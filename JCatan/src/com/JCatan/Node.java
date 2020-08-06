@@ -18,7 +18,12 @@ public abstract class Node {
 		tiles = new ArrayList<Tile>();
 	}
 	
-	/**
+	public Building getBuilding()
+    {
+        return building;
+    }
+
+    /**
 	 * @param road
 	 */
 	public void addRoad(Road road) {
@@ -33,6 +38,16 @@ public abstract class Node {
 	    //TODO Node: removeRoad
 		
 	}
+
+    public List<Tile> getTiles()
+    {
+        return tiles;
+    }
+
+    public void setTiles(List<Tile> tiles)
+    {
+        this.tiles = tiles;
+    }
 	
 
 }

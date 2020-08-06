@@ -3,7 +3,7 @@ package com.JCatan;
 public class HumanPlayer extends Player
 {
 
-    HumanPlayer(String name)
+    public HumanPlayer(String name)
     {
         super(name);
 
@@ -98,6 +98,15 @@ public class HumanPlayer extends Player
     public void tradePhase()
     {
         // TODO Player: tradePhase
+
+    }
+
+    @Override
+    public int calcVictoryPoints()
+    {
+        
+        //TODO update victory points
+        return victoryPoints;
 
     }
 

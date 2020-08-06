@@ -118,4 +118,11 @@ public class Bank extends Player
 
     }
 
+    @Override
+    public int calcVictoryPoints()
+    {
+        // TODO Player: calcVictoryPoints
+        return 0;
+    }
+
 }

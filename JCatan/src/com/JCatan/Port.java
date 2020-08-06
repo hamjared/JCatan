@@ -1,12 +1,18 @@
 package com.JCatan;
 
 public class Port {
-	Trade tradeType;
+	PortType portType;
+	ResourceType resourceType;
+	public enum PortType{
+	    GENERIC,
+	    SPECIAL
+	}
 	
 	/**
 	 * @param tradeType
 	 */
-	public Port(Trade tradeType) {
-		this.tradeType = tradeType;
+	public Port(PortType portType, ResourceType resourceType) {
+		this.portType = portType;
+		this.resourceType = resourceType;
 	}
 }

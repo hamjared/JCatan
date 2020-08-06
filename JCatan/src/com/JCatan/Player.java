@@ -45,9 +45,7 @@ public abstract class Player {
 	/**
 	 * 
 	 */
-	public void calcVictoryPoints() {
-		//TODO: Player: CalcVictoryPoints
-	}
+	public abstract int calcVictoryPoints();
 	
 	/**
 	 * 

@@ -1,11 +1,14 @@
 package com.JCatan;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BoardGraph {
-	ArrayList<ArrayList<Node>> nodes;
+	List<List<Node>> nodes;
 	
-	
+	public BoardGraph(List<List<Node>> nodes) {
+	    this.nodes = nodes;
+	}
 	// methods like checkConnections, ....
 
 }

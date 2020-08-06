@@ -1,23 +1,25 @@
 package com.JCatan;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class GameController {
-	public static void main(String [] args) {
-		
-		
-		
-		
-	}
+	private static final int POINTS_TO_WIN = 10;
+
+
 	List<Player> players;
 	int playerTurnIndex;
-
-
-	
+	int gameWinnerIndex;
 	Board board;
 	
-	/**
+	public Board getBoard()
+    {
+        return board;
+    }
+
+
+    /**
 	 * @param players
 	 * @param bf
 	 */
@@ -58,15 +60,51 @@ public class GameController {
 		
 	}
 	
+	   private void setupPhase() {
+	        for(Player player: players) {
+	            player.setup();
+	        }
+	        
+	        for(int i = players.size() - 1; i >=0; i--) {
+	            players.get(i).setup();
+	        }
+	        
+	    }
+	
 	private void gamePhase() {
-		// TODO Auto-generated method stub
+	    playerTurnIndex = 0;
+		boolean gameEnded = false;
+        while(!gameEnded) {
+		    
+            Player curPlayer = players.get(playerTurnIndex);
+            
+            int diceRoll = curPlayer.getDiceRoll();
+            
+            if(diceRoll == 7) {
+                players.forEach(p -> p.sevenRolled(curPlayer));
+            }
+            
+            board.dishOutResources(diceRoll);
+            
+            curPlayer.tradePhase();
+            
+            curPlayer.buildPhase();
+            
+            if(curPlayer.calcVictoryPoints() > POINTS_TO_WIN) {
+                gameWinnerIndex = playerTurnIndex;
+                gameEnded = true;
+            }
+            
+            playerTurnIndex ++;
+            
+            if(playerTurnIndex >= players.size()) {
+                playerTurnIndex = 0;
+            }
+		}
 		
 	}
 	
-	private void setupPhase() {
-		// TODO Auto-generated method stub
-		
-	}
+
 	
 	
 	/**
