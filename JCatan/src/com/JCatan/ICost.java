@@ -7,6 +7,6 @@ public interface ICost {
 	/**
 	 * @return
 	 */
-	public Map<ResourceCard, Integer> getCost();
+	public Map<ResourceType, Integer> getCost();
 
 }

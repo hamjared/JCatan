@@ -1,6 +1,6 @@
 package com.JCatan;
 
-public abstract class Building {
+public abstract class Building implements ICost {
 
 	private int victoryPoints;
 	Player player;
