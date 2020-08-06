@@ -43,42 +43,7 @@ public abstract class BoardFactory {
     
     private void createBoard()
     {
-        nodes = new ArrayList<>();
-        for (int i = 0; i < NUM_NODES; i++)
-        {
-            if (Arrays.asList(WHEAT_PORT_NODES).contains(i))
-            {
-                nodes.add(new PortNode(
-                        new Port(Port.PortType.SPECIAL, ResourceType.WHEAT)));
-            }
-            if (Arrays.asList(BRICK_PORT_NODES).contains(i))
-            {
-                nodes.add(new PortNode(
-                        new Port(Port.PortType.SPECIAL, ResourceType.BRICK)));
-            }
-            if (Arrays.asList(ORE_PORT_NODES).contains(i))
-            {
-                nodes.add(new PortNode(
-                        new Port(Port.PortType.SPECIAL, ResourceType.ORE)));
-            }
-            if (Arrays.asList(WOOD_PORT_NODES).contains(i))
-            {
-                nodes.add(new PortNode(
-                        new Port(Port.PortType.SPECIAL, ResourceType.WOOD)));
-            }
-            if (Arrays.asList(SHEEP_PORT_NODES).contains(i))
-            {
-                nodes.add(new PortNode(
-                        new Port(Port.PortType.SPECIAL, ResourceType.SHEEP)));
-            }
-            if (Arrays.asList(GENERIC_PORT_NODES).contains(i))
-            {
-                nodes.add(new PortNode(new Port(Port.PortType.GENERIC, null)));
-            }
-
-            nodes.add(new InteriorNode());
-        }
-
+        nodes = createNodes();
         Node[][] array =
         {
                 { nodes.get(3), nodes.get(4) }, // 0
@@ -147,6 +112,46 @@ public abstract class BoardFactory {
 
     }
 
+    @SuppressWarnings("unlikely-arg-type")
+    private List<Node> createNodes(){
+        nodes = new ArrayList<>();
+        for (int i = 0; i < NUM_NODES; i++)
+        {
+            if (Arrays.asList(WHEAT_PORT_NODES).contains(i))
+            {
+                nodes.add(new PortNode(
+                        new Port(Port.PortType.SPECIAL, ResourceType.WHEAT)));
+            }
+            if (Arrays.asList(BRICK_PORT_NODES).contains(i))
+            {
+                nodes.add(new PortNode(
+                        new Port(Port.PortType.SPECIAL, ResourceType.BRICK)));
+            }
+            if (Arrays.asList(ORE_PORT_NODES).contains(i))
+            {
+                nodes.add(new PortNode(
+                        new Port(Port.PortType.SPECIAL, ResourceType.ORE)));
+            }
+            if (Arrays.asList(WOOD_PORT_NODES).contains(i))
+            {
+                nodes.add(new PortNode(
+                        new Port(Port.PortType.SPECIAL, ResourceType.WOOD)));
+            }
+            if (Arrays.asList(SHEEP_PORT_NODES).contains(i))
+            {
+                nodes.add(new PortNode(
+                        new Port(Port.PortType.SPECIAL, ResourceType.SHEEP)));
+            }
+            if (Arrays.asList(GENERIC_PORT_NODES).contains(i))
+            {
+                nodes.add(new PortNode(new Port(Port.PortType.GENERIC, null)));
+            }
+
+            nodes.add(new InteriorNode());
+        }
+        
+        return nodes;
+    }
 
 
 
