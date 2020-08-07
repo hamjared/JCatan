@@ -9,6 +9,11 @@ public class VictoryPointDevelopmentCard extends DevelopmentCard {
         // TODO DevelopmentCard: performAction
         
     }
+    
+    @Override
+    public int getVictoryPoints() {
+        return 1;
+    }
 	
 	
 

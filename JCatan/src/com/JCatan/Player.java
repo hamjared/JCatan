@@ -6,16 +6,22 @@ import java.util.List;
 public abstract class Player {
 	List<ResourceCard> resources;
 	List<DevelopmentCard> devCards;
+	List<Building> buildings;
+	List<Road> roads;
 	int victoryPoints;
 	int diceRoll;
 	String name;
 	
-	Player(String name){
-		resources = new ArrayList<ResourceCard>();
-		devCards = new ArrayList<DevelopmentCard>();
-		victoryPoints = 0;
-		this.name = name;
-	}
+	Player(String name)
+    {
+        resources = new ArrayList<ResourceCard>();
+        devCards = new ArrayList<DevelopmentCard>();
+        victoryPoints = 0;
+        buildings = new ArrayList<Building>();
+        roads = new ArrayList<Road>();
+        this.name = name;
+        initializeBuildingsAndRoads();
+    }
 	
 	/**
 	 * @throws InsufficientResourceCardException
@@ -25,7 +31,7 @@ public abstract class Player {
 	/**
 	 * 
 	 */
-	public abstract void buildPhase();
+	public abstract void buildPhase(Node node1, Node node2);
 	
 	/**
 	 * @throws InsufficientResourceCardException
@@ -45,7 +51,55 @@ public abstract class Player {
 	/**
 	 * 
 	 */
-	public abstract int calcVictoryPoints();
+	public int calcVictoryPoints()
+    {
+        victoryPoints = 0;
+        victoryPoints += buildings.stream()
+                .filter(b -> b.hasBeenPlayed())
+                .reduce(0, (subtotal, b) -> subtotal + b.getVictoryPoints(),
+                        Integer::sum);
+
+        victoryPoints += devCards.stream().reduce(0,
+                (subtotal, dc) -> subtotal + dc.getVictoryPoints(),
+                Integer::sum);
+
+        return victoryPoints;
+
+    }
+	
+	public void initializeBuildingsAndRoads() {
+		for(int i = 0; i < 5; i++) {
+			Settlement settlement = new Settlement(this);
+			this.giveBuilding(settlement);
+		}
+		for(int i = 0; i < 4; i++) {
+			City city = new City(this);
+			this.giveBuilding(city);
+		}
+		for(int i = 0; i < 15; i++) {
+			Road road = new Road(null, null, this);
+			this.giveRoad(road);
+		}
+	}
+	
+	public void removeResource(ResourceType type) {
+		for(ResourceCard c: this.getResources()) {
+			if(c.getResourceType().equals(type)) {
+				this.getResources().remove(c);
+				break;
+			}
+		}
+	}
+	
+	public void giveBuilding(Building building)
+    {
+        this.buildings.add(building);
+    }
+	
+	public void giveRoad(Road road)
+	{
+		this.roads.add(road);
+	}
 	
 	/**
 	 * 
@@ -68,6 +122,7 @@ public abstract class Player {
 	 * @throws InvalidDevCardUseException
 	 */
 	public abstract void playDevelopmentCard(DevelopmentCard card) throws InvalidDevCardUseException;
+
 	
 	/**
 	 * @param trade
@@ -89,10 +144,14 @@ public abstract class Player {
 	 */
 	public abstract void setup(Node node1, Node node2);
 	
-	/**
-	 * @param activePlayer
-	 */
+	
 	public abstract void sevenRolled(Player activePlayer);
+	
+
+    public List<DevelopmentCard> getDevCards()
+    {
+        return devCards;
+    }
 	
 	/**
 	 *
@@ -107,7 +166,22 @@ public abstract class Player {
 	 */
 	public abstract void tradePhase();
 	
-	
+	public void giveDevelopmentCard(DevelopmentCard devCard)
+    {
+        devCards.add(devCard);
+    }
+
+	public List<Building> getBuildings() {
+		return buildings;
+	}
+
+	public List<Road> getRoads() {
+		return roads;
+	}
+
+	public void setResources(List<ResourceCard> resources) {
+		this.resources = resources;
+	}
 	
 	
 

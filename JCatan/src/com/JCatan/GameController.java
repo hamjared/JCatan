@@ -1,5 +1,6 @@
 package com.JCatan;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -128,9 +129,52 @@ public class GameController {
             
             board.dishOutResources(diceRoll);
             
-            curPlayer.tradePhase();
+            //curPlayer.tradePhase();
             
-            curPlayer.buildPhase();
+            List<ResourceCard> resources = new ArrayList<>();
+            ResourceCard card = new ResourceCard(ResourceType.WOOD);
+            ResourceCard card2 = new ResourceCard(ResourceType.BRICK);
+            ResourceCard card3 = new ResourceCard(ResourceType.SHEEP);
+            ResourceCard card4 = new ResourceCard(ResourceType.WHEAT);
+            ResourceCard card5 = new ResourceCard(ResourceType.WOOD);
+            ResourceCard card6 = new ResourceCard(ResourceType.BRICK);
+            ResourceCard card7 = new ResourceCard(ResourceType.ORE);
+            ResourceCard card8 = new ResourceCard(ResourceType.ORE);
+            ResourceCard card9 = new ResourceCard(ResourceType.ORE);
+            ResourceCard card10 = new ResourceCard(ResourceType.WHEAT);
+            ResourceCard card11 = new ResourceCard(ResourceType.WHEAT);
+            resources.add(card);
+            resources.add(card2);
+            resources.add(card3);
+            resources.add(card4);
+            resources.add(card5);
+            resources.add(card6);
+            resources.add(card7);
+            resources.add(card8);
+            resources.add(card9);
+            resources.add(card10);
+            resources.add(card11);
+            
+            curPlayer.setResources(resources);
+            
+            curPlayer.buildPhase(board.getTiles().get(12).getNodes().get(0), board.getTiles().get(12).getNodes().get(1));
+            if (board.getTiles().get(12).getNodes().get(0).getRoads().isEmpty()) {
+            	System.out.println("No road here");
+            } else {
+            	System.out.println(board.getTiles().get(12).getNodes().get(0).getRoads().get(0));
+            }
+            if (board.getTiles().get(12).getNodes().get(0).getBuilding() == null) {
+            	System.out.println("No building here");
+            } else {
+            	System.out.println(board.getTiles().get(12).getNodes().get(0).getBuilding());
+            }
+            if(curPlayer.getResources().isEmpty()) {
+            	System.out.println("The resources have been removed correctly");
+            } else {
+            	System.out.println("I still have resources");
+            }
+            
+            gameEnded = true;
             
             if(curPlayer.calcVictoryPoints() > POINTS_TO_WIN) {
                 gameWinnerIndex = playerTurnIndex;
@@ -167,7 +211,7 @@ public class GameController {
 				}
 		}
 		
-		//gamePhase();
+		gamePhase();
 		
 	}
 }
