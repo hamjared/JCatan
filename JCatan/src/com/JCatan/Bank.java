@@ -1,128 +1,73 @@
 package com.JCatan;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class Bank extends Player
+import java.util.EmptyStackException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
+public class Bank 
 {
 
-    final List<ResourceCard> brick = new ArrayList<>(19);
-    final List<ResourceCard> wood = new ArrayList<>(19);
-    final List<ResourceCard> wheat = new ArrayList<>(19);
-    final List<ResourceCard> ore = new ArrayList<>(19);
-    final List<ResourceCard> sheep = new ArrayList<>(19);
-    final List<DevelopmentCard> devCards;
+    public static final int NUM_OF_EACH_RESOURCE_CARD = 19;
+    final Stack<ResourceCard> brick = new Stack<ResourceCard>();
+    final Stack<ResourceCard> wood = new Stack<>();
+    final Stack<ResourceCard> wheat = new Stack<>();
+    final Stack<ResourceCard> ore = new Stack<>();
+    final Stack<ResourceCard> sheep = new Stack<>();
+    private Map<ResourceType, Stack<ResourceCard>> resourceTypeToResourceCards;
+    final Stack<DevelopmentCard> devCards;
 
-    Bank()
+    Bank() 
     {
-        super("Bank");
         devCards = DevCardFactory.makeDevCards();
+        resourceTypeToResourceCards = new HashMap<>();
+        for (int i = 0 ; i < NUM_OF_EACH_RESOURCE_CARD; i++) {
+            brick.push(new ResourceCard(ResourceType.BRICK));
+            wood.push(new ResourceCard(ResourceType.WOOD));
+            wheat.push(new ResourceCard(ResourceType.WHEAT));
+            ore.push(new ResourceCard(ResourceType.ORE));
+            sheep.push(new ResourceCard(ResourceType.SHEEP));
+        }
+        
+        resourceTypeToResourceCards.put(ResourceType.BRICK, brick);
+        resourceTypeToResourceCards.put(ResourceType.WOOD, wood);
+        resourceTypeToResourceCards.put(ResourceType.WHEAT, wheat);
+        resourceTypeToResourceCards.put(ResourceType.ORE, ore);
+        resourceTypeToResourceCards.put(ResourceType.SHEEP, sheep);
 
     }
-
-    @Override
-    public void buildCity() throws InsufficientResourceCardException
-    {
-        // TODO Player: buildCity
-
+    
+    public ResourceCard takeResourceCard(ResourceType resourceType) throws InsufficientResourceCardException{
+        try {
+            resourceTypeToResourceCards.get(resourceType).peek();
+        } catch(EmptyStackException e) {
+            throw new InsufficientResourceCardException();
+        }
+        return resourceTypeToResourceCards.get(resourceType).pop();
+    }
+    
+    public void giveResourceCard(ResourceCard resourceCard) {
+        resourceTypeToResourceCards.get(resourceCard.getResourceType()).push(resourceCard);
+    }
+    
+    public int getNumberOfResourceCardsRemaining(ResourceType rt) {
+        return resourceTypeToResourceCards.get(rt).size();
+    }
+    
+    public int getNumberOfDevelopmentCards() {
+        return devCards.size();
+    }
+    
+    public DevelopmentCard takeDevelopmentCard() throws OutOfDevelopmentCardsException{
+        try {
+            devCards.peek();
+        } catch(EmptyStackException e) {
+            throw new OutOfDevelopmentCardsException();
+        }
+        return devCards.pop();
     }
 
-    @Override
-    public void buildPhase()
-    {
-        // TODO Player: buildPhase
-
-    }
-
-    @Override
-    public void buildRoad() throws InsufficientResourceCardException
-    {
-        // TODO Player: buildRoad
-
-    }
-
-    @Override
-    public void buildSettlement() throws InsufficientResourceCardException
-    {
-        // TODO Player: buildSettlement
-
-    }
-
-    @Override
-    public void buyDevelopmentCard() throws InsufficientResourceCardException
-    {
-        // TODO Player: buyDevelopmentCard
-
-    }
-
-    @Override
-    public void endTurn()
-    {
-        // TODO Player: endTurn
-
-    }
-
-    public void getResourceCard(Player player, ResourceType resource,
-            int amount) throws InsufficientResourceCardException
-    {
-
-    }
-
-    @Override
-    public void playDevelopmentCard(DevelopmentCard card)
-            throws InvalidDevCardUseException
-    {
-        // TODO Player: playDevelopmentCard
-
-    }
-
-    @Override
-    public void proposeTrade(Trade trade)
-    {
-        // TODO Player: proposeTrade
-
-    }
-
-    @Override
-    public void receiveTrade(Trade trade)
-    {
-        // TODO Player: receiveTrade
-
-    }
-
-    @Override
-    public int rollDice()
-    {
-        // TODO Player: rollDice
-        return 0;
-    }
-
-    @Override
-    public void setup()
-    {
-        // TODO Player: setup
-
-    }
-
-    @Override
-    public void sevenRolled(Player activePlayer)
-    {
-        // TODO Player: sevenRolled
-
-    }
-
-    @Override
-    public void tradePhase()
-    {
-        // TODO Player: tradePhase
-
-    }
-
-    @Override
-    public int calcVictoryPoints()
-    {
-        // TODO Player: calcVictoryPoints
-        return 0;
-    }
 
 }
