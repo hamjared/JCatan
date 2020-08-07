@@ -6,6 +6,7 @@ import java.util.Map;
 public abstract class DevelopmentCard implements ICost {
 	private boolean canBePlayed;
 	
+	
 	/**
 	 * 
 	 */
@@ -17,6 +18,10 @@ public abstract class DevelopmentCard implements ICost {
 	 * @throws InvalidDevCardUseException
 	 */
 	public abstract void performAction() throws InvalidDevCardUseException;
+	
+	public int getVictoryPoints() {
+	    return 0;
+	}
 	
 	public Map<ResourceType, Integer> getCost(){
 	    Map<ResourceType, Integer> cost = new HashMap<>();

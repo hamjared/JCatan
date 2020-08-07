@@ -6,10 +6,19 @@ import java.util.Map;
 public class Settlement extends Building
 {
 
+    private static final int SETTLEMENT_VICTORY_POINTS = 1;
+
+    public Settlement(Player player)
+    {
+        super(player, SETTLEMENT_VICTORY_POINTS);
+
+    }
+
     @Override
     public void gatherResources(ResourceType resource)
     {
         // TODO Building: gatherResources
+        
 
     }
 
@@ -25,5 +34,7 @@ public class Settlement extends Building
 
         return cost;
     }
+
+
 
 }

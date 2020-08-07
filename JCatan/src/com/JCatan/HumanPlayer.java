@@ -55,9 +55,13 @@ public class HumanPlayer extends Player
     public void playDevelopmentCard(DevelopmentCard card)
             throws InvalidDevCardUseException
     {
-        // TODO Player: playDevelopmentCard
+        if(!devCards.contains(card)) {
+            throw new InvalidDevCardUseException();
+        }
+        card.performAction();
+        this.devCards.remove(card);
 
-    }
+    }  
 
     @Override
     public void proposeTrade(Trade trade)
@@ -101,13 +105,6 @@ public class HumanPlayer extends Player
 
     }
 
-    @Override
-    public int calcVictoryPoints()
-    {
-        
-        //TODO update victory points
-        return victoryPoints;
 
-    }
 
 }

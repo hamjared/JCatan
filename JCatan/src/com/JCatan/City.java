@@ -5,6 +5,14 @@ import java.util.Map;
 
 public class City extends Building
 {
+    
+    private static final int CITY_VICTORY_POINTS = 2;
+
+    public City(Player player)
+    {
+        super(player, CITY_VICTORY_POINTS);
+
+    }
 
     @Override
     public void gatherResources(ResourceType resource)
@@ -23,5 +31,7 @@ public class City extends Building
 
         return cost;
     }
+
+
 
 }

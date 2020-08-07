@@ -16,7 +16,7 @@ public class SettlementTest extends TestCase
     }
     
     public void testGetCost() {
-        Building building = new Settlement();
+        Building building = new Settlement(null);
         
         assertEquals(Integer.valueOf(1), building.getCost().get(ResourceType.WHEAT));
         assertEquals(Integer.valueOf(1), building.getCost().get(ResourceType.SHEEP));
