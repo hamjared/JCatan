@@ -67,5 +67,7 @@ public class GameGUI extends JFrame
         
         JPanel ResourcePanel = new ResourcesPanel();
         contentPane.add(ResourcePanel);
+        
+        controller.startGame();
     }
 }

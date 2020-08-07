@@ -1,6 +1,5 @@
 package com.JCatan;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BoardGraph {

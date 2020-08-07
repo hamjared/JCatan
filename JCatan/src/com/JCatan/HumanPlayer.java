@@ -1,5 +1,8 @@
 package com.JCatan;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HumanPlayer extends Player
 {
 
@@ -10,31 +13,55 @@ public class HumanPlayer extends Player
     }
 
     @Override
-    public void buildCity() throws InsufficientResourceCardException
+    public void buildCity(Node node) throws InsufficientResourceCardException
     {
-        // TODO Player: buildCity
+    	if(node.getBuilding() == null) {
+    		//Can't build City
+    	}
 
     }
 
     @Override
     public void buildPhase()
     {
-        // TODO Player: buildPhase
+        //Check for listener about player wanting to building road/building
+    	
+    	buildRoad(GamePhase.GAME, Node node1, Node node2);
+    	
+    	buildSettlement(GamePhase.GAME, Node node1);
+    	
+    	buildCity()
 
     }
 
     @Override
-    public void buildRoad() throws InsufficientResourceCardException
+    public void buildRoad(GamePhase phase, Node node1, Node node2) throws InsufficientResourceCardException
     {
-        // TODO Player: buildRoad
+        if(phase == GamePhase.SETUP) {
+        	//Setup Phase Build
+        	Road road = new Road(node1, node2, this);
+        	node1.addRoad(road);
+        	road = new Road(node2, node1, this);
+        	node2.addRoad(road);
+        } else {
+        	//Game Phase Build
+        	
+        }
 
     }
 
     @Override
-    public void buildSettlement() throws InsufficientResourceCardException
+    public void buildSettlement(GamePhase phase, Node node) throws InsufficientResourceCardException
     {
-        // TODO Player: buildSettlement
-
+    	if(phase == GamePhase.SETUP) {
+    		
+    		System.out.println("Im in here");
+    		//SetUp Phase Build
+    		Settlement settlement = new Settlement(1, this);
+    		node.setBuilding(settlement);
+    	} else {
+    		//Game Phase Build
+    	}
     }
 
     @Override
@@ -81,9 +108,20 @@ public class HumanPlayer extends Player
     }
 
     @Override
-    public void setup()
+    public void setup(Node node1, Node node2)
     {
-        // TODO Player: setup
+        //Player needs to put down 1 Settlement and 1 Road
+    	try {
+			buildSettlement(GamePhase.SETUP, node1);
+		} catch (InsufficientResourceCardException e) {
+			e.printStackTrace();
+		}
+    	try {
+			buildRoad(GamePhase.SETUP, node1, node2);
+		} catch (InsufficientResourceCardException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
     }
 

@@ -20,7 +20,7 @@ public abstract class Player {
 	/**
 	 * @throws InsufficientResourceCardException
 	 */
-	public abstract void buildCity() throws InsufficientResourceCardException;
+	public abstract void buildCity(Node node) throws InsufficientResourceCardException;
 	
 	/**
 	 * 
@@ -30,12 +30,12 @@ public abstract class Player {
 	/**
 	 * @throws InsufficientResourceCardException
 	 */
-	public abstract void buildRoad() throws InsufficientResourceCardException;
+	public abstract void buildRoad(GamePhase phase, Node node1, Node node2) throws InsufficientResourceCardException;
 	
 	/**
 	 * @throws InsufficientResourceCardException
 	 */
-	public abstract void buildSettlement() throws InsufficientResourceCardException;
+	public abstract void buildSettlement(GamePhase phase, Node node) throws InsufficientResourceCardException;
 	
 	/**
 	 * @throws InsufficientResourceCardException
@@ -57,6 +57,10 @@ public abstract class Player {
 	 */
 	public int getDiceRoll() {
 		return diceRoll;
+	}
+	
+	public List<ResourceCard> getResources() {
+		return resources;
 	}
 	
 	/**
@@ -83,7 +87,7 @@ public abstract class Player {
 	/**
 	 * 
 	 */
-	public abstract void setup();
+	public abstract void setup(Node node1, Node node2);
 	
 	/**
 	 * @param activePlayer

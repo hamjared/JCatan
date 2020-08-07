@@ -61,12 +61,54 @@ public class GameController {
 	}
 	
 	   private void setupPhase() {
+		   
+		   int playerNum = 0;
+		   Node node1 = null;
+		   Node node2 = null;
 	        for(Player player: players) {
-	            player.setup();
+	        	switch(playerNum) {
+	        		case 0:
+	        			node1 = board.getTiles().get(0).getNodes().get(0);
+	            		node2 = board.getTiles().get(0).getNodes().get(1);
+	            		break;
+	        		case 1:
+	        			node1 = board.getTiles().get(1).getNodes().get(0);
+	            		node2 = board.getTiles().get(1).getNodes().get(1);
+	            		break;
+	        		case 2:
+	        			node1 = board.getTiles().get(2).getNodes().get(0);
+	            		node2 = board.getTiles().get(2).getNodes().get(1);
+	            		break;
+	        		case 3:
+	        			node1 = board.getTiles().get(3).getNodes().get(0);
+	            		node2 = board.getTiles().get(3).getNodes().get(1);
+	            		break;
+	        	}
+	        	playerNum++;
+	            player.setup(node1, node2);  
 	        }
-	        
+	        playerNum = 3;		
 	        for(int i = players.size() - 1; i >=0; i--) {
-	            players.get(i).setup();
+	        	switch(playerNum) {
+        		case 0:
+        			node1 = board.getTiles().get(7).getNodes().get(0);
+            		node2 = board.getTiles().get(7).getNodes().get(1);
+            		break;
+        		case 1:
+        			node1 = board.getTiles().get(8).getNodes().get(0);
+            		node2 = board.getTiles().get(8).getNodes().get(1);
+            		break;
+        		case 2:
+        			node1 = board.getTiles().get(9).getNodes().get(0);
+            		node2 = board.getTiles().get(9).getNodes().get(1);
+            		break;
+        		case 3:
+        			node1 = board.getTiles().get(10).getNodes().get(0);
+            		node2 = board.getTiles().get(10).getNodes().get(1);
+            		break;
+        	}
+        	playerNum--;
+	        players.get(i).setup(node1, node2);
 	        }
 	        
 	    }
@@ -112,11 +154,20 @@ public class GameController {
 	 */
 	public void startGame() {
 		
-		diceRollPhase();
+		diceRollPhase();	
 		
 		setupPhase();
 		
-		gamePhase();
+		for(Tile tile: board.getTiles()) {
+				System.out.print(tile.getNumber() + ": ");
+				if (tile.getNodes().get(0).getBuilding() == null) {
+					System.out.println("No settlement");
+				} else {
+					System.out.println("Settlement");
+				}
+		}
+		
+		//gamePhase();
 		
 	}
 }

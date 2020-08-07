@@ -115,16 +115,16 @@ public class StartMenuFrame extends JFrame
     
     protected List<Player> getPlayers(){
         List<Player> players = new ArrayList<>();
-        if(!redPlayerName.getText().isBlank()) {
+        if(!redPlayerName.getText().isEmpty()) {
             players.add(new HumanPlayer(redPlayerName.getText()));
         }
-        if(!bluePlayerName.getText().isBlank()) {
+        if(!bluePlayerName.getText().isEmpty()) {
             players.add(new HumanPlayer(bluePlayerName.getText()));
         }
-        if(!whitePlayerName.getText().isBlank()) {
+        if(!whitePlayerName.getText().isEmpty()) {
             players.add(new HumanPlayer(whitePlayerName.getText()));
         }
-        if(!orangePlayerName.getText().isBlank()) {
+        if(!orangePlayerName.getText().isEmpty()) {
             players.add(new HumanPlayer(orangePlayerName.getText()));
         }
         

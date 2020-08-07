@@ -22,13 +22,18 @@ public abstract class Node {
     {
         return building;
     }
+	
+	
 
-    /**
+    public void setBuilding(Building building) {
+		this.building = building;
+	}
+
+	/**
 	 * @param road
 	 */
 	public void addRoad(Road road) {
-	    //TODO Node: addRoad
-		
+		roads.add(road);
 	}
 	
 	/**
