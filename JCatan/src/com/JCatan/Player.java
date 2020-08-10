@@ -1,13 +1,16 @@
 package com.JCatan;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Player
 {
     List<ResourceCard> resources;
     List<DevelopmentCard> devCards;
     List<Building> buildings;
+    List<Road> playedRoads;
     int victoryPoints;
     int diceRoll;
     boolean hasLongestRoad;
@@ -20,6 +23,7 @@ public abstract class Player
         devCards = new ArrayList<DevelopmentCard>();
         victoryPoints = 0;
         buildings = new ArrayList<Building>();
+        playedRoads = new ArrayList<>();
         hasLongestRoad = false;
         hasLargestArmy = false;
         this.name = name;
@@ -151,6 +155,14 @@ public abstract class Player
     public void giveDevelopmentCard(DevelopmentCard devCard)
     {
         devCards.add(devCard);
+    }
+    
+    public int calcLongestRoad() {
+    	return new LongestRoadCalculator(playedRoads).calcLongestRoad();
+    }
+    
+    public void addRoadToRoadPlayedList(Road road) {
+    	playedRoads.add(road);
     }
 
 }
