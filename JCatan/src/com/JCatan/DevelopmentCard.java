@@ -5,6 +5,7 @@ import java.util.Map;
 
 public abstract class DevelopmentCard implements ICost {
 	private boolean canBePlayed;
+	private boolean hasBeenPlayed;
 	
 	
 	/**
@@ -12,8 +13,17 @@ public abstract class DevelopmentCard implements ICost {
 	 */
 	public DevelopmentCard() {
 		canBePlayed = false;
+		hasBeenPlayed = false;
 	}
 	
+	public boolean isHasBeenPlayed() {
+		return hasBeenPlayed;
+	}
+
+	public void setHasBeenPlayed(boolean hasBeenPlayed) {
+		this.hasBeenPlayed = hasBeenPlayed;
+	}
+
 	/**
 	 * @throws InvalidDevCardUseException
 	 */

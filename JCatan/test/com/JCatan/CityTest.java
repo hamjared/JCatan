@@ -17,7 +17,7 @@ public class CityTest extends TestCase
 
     public void testGetCost()
     {
-        Building building = new City(null);
+        Building building = new City(new HumanPlayer("Test"));
 
         assertEquals(Integer.valueOf(2),
                 building.getCost().get(ResourceType.WHEAT));
