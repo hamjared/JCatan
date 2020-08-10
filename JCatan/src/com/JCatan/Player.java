@@ -1,15 +1,20 @@
 package com.JCatan;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Player
 {
     List<ResourceCard> resources;
     List<DevelopmentCard> devCards;
     List<Building> buildings;
+    List<Road> playedRoads;
     int victoryPoints;
     int diceRoll;
+    boolean hasLongestRoad;
+    boolean hasLargestArmy;
     String name;
 
     Player(String name)
@@ -18,6 +23,9 @@ public abstract class Player
         devCards = new ArrayList<DevelopmentCard>();
         victoryPoints = 0;
         buildings = new ArrayList<Building>();
+        playedRoads = new ArrayList<>();
+        hasLongestRoad = false;
+        hasLargestArmy = false;
         this.name = name;
     }
 
@@ -62,9 +70,28 @@ public abstract class Player
         victoryPoints += devCards.stream().reduce(0,
                 (subtotal, dc) -> subtotal + dc.getVictoryPoints(),
                 Integer::sum);
+        
+        if(hasLongestRoad) {
+            victoryPoints += 2;
+        }
+        
+        if(hasLargestArmy) {
+            victoryPoints += 2;
+        }
 
         return victoryPoints;
 
+    }
+    
+    public int getNumberOfKnightsPlayed() {
+    	int numKnights = 0;
+    	for (DevelopmentCard devCard : devCards) {
+    		if(devCard instanceof KnightDevelopmentCard && devCard.isHasBeenPlayed()) {
+    			numKnights ++;
+    		}
+    	}
+    	
+    	return numKnights;
     }
 
     public void giveBuilding(Building building)
@@ -136,9 +163,35 @@ public abstract class Player
      */
     public abstract void tradePhase();
 
-    public void giveDevelopmentCard(DevelopmentCard devCard)
+    public boolean isHasLongestRoad() {
+		return hasLongestRoad;
+	}
+
+	public boolean isHasLargestArmy() {
+		return hasLargestArmy;
+	}
+
+	public void giveDevelopmentCard(DevelopmentCard devCard)
     {
         devCards.add(devCard);
     }
+    
+    public int calcLongestRoad() {
+    	return new LongestRoadCalculator(playedRoads).calcLongestRoad();
+    }
+    
+    public void addRoadToRoadPlayedList(Road road) {
+    	playedRoads.add(road);
+    }
+
+	public void setHasLongestRoad(boolean hasLongestRoad) {
+		this.hasLongestRoad = hasLongestRoad;
+	}
+
+	public void setHasLargestArmy(boolean hasLargestArmy) {
+		this.hasLargestArmy = hasLargestArmy;
+	}
+
+    
 
 }
