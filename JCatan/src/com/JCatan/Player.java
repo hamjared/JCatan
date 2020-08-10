@@ -165,4 +165,14 @@ public abstract class Player
     	playedRoads.add(road);
     }
 
+	public void setHasLongestRoad(boolean hasLongestRoad) {
+		this.hasLongestRoad = hasLongestRoad;
+	}
+
+	public void setHasLargestArmy(boolean hasLargestArmy) {
+		this.hasLargestArmy = hasLargestArmy;
+	}
+
+    
+
 }
