@@ -84,4 +84,14 @@ public class Board {
 		
 	}
 
+	public BoardGraph getBoard() {
+		return board;
+	}
+
+	public void setBoard(BoardGraph board) {
+		this.board = board;
+	}
+	
+	
+
 }

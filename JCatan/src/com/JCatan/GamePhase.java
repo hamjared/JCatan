@@ -3,5 +3,8 @@ package com.JCatan;
 public enum GamePhase {
 	DICE,
 	SETUP,
-	GAME
+	GAME,
+	GAMEROLL,
+	GAMETRADE,
+	GAMEBUILD
 }

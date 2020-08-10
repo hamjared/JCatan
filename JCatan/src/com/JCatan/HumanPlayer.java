@@ -125,8 +125,6 @@ public class HumanPlayer extends Player {
 	@Override
 	public void buildSettlement(GamePhase phase, Node node) throws InsufficientResourceCardException {
 		if (phase == GamePhase.SETUP) {
-
-			System.out.println("Im in here");
 			// SetUp Phase Build
 			Settlement settlement = new Settlement(this);
 			settlement.setHasBeenPlayed(true);
@@ -353,6 +351,7 @@ public class HumanPlayer extends Player {
 	@Override
 	public int rollDice() {
 		diceRoll = new Dice().rollDice();
+		System.out.println("Dice roll: " + diceRoll);
 		return diceRoll;
 	}
 
@@ -375,7 +374,18 @@ public class HumanPlayer extends Player {
 
 	@Override
 	public void sevenRolled(Player activePlayer) {
-		// TODO Player: sevenRolled
+		List<ResourceCard> resources = activePlayer.getResources();
+		int handSize = resources.size();
+		int cardsToDrop = 0;
+		if(handSize > 7) {
+			if (handSize %2 == 0) {
+				//Player chooses half their cards to drop
+				cardsToDrop = handSize / 2;
+			} else {
+				//Player rounds down and drops half their cards
+				cardsToDrop = (handSize - 1) / 2;
+			}
+		}
 
 	}
 
