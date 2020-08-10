@@ -9,6 +9,7 @@ public class Road implements ICost
     Node node1;
     Node node2;
     Player player;
+    protected boolean hasBeenPlayed;
 
     /**
      * @param node1
@@ -20,7 +21,9 @@ public class Road implements ICost
         this.node1 = node1;
         this.node2 = node2;
         this.player = player;
+        this.hasBeenPlayed = false;
     }
+    
 
     public Node getNode1() {
 		return node1;
@@ -40,4 +43,10 @@ public class Road implements ICost
 
         return cost;
     }
+
+	public void setHasBeenPlayed(boolean hasBeenPlayed) {
+		this.hasBeenPlayed = hasBeenPlayed;
+	}
+    
+    
 }

@@ -12,7 +12,7 @@ public abstract class Building implements ICost {
 	    this.hasBeenPlayed = false;
 	    player.giveBuilding(this);
 	}
-	
+
 	/**
 	 * @param resource
 	 */

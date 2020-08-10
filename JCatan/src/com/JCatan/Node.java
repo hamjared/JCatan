@@ -31,13 +31,18 @@ public abstract class Node {
     {
         return building;
     }
+	
+	
 
-    /**
+    public void setBuilding(Building building) {
+		this.building = building;
+	}
+
+	/**
 	 * @param road
 	 */
 	public void addRoad(Road road) {
-	    roads.add(road);
-		
+		roads.add(road);
 	}
 	
 	/**
@@ -58,10 +63,9 @@ public abstract class Node {
         this.tiles = tiles;
     }
 
-    public List<Road> getRoads()
-    {
-        return roads;
-    }
+	public List<Road> getRoads() {
+		return roads;
+	}
 	
 
 }

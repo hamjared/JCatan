@@ -11,6 +11,9 @@ public class Tile
 
     ResourceType resourceType;
     boolean hasRobber;
+    int number;
+    List<Node> nodes;
+    
     public void setResourceType(ResourceType resourceType)
     {
         this.resourceType = resourceType;
@@ -41,9 +44,7 @@ public class Tile
     {
         this.number = number;
     }
-
-    int number;
-    List<Node> nodes;
+    
     
     public Tile(List<Node> nodes) {
         this.nodes = nodes;
@@ -54,7 +55,11 @@ public class Tile
         return number;
     }
 
-    public Tile(ResourceType resourceType, int number) {
+    public List<Node> getNodes() {
+		return nodes;
+	}
+
+	public Tile(ResourceType resourceType, int number) {
         this.resourceType = resourceType;
         this.number = number;
         switch(resourceType) {

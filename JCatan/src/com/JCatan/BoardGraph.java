@@ -1,7 +1,5 @@
 package com.JCatan;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class BoardGraph {
@@ -12,6 +10,15 @@ public class BoardGraph {
 	    this.nodes = nodes;
 	    this.nodeList = nodeList;
 	}
+
+	public List<List<Node>> getNodes() {
+		return nodes;
+	}
+
+	public void setNodes(List<List<Node>> nodes) {
+		this.nodes = nodes;
+	}
+	
 	// methods like checkConnections, ....
 
     public List<List<Node>> getNodes()
