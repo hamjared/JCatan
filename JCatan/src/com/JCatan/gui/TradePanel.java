@@ -27,16 +27,14 @@ import javax.swing.border.BevelBorder;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JSplitPane;
 import javax.swing.JLabel;
-import java.awt.ComponentOrientation;
 
-//https://stackoverflow.com/questions/6166906/wait-for-user-action-in-while-loop-java/6167083
 public class TradePanel extends JPanel {
 
 	private static final long serialVersionUID = 208059651951407846L;
 	private List<Player> participants;
 	private Player currentPlayer;
+	private Player selectedPlayer;
 	private JPanel traders;
 	private JPanel theirOffer;
 	private JPanel playerOffer;
@@ -45,6 +43,7 @@ public class TradePanel extends JPanel {
 	private JButton counterOfferButton;
 	private JButton cancelButton;
 	private ButtonGroup buttonToggleGroup = new ButtonGroup();
+	private String selectedPlayerlabel = "Selected Player";
 	
 	public void setEventForButtons(ActionListener list) {
 		confirmButton.addActionListener(list);
@@ -71,54 +70,64 @@ public class TradePanel extends JPanel {
 		for(Player player : participants) {
 			JCheckBox temp = new JCheckBox(player.getName());
 			temp.setSelected(false);
+			temp.addActionListener(e ->{
+				JCheckBox box = (JCheckBox) e.getSource();
+				
+				selectedPlayer = GameGUI.controller.getPlayers().stream()
+				  .filter(t -> t.getName() == box.getText()).findFirst().orElse(null);
+
+				clearSelectedPlayerResources();
+				setPlayersResources(selectedPlayer);
+			});
 			traders.add(temp);
 			buttonToggleGroup.add(temp);
 		}
 	}
 	
-	
 	@Override
     protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		setPlayersResources();
+		setPlayersResources(currentPlayer);
 		playerOffer.revalidate();
 	}
+		
+	private void clearSelectedPlayerResources() {
+		Component[] components = playerOffer.getComponents();
+		for(Component comp : components) {
+			if(comp.getName() == selectedPlayerlabel)
+				playerOffer.remove(comp);
+		}
+		playerOffer.revalidate();
+		playerOffer.repaint();
+	}
 	
-	private void clearPlayerResources() {
+	private void clearAllPlayerResources() {
 		playerOffer.removeAll();
 		playerOffer.revalidate();
 		playerOffer.repaint();
 	}
 	
-	//TODO: Break each section down to smaller methods...
-	private void createTradeIcons(String resourceName, String value, int i, int j) {
-		
-		JLabel playerResource = new JLabel(resourceName);
+	private JLabel createLabel(String text, String name, int x, int y) {
+		JLabel playerResource = new JLabel(text);
+		playerResource.setName(name);
 		playerResource.setSize(playerResource.getPreferredSize());
 		GridBagConstraints gbc_playerResource = new GridBagConstraints();
 		gbc_playerResource.anchor = GridBagConstraints.LINE_START;
 		gbc_playerResource.insets = new Insets(0, 0, 0, 5);
-		gbc_playerResource.gridx = i;
-		gbc_playerResource.gridy = j;
+		gbc_playerResource.gridx = x;
+		gbc_playerResource.gridy = y;
 		playerOffer.add(playerResource, gbc_playerResource);
-		i++;
-		
-		JLabel playerResourceTotal = new JLabel(value);
-		playerResourceTotal.setSize(playerResourceTotal.getPreferredSize());
-		GridBagConstraints gbc_playerResourceTotal = new GridBagConstraints();
-		gbc_playerResourceTotal.anchor = GridBagConstraints.LINE_START;
-		gbc_playerResourceTotal.insets = new Insets(0, 0, 0, 5);
-		gbc_playerResourceTotal.gridx = i;
-		gbc_playerResourceTotal.gridy = j;
-		playerOffer.add(playerResourceTotal, gbc_playerResourceTotal);
-		i++;
-		
+		return playerResource;
+	}
+	
+	private void createButtonPanel(JLabel playerResourceTotal, String name, int x, int y) {
 		JPanel panel_1 = new JPanel();
+		panel_1.setName(name);
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.insets = new Insets(0, 0, 0, 5);
 		gbc_panel_1.fill = GridBagConstraints.CENTER;
-		gbc_panel_1.gridx = i;
-		gbc_panel_1.gridy = j;
+		gbc_panel_1.gridx = x;
+		gbc_panel_1.gridy = y;
 		playerOffer.add(panel_1, gbc_panel_1);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[]{0, 0, 0};
@@ -126,7 +135,7 @@ public class TradePanel extends JPanel {
 		gbl_panel_1.columnWeights = new double[]{1.0, 1.0, 1.0};
 		gbl_panel_1.rowWeights = new double[]{1.0, 1.0};
 		panel_1.setLayout(gbl_panel_1);
-		i++;
+		x++;
 		
 		JButton playerDecResource = new JButton("-");
 		playerDecResource.addActionListener(e -> {
@@ -138,93 +147,42 @@ public class TradePanel extends JPanel {
 		});
 		GridBagConstraints gbc_playerDecResource = new GridBagConstraints();
 		gbc_playerDecResource.insets = new Insets(0, 0, 0, 5);
-		gbc_playerDecResource.gridx = i;
-		gbc_playerDecResource.gridy = j;
+		gbc_playerDecResource.gridx = x;
+		gbc_playerDecResource.gridy = y;
 		panel_1.add(playerDecResource, gbc_playerDecResource);
-		i++;
-		
+		x++;
+				
 		JButton playerIncResource_1 = new JButton("+");
 		playerIncResource_1.addActionListener(e -> {
 			String val = playerResourceTotal.getText();
 			Integer temp = Integer.valueOf(val);
 			playerResourceTotal.setText((++temp).toString());
 		});
+		
 		GridBagConstraints gbc_playerIncResource_1 = new GridBagConstraints();
-		gbc_playerIncResource_1.gridx = i;
-		gbc_playerIncResource_1.gridy = j;
+		gbc_playerIncResource_1.gridx = x;
+		gbc_playerIncResource_1.gridy = y;
 		panel_1.add(playerIncResource_1, gbc_playerIncResource_1);
-		i++;
-		
-		JLabel lblNewLabel_8 = new JLabel(resourceName);
-		lblNewLabel_8.setSize(lblNewLabel_8.getPreferredSize());
-		GridBagConstraints gbc_lblNewLabel_8 = new GridBagConstraints();
-		gbc_lblNewLabel_8.anchor = GridBagConstraints.LINE_START;
-		gbc_lblNewLabel_8.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNewLabel_8.gridx = i;
-		gbc_lblNewLabel_8.gridy = j;
-		playerOffer.add(lblNewLabel_8, gbc_lblNewLabel_8);
-		i++;
-		
-		JLabel lblNewLabel_9 = new JLabel(value);
-		lblNewLabel_9.setSize(lblNewLabel_9.getPreferredSize());
-		GridBagConstraints gbc_lblNewLabel_9 = new GridBagConstraints();
-		gbc_lblNewLabel_9.anchor = GridBagConstraints.LINE_START;
-		gbc_lblNewLabel_9.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNewLabel_9.gridx = i;
-		gbc_lblNewLabel_9.gridy = j;
-		playerOffer.add(lblNewLabel_9, gbc_lblNewLabel_9);
-		i++;
-		
-		JPanel panel_2 = new JPanel();
-		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
-		gbc_panel_2.fill = GridBagConstraints.CENTER;
-		gbc_panel_2.gridx = i;
-		gbc_panel_2.gridy = j;
-		playerOffer.add(panel_2, gbc_panel_2);
-		GridBagLayout gbl_panel_2 = new GridBagLayout();
-		gbl_panel_2.columnWidths = new int[]{0, 0, 0};
-		gbl_panel_2.rowHeights = new int[]{0, 0};
-		gbl_panel_2.columnWeights = new double[]{1.0, 1.0, 1.0};
-		gbl_panel_2.rowWeights = new double[]{1.0, 1.0};
-		panel_2.setLayout(gbl_panel_2);
-		i++;
-		
-		JButton wantsDecResource = new JButton("-");
-		wantsDecResource.addActionListener(e -> {
-			String val = lblNewLabel_9.getText();
-			Integer temp = Integer.valueOf(val);
-			if(temp <= 0)
-				return;
-			lblNewLabel_9.setText((--temp).toString());
-		});
-		GridBagConstraints gbc_wantsDecResource = new GridBagConstraints();
-		gbc_wantsDecResource.insets = new Insets(0, 0, 0, 5);
-		gbc_wantsDecResource.gridx = i;
-		gbc_wantsDecResource.gridy = j;
-		panel_2.add(wantsDecResource, gbc_wantsDecResource);
-		i++;
-		
-		JButton wantsIncResource = new JButton("+");
-		wantsIncResource.addActionListener(e -> {
-			String val = lblNewLabel_9.getText();
-			Integer temp = Integer.valueOf(val);
-			lblNewLabel_9.setText((++temp).toString());
-		});
-		GridBagConstraints gbc_wantsIncResource = new GridBagConstraints();
-		gbc_wantsIncResource.gridx = i;
-		gbc_wantsIncResource.gridy = j;
-		panel_2.add(wantsIncResource, gbc_wantsIncResource);
 	}
 	
-	private void setPlayersResources() {
+	private void createTradeIcons(String resourceName, String name, String value, int i, int j) {
+		createLabel(resourceName, name, i, j);
+		JLabel playerResourceTotal = createLabel(value, name, ++i, j);
+		createButtonPanel(playerResourceTotal, name, ++i, j);
+	}
+	
+	private void setPlayersResources(Player player) {
 		int j=0;
-		Map<ResourceType, Integer> resources = currentPlayer.getUniqueResourcesCount();
+		Map<ResourceType, Integer> resources = player.getUniqueResourcesCount();
 		
 		for(Map.Entry<ResourceType, Integer> entry: resources.entrySet()) {
-			int i=0;
+			
+			GridBagLayout temp = (GridBagLayout)playerOffer.getLayout();
+			int i= (player == currentPlayer)? 0 : temp.columnWidths.length/2+1;
 			String cardName = entry.getKey().name();
 			String total = entry.getValue().toString();
-			createTradeIcons(cardName, total, i,j);
+			String labelName = (player == currentPlayer) ? "" : selectedPlayerlabel;
+			createTradeIcons(cardName, labelName, total, i, j);
 			j++;
 		}
 	}
@@ -234,6 +192,7 @@ public class TradePanel extends JPanel {
 	 */
 	public TradePanel(int x, int y, int width, int height) {
 		this.setBounds(x, y, width, 379);
+		selectedPlayer=null;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{569, 403, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
@@ -254,7 +213,7 @@ public class TradePanel extends JPanel {
 		setTraders();
 		add(traders, gbc_traders);
 		
-		playerOffer = new JPanel();
+		playerOffer = new JPanel();		
 		playerOffer.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Player's Offer", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GridBagConstraints gbc_playerOffer = new GridBagConstraints();
 		gbc_playerOffer.weightx = 1.0;
@@ -372,7 +331,7 @@ public class TradePanel extends JPanel {
 		cancelButton.addActionListener(e -> {
 			this.setVisible(false);
 			this.setEnabled(false);
-			clearPlayerResources();
+			clearAllPlayerResources();
 		});
 		
 		GridBagConstraints gbc_cancelButton = new GridBagConstraints();
