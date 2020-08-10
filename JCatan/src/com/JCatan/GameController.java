@@ -42,7 +42,7 @@ public class GameController {
 			@SuppressWarnings("null")
 			@Override
 			public int compare(Object o1, Object o2) {
-				Player p1 = null;
+				Player p1 = null; 
 				Player p2 = null;
 				if (o1 instanceof Player && o2 instanceof Player) {
 					p1 = (Player) o1;
@@ -90,6 +90,10 @@ public class GameController {
             
             curPlayer.buildPhase();
             
+            setLongestRoad();
+            
+            setLargestArmy();
+            
             if(curPlayer.calcVictoryPoints() > POINTS_TO_WIN) {
                 gameWinnerIndex = playerTurnIndex;
                 gameEnded = true;
@@ -107,6 +111,34 @@ public class GameController {
 
 	
 	
+	private void setLargestArmy() {
+		int largestArmy = 0;
+		for(Player player: players) {
+			player.setHasLargestArmy(false);
+			int playersArmy = player.getNumberOfKnightsPlayed();
+			if (playersArmy > largestArmy && playersArmy >= 5) {
+				largestArmy = playersArmy;
+				player.setHasLargestArmy(true);
+			}
+		}
+		
+	}
+
+
+	private void setLongestRoad() {
+		int longestRoad = 0;
+		for(Player player: players) {
+			player.setHasLongestRoad(false);
+			int playersLongestRoad = player.calcLongestRoad();
+			if (playersLongestRoad > longestRoad && playersLongestRoad >= 5) {
+				longestRoad = playersLongestRoad;
+				player.setHasLongestRoad(true);
+			}
+		}
+		
+	}
+
+
 	/**
 	 * 
 	 */

@@ -82,6 +82,17 @@ public abstract class Player
         return victoryPoints;
 
     }
+    
+    public int getNumberOfKnightsPlayed() {
+    	int numKnights = 0;
+    	for (DevelopmentCard devCard : devCards) {
+    		if(devCard instanceof KnightDevelopmentCard && devCard.isHasBeenPlayed()) {
+    			numKnights ++;
+    		}
+    	}
+    	
+    	return numKnights;
+    }
 
     public void giveBuilding(Building building)
     {
@@ -152,7 +163,15 @@ public abstract class Player
      */
     public abstract void tradePhase();
 
-    public void giveDevelopmentCard(DevelopmentCard devCard)
+    public boolean isHasLongestRoad() {
+		return hasLongestRoad;
+	}
+
+	public boolean isHasLargestArmy() {
+		return hasLargestArmy;
+	}
+
+	public void giveDevelopmentCard(DevelopmentCard devCard)
     {
         devCards.add(devCard);
     }
