@@ -8,6 +8,7 @@ public abstract class Trade {
 	Player receivingPlayer;
 	List<ResourceCard> offeringCards;
 	List<ResourceCard> requestingCards;
+	boolean acceptedOffer;
 	
 	/**
 	 * @param offeringPlayer  Player proposing the trade

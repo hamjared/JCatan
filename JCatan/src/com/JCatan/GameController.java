@@ -1,6 +1,4 @@
 package com.JCatan;
-
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -18,6 +16,15 @@ public class GameController {
         return board;
     }
 
+	public List<Player> getPlayers(){
+		return players;
+	}
+	
+	public Player getCurrentPlayer() {
+		if(playerTurnIndex >= players.size())
+			playerTurnIndex=0;
+		return players.get(playerTurnIndex);
+	}
 
     /**
 	 * @param players
@@ -26,10 +33,9 @@ public class GameController {
 	public GameController(List<Player> players, BoardFactory bf) {
 		this.players = players;
 		this.board = new Board(bf);
-		playerTurnIndex = 0;
+		playerTurnIndex = 0;	
 		
 	}
-
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void diceRollPhase() {
@@ -39,7 +45,6 @@ public class GameController {
 		
 		players.sort(new Comparator() {
 
-			@SuppressWarnings("null")
 			@Override
 			public int compare(Object o1, Object o2) {
 				Player p1 = null;
@@ -76,7 +81,8 @@ public class GameController {
 		boolean gameEnded = false;
         while(!gameEnded) {
 		    
-            Player curPlayer = players.get(playerTurnIndex);
+        	System.out.print("In game phase");
+            HumanPlayer curPlayer = (HumanPlayer) getCurrentPlayer();
             
             int diceRoll = curPlayer.getDiceRoll();
             
@@ -85,6 +91,8 @@ public class GameController {
             }
             
             board.dishOutResources(diceRoll);
+            
+            System.out.print("Beginning Trade");
             
             curPlayer.tradePhase();
             
@@ -95,7 +103,7 @@ public class GameController {
                 gameEnded = true;
             }
             
-            playerTurnIndex ++;
+            playerTurnIndex++;
             
             if(playerTurnIndex >= players.size()) {
                 playerTurnIndex = 0;
@@ -104,12 +112,11 @@ public class GameController {
 		
 	}
 	
-
+	public void turnOnPlayersTradePanel(DomesticTrade trade, Player player) {
+		//Turn the player's tradePanel on and insert the trade...
+		System.out.print("PLAYER MADE DOMESTIC TRADE OFFER!");
+	}
 	
-	
-	/**
-	 * 
-	 */
 	public void startGame() {
 		
 		diceRollPhase();
@@ -117,6 +124,5 @@ public class GameController {
 		setupPhase();
 		
 		gamePhase();
-		
 	}
 }

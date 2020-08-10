@@ -2,11 +2,17 @@ package com.JCatan;
 
 public class HumanPlayer extends Player
 {
-
+	private Object temp = new Object();
+	
     public HumanPlayer(String name)
     {
         super(name);
-
+        for(int i = 0; i < 10; i++) {
+        	this.resources.add(new ResourceCard(ResourceType.BRICK));
+        	this.resources.add(new ResourceCard(ResourceType.ORE));
+        	this.resources.add(new ResourceCard(ResourceType.SHEEP));
+        	this.resources.add(new ResourceCard(ResourceType.WHEAT));
+        }
     }
 
     @Override
@@ -72,7 +78,7 @@ public class HumanPlayer extends Player
         // TODO Player: receiveTrade
 
     }
-
+   
     @Override
     public int rollDice()
     {
@@ -96,9 +102,18 @@ public class HumanPlayer extends Player
 
     @Override
     public void tradePhase()
-    {
-        // TODO Player: tradePhase
-
+    {   
+    synchronized(temp) {
+    	boolean finishedTrade = false;
+    		try {		
+    			while(!finishedTrade) {
+    				System.out.print("WAITING");	
+    				temp.wait();
+    			}
+    		} catch (Exception e) {
+				e.printStackTrace();
+			}
+    	}
     }
 
     @Override

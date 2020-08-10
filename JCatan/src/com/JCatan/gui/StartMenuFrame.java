@@ -1,8 +1,5 @@
 package com.JCatan.gui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -14,6 +11,7 @@ import com.JCatan.TraditionalBoardFactory;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -25,8 +23,8 @@ import java.awt.event.ActionEvent;
 
 public class StartMenuFrame extends JFrame
 {
-
-    private JPanel contentPane;
+	private static final long serialVersionUID = 7807675421410822657L;
+	private JPanel contentPane;
     private JTextField redPlayerName;
     private JTextField whitePlayerName;
     private JTextField bluePlayerName;
@@ -106,25 +104,28 @@ public class StartMenuFrame extends JFrame
     {
         List<Player> players = getPlayers();
         
-        
-        GameGUI game = new GameGUI(players, new TraditionalBoardFactory());
-        game.setVisible(true);
-        this.setVisible(false);
-        
+        SwingUtilities.invokeLater(new Runnable() {
+    		public void run() {
+    			GameGUI game = new GameGUI(players, new TraditionalBoardFactory());
+    	        game.setVisible(true);
+    		}
+    	});
+        setVisible(false);
+        dispose();
     }
     
     protected List<Player> getPlayers(){
         List<Player> players = new ArrayList<>();
-        if(!redPlayerName.getText().isBlank()) {
+        if(!redPlayerName.getText().isEmpty()) {
             players.add(new HumanPlayer(redPlayerName.getText()));
         }
-        if(!bluePlayerName.getText().isBlank()) {
+        if(!bluePlayerName.getText().isEmpty()) {
             players.add(new HumanPlayer(bluePlayerName.getText()));
         }
-        if(!whitePlayerName.getText().isBlank()) {
+        if(!whitePlayerName.getText().isEmpty()) {
             players.add(new HumanPlayer(whitePlayerName.getText()));
         }
-        if(!orangePlayerName.getText().isBlank()) {
+        if(!orangePlayerName.getText().isEmpty()) {
             players.add(new HumanPlayer(orangePlayerName.getText()));
         }
         

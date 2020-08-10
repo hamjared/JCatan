@@ -9,20 +9,16 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import com.JCatan.ResourceType;
 import com.JCatan.Tile;
 
 public class BoardPanel extends JPanel
 {
-    public BoardPanel()
+    public BoardPanel(int x, int y, int width, int height)
     {
         super();
         setBackground(Color.BLUE);
-        setBounds(0, 0, 1441, 867);
+        setBounds(x, y, width, height);
     }
 
     private static final long serialVersionUID = 1L;
@@ -34,10 +30,11 @@ public class BoardPanel extends JPanel
 
     private Font font = new Font("Arial", Font.BOLD, 24);
     FontMetrics metrics;
-
+    
     @Override
     public void paintComponent(Graphics g)
     {
+    	super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE,
@@ -48,17 +45,19 @@ public class BoardPanel extends JPanel
         drawCircle(g2d, W2, H2, 10000, true, true, 0x4488FF, 0);
 
         drawHexGridAdvanced(g2d, 5, 85);
+        g2d.dispose();
     }
-
-    private void drawHexGridAdvanced(Graphics g, int n, int r)
+    
+    private void drawHexGridAdvanced(Graphics2D g, int n, int r)
     {
         double ang30 = Math.toRadians(30);
         double xOff = Math.cos(ang30) * r;
         double yOff = Math.sin(ang30) * r;
         int h = n / 2;
         int tileIndex = 0;
+        
         List<Tile> tiles = GameGUI.controller.getBoard().getTiles();
-
+       
         for (int row = 0; row < 5; row++)
         {
             int cols = 0;
@@ -112,12 +111,10 @@ public class BoardPanel extends JPanel
 
                 tileIndex++;
             }
-
         }
-
     }
-
-    private void drawHex(Graphics g, int posX, int posY, int x, int y, int r,
+    
+    private void drawHex(Graphics2D g, int posX, int posY, int x, int y, int r,
             Tile tile, String text)
     {
         Hexagon hex = new Hexagon(x, y, r, tile);
@@ -132,20 +129,20 @@ public class BoardPanel extends JPanel
         g.setColor(new Color(0xFFFFFF));
         g.drawString(text, x - w / 2, y + h / 2);
     }
-
+    
     private String coord(int value)
     {
         return (value > 0 ? "+" : "") + Integer.toString(value);
     }
 
-    public void drawCircle(Graphics2D g, int x, int y, int diameter,
+    private void drawCircle(Graphics2D g, int x, int y, int diameter,
             boolean centered, boolean filled, int colorValue, int lineThickness)
     {
         drawOval(g, x, y, diameter, diameter, centered, filled, colorValue,
                 lineThickness);
     }
 
-    public void drawOval(Graphics2D g, int x, int y, int width, int height,
+    private void drawOval(Graphics2D g, int x, int y, int width, int height,
             boolean centered, boolean filled, int colorValue, int lineThickness)
     {
         // Store before changing.
@@ -168,5 +165,4 @@ public class BoardPanel extends JPanel
         g.setColor(tmpC);
         g.setStroke(tmpS);
     }
-
 }

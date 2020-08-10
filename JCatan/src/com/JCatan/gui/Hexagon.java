@@ -99,7 +99,7 @@ public class Hexagon extends Polygon
             xpoints[p] = point.x;
             ypoints[p] = point.y;
             points[p] = point;
-            System.out.printf("%d. (%d, %d)\n", p, point.x, point.y);
+            //System.out.printf("%d. (%d, %d)\n", p, point.x, point.y);
         }
     }
 

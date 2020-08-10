@@ -2,6 +2,8 @@ package com.JCatan;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public abstract class Player {
 	List<ResourceCard> resources;
@@ -16,6 +18,17 @@ public abstract class Player {
 		victoryPoints = 0;
 		this.name = name;
 	}
+	
+	public List<ResourceCard> getResources(){
+		return resources;
+	}
+	
+    public Map<ResourceType, Integer> getUniqueResourcesCount(){
+   	 Map<ResourceType, Integer> temp = resources.stream().collect(
+   			 										Collectors.toMap(ResourceCard::getResourceType,
+   			 										r->1, (existing, addition)-> existing + addition));
+   	 return temp;
+   }
 	
 	/**
 	 * @throws InsufficientResourceCardException
@@ -51,6 +64,10 @@ public abstract class Player {
 	 * 
 	 */
 	public abstract void endTurn();
+	
+	public String getName() {
+		return name;
+	}
 	
 	/**
 	 * @return

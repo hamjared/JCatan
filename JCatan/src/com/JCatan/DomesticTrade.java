@@ -3,10 +3,10 @@ package com.JCatan;
 import java.util.List;
 
 public class DomesticTrade extends Trade {
-
+	
 	public DomesticTrade(Player offeringPlayer, List<ResourceCard> offeringCards, List<ResourceCard> requestingCards) {
 		super(offeringPlayer, offeringCards, requestingCards);
-
+		
 	}
 
     @Override
