@@ -239,9 +239,6 @@ public abstract class Player {
     	return new LongestRoadCalculator(playedRoads).calcLongestRoad();
     }
     
-    public void addRoadToRoadPlayedList(Road road) {
-    	playedRoads.add(road);
-    }
 
 	public void setHasLongestRoad(boolean hasLongestRoad) {
 		this.hasLongestRoad = hasLongestRoad;
