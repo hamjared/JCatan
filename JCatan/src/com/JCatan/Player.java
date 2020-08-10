@@ -1,27 +1,33 @@
 package com.JCatan;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public abstract class Player {
 	List<ResourceCard> resources;
 	List<DevelopmentCard> devCards;
 	List<Building> buildings;
-	List<Road> roads;
+	List<Road> playedRoads;
 	int victoryPoints;
 	int diceRoll;
 	String name;
 	Random randomGenerator;
+    	boolean hasLongestRoad;
+    	boolean hasLargestArmy;
 
 	Player(String name) {
 		resources = new ArrayList<ResourceCard>();
 		devCards = new ArrayList<DevelopmentCard>();
 		victoryPoints = 0;
 		buildings = new ArrayList<Building>();
-		roads = new ArrayList<Road>();
+		playedRoads = new ArrayList<Road>();
 		this.name = name;
 		initializeBuildingsAndRoads();
+		hasLongestRoad = false;
+        	hasLargestArmy = false;
 	}
 
 	/**
@@ -52,16 +58,42 @@ public abstract class Player {
 	/**
 	 * 
 	 */
-	public int calcVictoryPoints() {
-		victoryPoints = 0;
-		victoryPoints += buildings.stream().filter(b -> b.hasBeenPlayed()).reduce(0,
-				(subtotal, b) -> subtotal + b.getVictoryPoints(), Integer::sum);
+	public int calcVictoryPoints()
+    {
+        victoryPoints = 0;
+        victoryPoints += buildings.stream()
+                .filter(b -> b.hasBeenPlayed())
+                .reduce(0, (subtotal, b) -> subtotal + b.getVictoryPoints(),
+                        Integer::sum);
 
-		victoryPoints += devCards.stream().reduce(0, (subtotal, dc) -> subtotal + dc.getVictoryPoints(), Integer::sum);
+        victoryPoints += devCards.stream().reduce(0,
+                (subtotal, dc) -> subtotal + dc.getVictoryPoints(),
+                Integer::sum);
+        
+        if(hasLongestRoad) {
+            victoryPoints += 2;
+        }
+        
+        if(hasLargestArmy) {
+            victoryPoints += 2;
+        }
 
-		return victoryPoints;
+        return victoryPoints;
 
-	}
+    }
+
+
+	public int getNumberOfKnightsPlayed() {
+    	int numKnights = 0;
+    	for (DevelopmentCard devCard : devCards) {
+    		if(devCard instanceof KnightDevelopmentCard && devCard.isHasBeenPlayed()) {
+    			numKnights ++;
+    		}
+    	}
+    	
+    	return numKnights;
+    }
+	
 
 	public void initializeBuildingsAndRoads() {
 		for (int i = 0; i < 5; i++) {
@@ -92,7 +124,7 @@ public abstract class Player {
 	}
 
 	public void giveRoad(Road road) {
-		this.roads.add(road);
+		this.playedRoads.add(road);
 	}
 
 	/**
@@ -176,9 +208,18 @@ public abstract class Player {
 	 */
 	public abstract void tradePhase();
 
+	public boolean isHasLongestRoad() {
+		return hasLongestRoad;
+	}
+
+	public boolean isHasLargestArmy() {
+		return hasLargestArmy;
+	}
+
 	public void giveDevelopmentCard(DevelopmentCard devCard) {
 		devCards.add(devCard);
 	}
+
 
 	public List<Building> getBuildings() {
 		return buildings;
@@ -192,4 +233,18 @@ public abstract class Player {
 		this.resources = resources;
 	}
 
-}
+	public int calcLongestRoad() {
+    	return new LongestRoadCalculator(playedRoads).calcLongestRoad();
+    }
+    
+    public void addRoadToRoadPlayedList(Road road) {
+    	playedRoads.add(road);
+    }
+
+	public void setHasLongestRoad(boolean hasLongestRoad) {
+		this.hasLongestRoad = hasLongestRoad;
+	}
+
+	public void setHasLargestArmy(boolean hasLargestArmy) {
+		this.hasLargestArmy = hasLargestArmy;
+	}

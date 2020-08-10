@@ -8,7 +8,16 @@ public abstract class Node {
 	Building building;
 	List<Road> roads;
 	List<Tile> tiles;
+	private int nodeIndex;
 	
+	public int getNodeIndex() {
+		return nodeIndex;
+	}
+
+	public void setNodeIndex(int nodeIndex) {
+		this.nodeIndex = nodeIndex;
+	}
+
 	/**
 	 * 
 	 */
@@ -57,8 +66,6 @@ public abstract class Node {
 	public List<Road> getRoads() {
 		return roads;
 	}
-    
-    
 	
 
 }
