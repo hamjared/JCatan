@@ -12,139 +12,78 @@ public class LongestRoadCalculatorTest extends TestCase {
 		super.tearDown();
 	}
 
-	public void test() {
+	public void test() throws InsufficientResourceCardException {
 		Board board = new Board(new TraditionalBoardFactory());
 		Player player = new HumanPlayer("Joe");
 
-		Road road10_14 = new Road(board.board.getNodeList().get(10), board.board.getNodeList().get(14), player);
-		board.board.getNodeList().get(14).addRoad(road10_14);
-		board.board.getNodeList().get(10).addRoad(road10_14);
-		player.addRoadToRoadPlayedList(road10_14);
-
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(10), board.board.getNodeList().get(14));
 		assertEquals(1, player.calcLongestRoad());
 
-		Road road14_19 = new Road(board.board.getNodeList().get(14), board.board.getNodeList().get(19), player);
-		board.board.getNodeList().get(14).addRoad(road14_19);
-		board.board.getNodeList().get(19).addRoad(road14_19);
-		player.addRoadToRoadPlayedList(road14_19);
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(14), board.board.getNodeList().get(19));
 
 		assertEquals(2, player.calcLongestRoad());
 
-		Road road14_9 = new Road(board.board.getNodeList().get(14), board.board.getNodeList().get(9), player);
-		board.board.getNodeList().get(14).addRoad(road14_9);
-		board.board.getNodeList().get(19).addRoad(road14_9);
-		player.addRoadToRoadPlayedList(road14_9);
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(14), board.board.getNodeList().get(9));
 
 		assertEquals(2, player.calcLongestRoad());
 
-		Road road19_24 = new Road(board.board.getNodeList().get(24), board.board.getNodeList().get(19), player);
-		board.board.getNodeList().get(19).addRoad(road19_24);
-		board.board.getNodeList().get(24).addRoad(road19_24);
-		player.addRoadToRoadPlayedList(road19_24);
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(24), board.board.getNodeList().get(19));
 
 		assertEquals(3, player.calcLongestRoad());
 
-
-
 	}
-	
-	public void test2() {
+
+	public void test2() throws InsufficientResourceCardException {
 		Board board = new Board(new TraditionalBoardFactory());
 		Player player = new HumanPlayer("Joe");
 
-		Road road10_14 = new Road(board.board.getNodeList().get(10), board.board.getNodeList().get(14), player);
-		board.board.getNodeList().get(14).addRoad(road10_14);
-		board.board.getNodeList().get(10).addRoad(road10_14);
-		player.addRoadToRoadPlayedList(road10_14);
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(10), board.board.getNodeList().get(14));
 
-		Road road14_19 = new Road(board.board.getNodeList().get(14), board.board.getNodeList().get(19), player);
-		board.board.getNodeList().get(14).addRoad(road14_19);
-		board.board.getNodeList().get(19).addRoad(road14_19);
-		player.addRoadToRoadPlayedList(road14_19);
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(14), board.board.getNodeList().get(19));
 
-		Road road14_9 = new Road(board.board.getNodeList().get(14), board.board.getNodeList().get(9), player);
-		board.board.getNodeList().get(14).addRoad(road14_9);
-		board.board.getNodeList().get(19).addRoad(road14_9);
-		player.addRoadToRoadPlayedList(road14_9);
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(14), board.board.getNodeList().get(9));
 
-		Road road19_24 = new Road(board.board.getNodeList().get(24), board.board.getNodeList().get(19), player);
-		board.board.getNodeList().get(19).addRoad(road19_24);
-		board.board.getNodeList().get(24).addRoad(road19_24);
-		player.addRoadToRoadPlayedList(road19_24);
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(24), board.board.getNodeList().get(19));
 
-		Road road24_30 = new Road(board.board.getNodeList().get(24), board.board.getNodeList().get(30), player);
-		board.board.getNodeList().get(30).addRoad(road24_30);
-		board.board.getNodeList().get(24).addRoad(road24_30);
-		player.addRoadToRoadPlayedList(road24_30);
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(24), board.board.getNodeList().get(30));
 
-		Road road18_24 = new Road(board.board.getNodeList().get(24), board.board.getNodeList().get(18), player);
-		board.board.getNodeList().get(18).addRoad(road18_24);
-		board.board.getNodeList().get(24).addRoad(road18_24);
-		player.addRoadToRoadPlayedList(road18_24);
-		
-		Road road19_25 = new Road(board.board.getNodeList().get(19), board.board.getNodeList().get(25), player);
-		board.board.getNodeList().get(19).addRoad(road19_25);
-		board.board.getNodeList().get(25).addRoad(road19_25);
-		player.addRoadToRoadPlayedList(road19_25);
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(24), board.board.getNodeList().get(18));
 
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(19), board.board.getNodeList().get(25));
 
-		Road road17_22 = new Road(board.board.getNodeList().get(22), board.board.getNodeList().get(17), player);
-		board.board.getNodeList().get(22).addRoad(road17_22);
-		board.board.getNodeList().get(17).addRoad(road17_22);
-		player.addRoadToRoadPlayedList(road17_22);
-		
-		Road road17_23 = new Road(board.board.getNodeList().get(23), board.board.getNodeList().get(17), player);
-		board.board.getNodeList().get(23).addRoad(road17_23);
-		board.board.getNodeList().get(17).addRoad(road17_23);
-		player.addRoadToRoadPlayedList(road17_23);
-		
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(22), board.board.getNodeList().get(17));
+
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(23), board.board.getNodeList().get(17));
+
 		assertEquals(4, player.calcLongestRoad());
-		Road road18_23 = new Road(board.board.getNodeList().get(23), board.board.getNodeList().get(18), player);
-		board.board.getNodeList().get(23).addRoad(road18_23);
-		board.board.getNodeList().get(18).addRoad(road18_23);
-		player.addRoadToRoadPlayedList(road18_23);
+
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(23), board.board.getNodeList().get(18));
 
 		int lr = player.calcLongestRoad();
 		assertEquals(7, lr);
 	}
-	
-	public void test3() {
+
+	public void test3() throws InsufficientResourceCardException {
 		Board board = new Board(new TraditionalBoardFactory());
 		Player player = new HumanPlayer("Joe");
 
-		Road road29_35 = new Road(board.board.getNodeList().get(35), board.board.getNodeList().get(29), player);
-		board.board.getNodeList().get(35).addRoad(road29_35);
-		board.board.getNodeList().get(29).addRoad(road29_35);
-		player.addRoadToRoadPlayedList(road29_35);
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(35), board.board.getNodeList().get(29));
 
 		assertEquals(1, player.calcLongestRoad());
-
-
-
-
 
 	}
-	
-	public void test4() {
+
+	public void test5() throws InsufficientResourceCardException {
 		Board board = new Board(new TraditionalBoardFactory());
 		Player player = new HumanPlayer("Joe");
 
-		Road road10_14 = new Road(board.board.getNodeList().get(10), board.board.getNodeList().get(14), player);
-		board.board.getNodeList().get(14).addRoad(road10_14);
-		board.board.getNodeList().get(10).addRoad(road10_14);
-		player.addRoadToRoadPlayedList(road10_14);
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(10), board.board.getNodeList().get(14));
 
 		assertEquals(1, player.calcLongestRoad());
 
-		Road road14_19 = new Road(board.board.getNodeList().get(14), board.board.getNodeList().get(19), player);
-		board.board.getNodeList().get(14).addRoad(road14_19);
-		board.board.getNodeList().get(19).addRoad(road14_19);
-		player.addRoadToRoadPlayedList(road14_19);
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(14), board.board.getNodeList().get(19));
 
 		assertEquals(2, player.calcLongestRoad());
-
-
-
 
 	}
 
