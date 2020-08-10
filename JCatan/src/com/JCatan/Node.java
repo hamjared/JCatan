@@ -48,6 +48,11 @@ public abstract class Node {
     {
         this.tiles = tiles;
     }
+
+    public List<Road> getRoads()
+    {
+        return roads;
+    }
 	
 
 }
