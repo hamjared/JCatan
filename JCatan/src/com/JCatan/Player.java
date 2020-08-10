@@ -9,14 +9,15 @@ import java.util.Set;
 public abstract class Player {
 	List<ResourceCard> resources;
 	List<DevelopmentCard> devCards;
+	List<Road> roads;
 	List<Building> buildings;
 	List<Road> playedRoads;
 	int victoryPoints;
 	int diceRoll;
 	String name;
 	Random randomGenerator;
-    	boolean hasLongestRoad;
-    	boolean hasLargestArmy;
+    boolean hasLongestRoad;
+    boolean hasLargestArmy;
 
 	Player(String name) {
 		resources = new ArrayList<ResourceCard>();
@@ -24,6 +25,7 @@ public abstract class Player {
 		victoryPoints = 0;
 		buildings = new ArrayList<Building>();
 		playedRoads = new ArrayList<Road>();
+		this.roads = new ArrayList<>();
 		this.name = name;
 		initializeBuildingsAndRoads();
 		hasLongestRoad = false;
@@ -124,7 +126,7 @@ public abstract class Player {
 	}
 
 	public void giveRoad(Road road) {
-		this.playedRoads.add(road);
+		this.roads.add(road);
 	}
 
 	/**
@@ -248,3 +250,4 @@ public abstract class Player {
 	public void setHasLargestArmy(boolean hasLargestArmy) {
 		this.hasLargestArmy = hasLargestArmy;
 	}
+}
