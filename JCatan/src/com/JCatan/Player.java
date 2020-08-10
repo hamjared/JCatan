@@ -10,6 +10,8 @@ public abstract class Player
     List<Building> buildings;
     int victoryPoints;
     int diceRoll;
+    boolean hasLongestRoad;
+    boolean hasLargestArmy;
     String name;
 
     Player(String name)
@@ -18,6 +20,8 @@ public abstract class Player
         devCards = new ArrayList<DevelopmentCard>();
         victoryPoints = 0;
         buildings = new ArrayList<Building>();
+        hasLongestRoad = false;
+        hasLargestArmy = false;
         this.name = name;
     }
 
@@ -62,6 +66,14 @@ public abstract class Player
         victoryPoints += devCards.stream().reduce(0,
                 (subtotal, dc) -> subtotal + dc.getVictoryPoints(),
                 Integer::sum);
+        
+        if(hasLongestRoad) {
+            victoryPoints += 2;
+        }
+        
+        if(hasLargestArmy) {
+            victoryPoints += 2;
+        }
 
         return victoryPoints;
 
