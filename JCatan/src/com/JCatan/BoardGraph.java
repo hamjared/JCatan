@@ -11,10 +11,6 @@ public class BoardGraph {
 	    this.nodeList = nodeList;
 	}
 
-	public List<List<Node>> getNodes() {
-		return nodes;
-	}
-
 	public void setNodes(List<List<Node>> nodes) {
 		this.nodes = nodes;
 	}

@@ -15,8 +15,8 @@ public abstract class Player {
 	int diceRoll;
 	String name;
 	Random randomGenerator;
-    	boolean hasLongestRoad;
-    	boolean hasLargestArmy;
+    boolean hasLongestRoad;
+    boolean hasLargestArmy;
 
 	Player(String name) {
 		resources = new ArrayList<ResourceCard>();
@@ -27,7 +27,7 @@ public abstract class Player {
 		this.name = name;
 		initializeBuildingsAndRoads();
 		hasLongestRoad = false;
-        	hasLargestArmy = false;
+        hasLargestArmy = false;
 	}
 
 	/**
@@ -226,7 +226,7 @@ public abstract class Player {
 	}
 
 	public List<Road> getRoads() {
-		return roads;
+		return playedRoads;
 	}
 
 	public void setResources(List<ResourceCard> resources) {
@@ -248,3 +248,4 @@ public abstract class Player {
 	public void setHasLargestArmy(boolean hasLargestArmy) {
 		this.hasLargestArmy = hasLargestArmy;
 	}
+}
