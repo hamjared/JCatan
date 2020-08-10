@@ -153,7 +153,11 @@ public abstract class BoardFactory {
             }
 
             nodes.add(new InteriorNode());
+            
+            nodes.get(i).setNodeIndex(i);
         }
+        
+        
         
         return nodes;
     }
