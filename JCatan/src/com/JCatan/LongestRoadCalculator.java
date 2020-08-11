@@ -19,6 +19,9 @@ public class LongestRoadCalculator {
 	}
 
 	public int calcLongestRoad() {
+		if(roads.isEmpty()) {
+			return 0;
+		}
 		int longestLength = 0;
 		int curLength = 0;
 		for (Road road : roads) {
