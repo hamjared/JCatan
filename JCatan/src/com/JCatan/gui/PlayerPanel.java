@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import com.JCatan.Player;
 
 import javax.swing.JLabel;
+import java.awt.Font;
 
 public class PlayerPanel extends JPanel
 {
@@ -34,8 +35,38 @@ public class PlayerPanel extends JPanel
         add(numResourceCardLabel);
         
         JLabel numDevelopCardsLabel = new JLabel("12");
-        numDevelopCardsLabel.setBounds(122, 101, 28, 14);
+        numDevelopCardsLabel.setBounds(143, 101, 28, 14);
         add(numDevelopCardsLabel);
+        
+        JLabel numRoadsLabel = new JLabel("12");
+        numRoadsLabel.setBounds(274, 110, 46, 14);
+        add(numRoadsLabel);
+        
+        JLabel numSettlementsLabel = new JLabel("12");
+        numSettlementsLabel.setBounds(335, 110, 20, 14);
+        add(numSettlementsLabel);
+        
+        JLabel numCitiesLabel = new JLabel("12");
+        numCitiesLabel.setBounds(407, 110, 46, 14);
+        add(numCitiesLabel);
+        
+        JLabel lblNewLabel = new JLabel("VP");
+        lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblNewLabel.setBounds(261, 0, 57, 61);
+        add(lblNewLabel);
+        
+        JLabel victoryPointsLabel = new JLabel("16");
+        victoryPointsLabel.setBounds(302, 27, 46, 14);
+        add(victoryPointsLabel);
+        
+        JLabel longestRoadLabel = new JLabel("LR");
+        longestRoadLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+        longestRoadLabel.setBounds(348, 11, 46, 34);
+        add(longestRoadLabel);
+        
+        JLabel lblNewLabel_2 = new JLabel("16");
+        lblNewLabel_2.setBounds(384, 27, 46, 14);
+        add(lblNewLabel_2);
         
         
     }
@@ -48,6 +79,9 @@ public class PlayerPanel extends JPanel
     	drawShape(new Rectangle2D.Double(0,0, 10,30), 0, 275, 75, 1, g2);
     	drawShape(new SettlementShape(0,0, 30,30), 0, 325, 75, 1, g2);
     	drawShape(new CityShape(30,30), 0, 400,75, 1, g2);
+    	
+    	drawShape(new Rectangle2D.Double(0,0, 35,50), 180, 110, 90, 1, g2); 
+    	drawShape(new Rectangle2D.Double(0,0, 35,50), 180, 175, 90, 1, g2);
 
     	
     	
