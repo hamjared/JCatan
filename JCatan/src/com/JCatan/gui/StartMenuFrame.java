@@ -81,8 +81,8 @@ public class StartMenuFrame extends JFrame
         contentPane.add(orangePlayerName);
         orangePlayerName.setColumns(10);
         
-        JComboBox comboBox = new JComboBox();
-        comboBox.setModel(new DefaultComboBoxModel(new String[] {"Traditional Board"}));
+        JComboBox<String> comboBox = new JComboBox<String>();
+        comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Traditional Board"}));
         comboBox.setBounds(336, 317, 113, 22);
         contentPane.add(comboBox);
         

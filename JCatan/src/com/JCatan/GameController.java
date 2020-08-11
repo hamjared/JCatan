@@ -1,130 +1,232 @@
 package com.JCatan;
+
 import java.util.Comparator;
 import java.util.List;
 
 public class GameController {
 	private static final int POINTS_TO_WIN = 10;
 
-
 	List<Player> players;
-	int playerTurnIndex;
+	int playerTurnIndex = 0;
 	int gameWinnerIndex;
 	Board board;
-	
-	public Board getBoard()
-    {
-        return board;
-    }
+	Player curPlayer;
+	boolean gameEnded = false;
+	GamePhase gamePhase;
+	Consumer action;
 
 	public List<Player> getPlayers(){
 		return players;
 	}
-	
-	public Player getCurrentPlayer() {
-		if(playerTurnIndex >= players.size())
-			playerTurnIndex=0;
-		return players.get(playerTurnIndex);
+
+	public Board getBoard() {
+		return board;
 	}
 
-    /**
+	/**
 	 * @param players
 	 * @param bf
 	 */
 	public GameController(List<Player> players, BoardFactory bf) {
 		this.players = players;
 		this.board = new Board(bf);
-		playerTurnIndex = 0;	
-		
+		playerTurnIndex = 0;
+
+	}
+	
+	public Player getCurPlayer() {
+		return curPlayer;
+	}
+
+	public GamePhase getGamePhase() {
+		return gamePhase;
+	}
+
+	public void setGamePhase(GamePhase gamePhase) {
+		this.gamePhase = gamePhase;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void diceRollPhase() {
-		for(Player player : players) {
+		for (Player player : players) {
 			player.rollDice();
 		}
-		
+
 		players.sort(new Comparator() {
 
 			@Override
 			public int compare(Object o1, Object o2) {
-				Player p1 = null;
+				Player p1 = null; 
 				Player p2 = null;
 				if (o1 instanceof Player && o2 instanceof Player) {
 					p1 = (Player) o1;
 					p2 = (Player) o2;
-					
-					
+
 				}
-				if(p1 == null) {
+				if (p1 == null) {
 					return -1;
 				}
 				return p2.getDiceRoll() - p1.getDiceRoll();
 			}
-			
+
 		});
-		
+
+	}
+
+	public void setAction(Consumer c) {
+		action = c;
 	}
 	
-	   private void setupPhase() {
-	        for(Player player: players) {
-	            player.setup();
-	        }
-	        
-	        for(int i = players.size() - 1; i >=0; i--) {
-	            players.get(i).setup();
-	        }
-	        
-	    }
+	public void endTrade() {
+		//Could display message player accepted the trade...
+		action.accept(this);
+	}
 	
-	private void gamePhase() {
-	    playerTurnIndex = 0;
-		boolean gameEnded = false;
-        while(!gameEnded) {
-		    
-        	System.out.print("In game phase");
-            HumanPlayer curPlayer = (HumanPlayer) getCurrentPlayer();
-            
-            int diceRoll = curPlayer.getDiceRoll();
-            
-            if(diceRoll == 7) {
-                players.forEach(p -> p.sevenRolled(curPlayer));
-            }
-            
-            board.dishOutResources(diceRoll);
-            
-            System.out.print("Beginning Trade");
-            
-            curPlayer.tradePhase();
-            
-            curPlayer.buildPhase();
-            
-            if(curPlayer.calcVictoryPoints() > POINTS_TO_WIN) {
-                gameWinnerIndex = playerTurnIndex;
-                gameEnded = true;
-            }
-            
-            playerTurnIndex++;
-            
-            if(playerTurnIndex >= players.size()) {
-                playerTurnIndex = 0;
-            }
+	private void setupPhase() {
+
+		int playerNum = 0;
+		Node node1 = null;
+		Node node2 = null;
+		for (Player player : players) {
+			switch (playerNum) {
+			case 0:
+				node1 = board.getTiles().get(0).getNodes().get(0);
+				node2 = board.getTiles().get(0).getNodes().get(1);
+				break;
+			case 1:
+				node1 = board.getTiles().get(1).getNodes().get(0);
+				node2 = board.getTiles().get(1).getNodes().get(1);
+				break;
+			case 2:
+				node1 = board.getTiles().get(2).getNodes().get(0);
+				node2 = board.getTiles().get(2).getNodes().get(1);
+				break;
+			case 3:
+				node1 = board.getTiles().get(3).getNodes().get(0);
+				node2 = board.getTiles().get(3).getNodes().get(1);
+				break;
+			}
+			playerNum++;
+			player.setup(node1, node2);
+		}
+		playerNum = 3;
+		for (int i = players.size() - 1; i >= 0; i--) {
+			switch (playerNum) {
+			case 0:
+				node1 = board.getTiles().get(7).getNodes().get(0);
+				node2 = board.getTiles().get(7).getNodes().get(1);
+				break;
+			case 1:
+				node1 = board.getTiles().get(8).getNodes().get(0);
+				node2 = board.getTiles().get(8).getNodes().get(1);
+				break;
+			case 2:
+				node1 = board.getTiles().get(9).getNodes().get(0);
+				node2 = board.getTiles().get(9).getNodes().get(1);
+				break;
+			case 3:
+				node1 = board.getTiles().get(10).getNodes().get(0);
+				node2 = board.getTiles().get(10).getNodes().get(1);
+				break;
+			}
+			playerNum--;
+			players.get(i).setup(node1, node2);
+		}
+		
+		gamePhase = GamePhase.GAMEROLL;
+
+	}
+	
+	public void gamePhaseRoll() {
+			Player curPlayer = players.get(playerTurnIndex);
+
+			int diceRoll = curPlayer.rollDice();
+
+			if (diceRoll == 7) {
+				players.forEach(p -> p.sevenRolled(curPlayer));
+				boolean cardStolen = false;
+//				while (cardStolen == false) {
+//					cardStolen = curPlayer.sevenRolledSteal(players.get(playerTurnIndex + 1)); // Pass in a player to
+//																								// steal from here right
+//																								// now it is set to
+//																								// curPlayer + 1
+//				}
+			}
+
+			board.dishOutResources(diceRoll);
+	}
+    
+	
+	public void initiateTrade(Trade trade) {
+		if(trade instanceof DomesticTrade) {
+			DomesticTrade dt = (DomesticTrade)trade;
+			dt.accept();
+		}
+	}
+	
+	public void gamePhaseTrade() {
+		curPlayer = players.get(playerTurnIndex);
+	}
+	
+	public void gamePhaseBuild() {
+		curPlayer = players.get(playerTurnIndex);
+		//board.getBoard().getNodes().get()
+		curPlayer.buildPhase(board.getTiles().get(12).getNodes().get(0),
+				board.getTiles().get(12).getNodes().get(1));
+	}
+	
+	public void gamePhaseEnd() {
+		if (curPlayer.calcVictoryPoints() > POINTS_TO_WIN) {
+			gameWinnerIndex = playerTurnIndex;
+			gameEnded = true;
+		}
+
+		playerTurnIndex++;
+
+		if (playerTurnIndex >= players.size()) {
+			playerTurnIndex = 0;
+		}
+	}
+  
+	private void setLargestArmy() {
+		int largestArmy = 0;
+		for(Player player: players) {
+			player.setHasLargestArmy(false);
+			int playersArmy = player.getNumberOfKnightsPlayed();
+			if (playersArmy > largestArmy && playersArmy >= 5) {
+				largestArmy = playersArmy;
+				player.setHasLargestArmy(true);
+			}
+		}
+	}
+	
+	private void setLongestRoad() {
+		int longestRoad = 0;
+		for(Player player: players) {
+			player.setHasLongestRoad(false);
+			int playersLongestRoad = player.calcLongestRoad();
+			if (playersLongestRoad > longestRoad && playersLongestRoad >= 5) {
+				longestRoad = playersLongestRoad;
+				player.setHasLongestRoad(true);
+			}
 		}
 		
 	}
-	
-	public void turnOnPlayersTradePanel(DomesticTrade trade) {
-		//Turn the player's tradePanel on and insert the trade...
-		System.out.print(trade.getReceivingPlayer().getName() + " MADE DOMESTIC TRADE OFFER!");
-		
-		
-	}
-	
+
 	public void startGame() {
-		
+
 		diceRollPhase();
-		
+
 		setupPhase();
-		
-		gamePhase();
+
+		for (Tile tile : board.getTiles()) {
+			System.out.print(tile.getNumber() + ": ");
+			if (tile.getNodes().get(0).getBuilding() == null) {
+				System.out.println("No settlement");
+			} else {
+				System.out.println("Settlement");
+			}
+		}
+		//	gamePhase();
 	}
 }

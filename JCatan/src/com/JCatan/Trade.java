@@ -29,6 +29,14 @@ public abstract class Trade {
 		return requestingCards;
 	}
 	
+	public Player getReceivingPlayer() {
+		return receivingPlayer;
+	}
+	
+	public Player getOfferingPlayer() {
+		return offeringPlayer;
+	}
+	
 	/**
 	 * 
 	 */

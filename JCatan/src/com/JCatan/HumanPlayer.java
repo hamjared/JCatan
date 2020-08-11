@@ -1,117 +1,440 @@
 package com.JCatan;
 
-public class HumanPlayer extends Player
-{	
-    public HumanPlayer(String name)
-    {
-        super(name);
-        for(int i = 0; i < 10; i++) {
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+public class HumanPlayer extends Player {
+
+	public HumanPlayer(String name) {
+		super(name);
+		for(int i = 0; i < 10; i++) {
         	this.resources.add(new ResourceCard(ResourceType.BRICK));
         	this.resources.add(new ResourceCard(ResourceType.ORE));
         	this.resources.add(new ResourceCard(ResourceType.SHEEP));
         	this.resources.add(new ResourceCard(ResourceType.WHEAT));
+        	this.resources.add(new ResourceCard(ResourceType.WOOD));
         }
-    }
+	}
 
+	@Override
+	public void buildPhase(Node node1, Node node2) {
+		// Check for listener about player wanting to building road/building
+
+		try {
+			buildRoad(GamePhase.GAME, node1, node2);
+		} catch (InsufficientResourceCardException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		try {
+			buildSettlement(GamePhase.GAME, node1);
+		} catch (InsufficientResourceCardException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		try {
+			buildCity(node1);
+		} catch (InsufficientResourceCardException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void buildRoad(GamePhase phase, Node node1, Node node2) throws InsufficientResourceCardException {
+		if (phase == GamePhase.SETUP) {
+			// Setup Phase Build
+			Road road = new Road(node1, node2, this);
+			road.setHasBeenPlayed(true);
+			this.playedRoads.add(road);
+			this.getRoads().remove(road);
+			node1.addRoad(road);
+			node2.addRoad(road);
+		} else {
+			// Game Phase Build
+			if (this.getRoads().isEmpty() == false) {
+
+				Road road = new Road(node1, node2, this);
+				List<ResourceCard> resources = this.getResources();
+				int numWheat = 0;
+				int numWood = 0;
+				int numOre = 0;
+				int numSheep = 0;
+				int numBrick = 0;
+				int resourceCheck = 0;
+
+				for (ResourceCard r : resources) {
+					ResourceType type = r.getResourceType();
+					switch (type) {
+					case WHEAT:
+						numWheat++;
+						break;
+					case WOOD:
+						numWood++;
+						break;
+					case ORE:
+						numOre++;
+						break;
+					case SHEEP:
+						numSheep++;
+						break;
+					case BRICK:
+						numBrick++;
+						break;
+					default:
+						break;
+					}
+				}
+
+				Map<ResourceType, Integer> mp = road.getCost();
+				List<ResourceType> list = new ArrayList<>();
+				Iterator<Entry<ResourceType, Integer>> it = mp.entrySet().iterator();
+				while (it.hasNext()) {
+					Map.Entry<ResourceType, Integer> pair = (Map.Entry<ResourceType, Integer>) it.next();
+					ResourceType typeCheck = (ResourceType) pair.getKey();
+					switch (typeCheck) {
+					case BRICK:
+						if (numBrick < (int) pair.getValue()) {
+							System.out.println("Insufficient Resources");
+						} else {
+							System.out.println("Im in the resourceCheck");
+							resourceCheck++;
+							list.add((ResourceType) pair.getKey());
+						}
+						break;
+					case WOOD:
+						if (numWood < (int) pair.getValue()) {
+							System.out.println("Insufficient Resources");
+						} else {
+							System.out.println("Im in the resourceCheck");
+							resourceCheck++;
+							list.add((ResourceType) pair.getKey());
+						}
+					default:
+						break;
+					}
+					it.remove(); // avoids a ConcurrentModificationException
+				}
+
+				if (resourceCheck == 2) {
+					road.setHasBeenPlayed(true);
+					this.playedRoads.add(road);
+					this.getRoads().remove(road);
+					node1.addRoad(road);
+					node2.addRoad(road);
+					for (ResourceType type : list) {
+						this.removeResource(type);
+					}
+				}
+			}
+		}
+	}
+ 
+	@Override
+	public void buildSettlement(GamePhase phase, Node node) throws InsufficientResourceCardException {
+		if (phase == GamePhase.SETUP) {
+			// SetUp Phase Build
+			Settlement settlement = new Settlement(this);
+			settlement.setHasBeenPlayed(true);
+			this.getBuildings().remove(settlement);
+			node.setBuilding(settlement);
+		} else {
+			// Game Phase Build
+			boolean settlementCheck = false; 
+			for (Building b : this.getBuildings()) {
+				if (b.getClass().equals(Settlement.class)) {
+					settlementCheck = true;
+				}
+			}
+			if (settlementCheck == true) {
+
+				Settlement settlement = new Settlement(this);
+				List<ResourceCard> resources = this.getResources();
+				int numWheat = 0;
+				int numWood = 0;
+				int numOre = 0;
+				int numSheep = 0;
+				int numBrick = 0;
+				int resourceCheck = 0;
+
+				for (ResourceCard r : resources) {
+					ResourceType type = r.getResourceType();
+					switch (type) {
+					case WHEAT:
+						numWheat++;
+						break;
+					case WOOD:
+						numWood++;
+						break;
+					case ORE:
+						numOre++;
+						break;
+					case SHEEP:
+						numSheep++;
+						break;
+					case BRICK:
+						numBrick++;
+						break;
+					default:
+						break;
+					}
+				}
+				Map<ResourceType, Integer> mp = settlement.getCost();
+				List<ResourceType> list = new ArrayList<>();
+				Iterator<Entry<ResourceType, Integer>> it = mp.entrySet().iterator();
+				while (it.hasNext()) {
+					Map.Entry<ResourceType, Integer> pair = (Map.Entry<ResourceType, Integer>) it.next();
+					ResourceType typeCheck = (ResourceType) pair.getKey();
+					switch (typeCheck) {
+					case BRICK:
+						if (numBrick < (int) pair.getValue()) {
+							System.out.println("Insufficient Resources");
+						} else {
+							System.out.println("Im in the resourceCheck");
+							resourceCheck++;
+							list.add((ResourceType) pair.getKey());
+						}
+						break;
+					case WOOD:
+						if (numWood < (int) pair.getValue()) {
+							System.out.println("Insufficient Resources");
+						} else {
+							System.out.println("Im in the resourceCheck");
+							resourceCheck++;
+							list.add((ResourceType) pair.getKey());
+						}
+						break;
+					case SHEEP:
+						if (numSheep < (int) pair.getValue()) {
+							System.out.println("Insufficient Resources");
+						} else {
+							System.out.println("Im in the resourceCheck");
+							resourceCheck++;
+							list.add((ResourceType) pair.getKey());
+						}
+						break;
+					case WHEAT:
+						if (numWheat < (int) pair.getValue()) {
+							System.out.println("Insufficient Resources");
+						} else {
+							System.out.println("Im in the resourceCheck");
+							resourceCheck++;
+							list.add((ResourceType) pair.getKey());
+						}
+					default:
+						break;
+					}
+					it.remove(); // avoids a ConcurrentModificationException
+				}
+				if (resourceCheck == 4) {
+					settlement.setHasBeenPlayed(true);
+					this.getBuildings().remove(settlement);
+					node.setBuilding(settlement);
+					for (ResourceType type : list) {
+						this.removeResource(type);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void receiveTrade(Trade trade) {
+		List<ResourceCard> requesting = null;
+		List<ResourceCard> offering = null;
+		
+		if(trade.getOfferingPlayer().equals(this)) {
+			requesting = trade.getRequestingCards();
+			offering = trade.getOfferingCards();
+		} else {
+			 requesting = trade.getOfferingCards();
+			 offering = trade.getRequestingCards();
+		}
+		
+		for(ResourceCard card : offering) {
+			resources.removeIf(c -> c.resourceType.equals(card.resourceType));
+		}
+		
+		for(ResourceCard card : requesting) {
+			resources.add(card);
+		}
+		System.out.print(resources.size());
+		System.out.print("Has received trade!");
+	}
+	
+	@Override
+	public void tradePhase() {
+		
+	}
+	
     @Override
-    public void buildCity() throws InsufficientResourceCardException
-    {
-        // TODO Player: buildCity
-
-    }
-
-    @Override
-    public void buildPhase()
-    {
-        // TODO Player: buildPhase
-
-    }
-
-    @Override
-    public void buildRoad() throws InsufficientResourceCardException
-    {
-        // TODO Player: buildRoad
-
-    }
-
-    @Override
-    public void buildSettlement() throws InsufficientResourceCardException
-    {
-        // TODO Player: buildSettlement
-
-    }
-
-    @Override
-    public void buyDevelopmentCard() throws InsufficientResourceCardException
-    {
-        // TODO Player: buyDevelopmentCard
-
-    }
-
-    @Override
-    public void endTurn()
-    {
-        // TODO Player: endTurn
-
-    }
-
-    @Override
-    public void playDevelopmentCard(DevelopmentCard card)
-            throws InvalidDevCardUseException
-    {
-        // TODO Player: playDevelopmentCard
-
-    }
-
-    @Override
-    public void proposeTrade(Trade trade)
-    {
-        // TODO Player: proposeTrade
+    public void proposeTrade(Trade trade){
     	//Remember the trade is the middle man here.  Trade helps with GUI side...
+    	try {
+    		if(trade instanceof DomesticTrade) {
+    			System.out.print("Proposing trade!");
+    		} else if(trade instanceof MaritimeTrade) {
+    			
+    		}
+    	} catch(Exception e) {
+    		
+    	}
+	}
 
-    }
 
-    @Override
-    public void receiveTrade(Trade trade)
-    {
-        // TODO Player: receiveTrade
+	@Override
+	public void buildCity(Node node) throws InsufficientResourceCardException {
+		if (node.getBuilding() == null) {
+			System.out.println("This node does not have a settlement so you cannot build a city here.");
+		} else {
+			boolean cityCheck = false;
+			for (Building b : this.getBuildings()) {
+				if (b.getClass().equals(Settlement.class)) {
+					cityCheck = true;
+				}
+			}
+			if (cityCheck == true) {
 
+				City city = new City(this);
+				List<ResourceCard> resources = this.getResources();
+				int numWheat = 0;
+				int numWood = 0;
+				int numOre = 0;
+				int numSheep = 0;
+				int numBrick = 0;
+				int resourceCheck = 0;
+				for (ResourceCard r : resources) {
+					ResourceType type = r.getResourceType();
+					switch (type) {
+					case WHEAT:
+						numWheat++;
+						break;
+					case WOOD:
+						numWood++;
+						break;
+					case ORE:
+						numOre++;
+						break;
+					case SHEEP:
+						numSheep++;
+						break;
+					case BRICK:
+						numBrick++;
+						break;
+					default:
+						break;
+					}
+				}
+				Map<ResourceType, Integer> mp = city.getCost();
+				List<ResourceType> list = new ArrayList<>();
+				Iterator<Entry<ResourceType, Integer>> it = mp.entrySet().iterator();
+				while (it.hasNext()) {
+					Map.Entry<ResourceType, Integer> pair = (Map.Entry<ResourceType, Integer>) it.next();
+					ResourceType typeCheck = (ResourceType) pair.getKey();
+					for (int i = 0; i < (int) pair.getValue(); i++) {
+
+						switch (typeCheck) {
+						case WHEAT:
+							if (numWheat < (int) pair.getValue()) {
+								System.out.println("Insufficient Resources");
+							} else {
+								System.out.println("Im in the resourceCheck");
+								resourceCheck++;
+								list.add((ResourceType) pair.getKey());
+							}
+							break;
+						case ORE:
+							if (numOre < (int) pair.getValue()) {
+								System.out.println("Insufficient Resources");
+							} else {
+								System.out.println("Im in the resourceCheck");
+								resourceCheck++;
+								list.add((ResourceType) pair.getKey());
+							}
+						default:
+							break;
+						}
+					}
+					it.remove(); // avoids a ConcurrentModificationException
+				}
+				
+				if (resourceCheck == 5) {
+					city.setHasBeenPlayed(true);
+					this.getBuildings().remove(city);
+					Settlement settlement = new Settlement(this);
+					this.giveBuilding(settlement);
+					node.setBuilding(city);
+					for (ResourceType type : list) {
+						this.removeResource(type);
+					}
+				}
+			}
+		}
     }
    
-    @Override
-    public int rollDice()
-    {
-        diceRoll = new Dice().rollDice();
-        return diceRoll;
-    }
+	@Override
+	public void buyDevelopmentCard() throws InsufficientResourceCardException {
+		// TODO Player: buyDevelopmentCard
 
-    @Override
-    public void setup()
-    {
-        // TODO Player: setup
+	}
 
-    }
+	@Override
+	public void endTurn() {
+		// TODO Player: endTurn
+	}
 
-    @Override
-    public void sevenRolled(Player activePlayer)
-    {
-        // TODO Player: sevenRolled
+	@Override
+	public void playDevelopmentCard(DevelopmentCard card) throws InvalidDevCardUseException {
+		if (!devCards.contains(card)) {
+			throw new InvalidDevCardUseException();
+		}
+		card.performAction();
+		this.devCards.remove(card);
+	}
 
-    }
+	@Override
+	public int rollDice() {
+		diceRoll = new Dice().rollDice();
+		System.out.println("Dice roll: " + diceRoll);
+		return diceRoll;
+	}
 
-    @Override
-    public void tradePhase()
-    {   
-    	
-    }
+	@Override
+	public void setup(Node node1, Node node2) {
+		// Player needs to put down 1 Settlement and 1 Road
+		try {
+			buildSettlement(GamePhase.SETUP, node1);
+		} catch (InsufficientResourceCardException e) {
+			e.printStackTrace();
+		}
+		try {
+			buildRoad(GamePhase.SETUP, node1, node2);
+		} catch (InsufficientResourceCardException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-    @Override
-    public int calcVictoryPoints()
-    {
-        
-        //TODO update victory points
-        return victoryPoints;
+	}
 
-    }
-
+	@Override
+	public void sevenRolled(Player activePlayer) {
+		List<ResourceCard> resources = activePlayer.getResources();
+		int handSize = resources.size();
+		int cardsToDrop = 0;
+		if(handSize > 7) {
+			if (handSize %2 == 0) {
+				//Player chooses half their cards to drop
+				cardsToDrop = handSize / 2;
+			} else {
+				//Player rounds down and drops half their cards
+				cardsToDrop = (handSize - 1) / 2;
+			}
+		}
+	}
 }

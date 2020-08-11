@@ -103,12 +103,17 @@ public abstract class BoardFactory {
 
         };
         List<List<Node>> boardGraph = new ArrayList<>();
+        List<Node> nodeList = new ArrayList<>();
         for (int i = 0; i < array.length; i++)
         {
             boardGraph.add(Arrays.asList(array[i]));
+            nodeList.add(nodes.get(i));
         }
+        
+        
+        
 
-        board =  new BoardGraph(boardGraph);
+        board =  new BoardGraph(boardGraph, nodeList);
 
     }
 
@@ -148,7 +153,11 @@ public abstract class BoardFactory {
             }
 
             nodes.add(new InteriorNode());
+            
+            nodes.get(i).setNodeIndex(i);
         }
+        
+        
         
         return nodes;
     }

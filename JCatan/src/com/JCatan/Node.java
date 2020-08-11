@@ -8,7 +8,16 @@ public abstract class Node {
 	Building building;
 	List<Road> roads;
 	List<Tile> tiles;
+	private int nodeIndex;
 	
+	public int getNodeIndex() {
+		return nodeIndex;
+	}
+
+	public void setNodeIndex(int nodeIndex) {
+		this.nodeIndex = nodeIndex;
+	}
+
 	/**
 	 * 
 	 */
@@ -22,13 +31,18 @@ public abstract class Node {
     {
         return building;
     }
+	
+	
 
-    /**
+    public void setBuilding(Building building) {
+		this.building = building;
+	}
+
+	/**
 	 * @param road
 	 */
 	public void addRoad(Road road) {
-	    //TODO Node: addRoad
-		
+		roads.add(road);
 	}
 	
 	/**
@@ -48,6 +62,10 @@ public abstract class Node {
     {
         this.tiles = tiles;
     }
+
+	public List<Road> getRoads() {
+		return roads;
+	}
 	
 
 }

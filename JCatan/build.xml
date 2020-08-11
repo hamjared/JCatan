@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name = "JCatan" default = "info">
+	
+	<path id="JUnit 3.libraryclasspath">
+	        <pathelement location="../../../../.p2/pool/plugins/org.junit_4.13.0.v20200204-1500.jar"/>
+	</path>
+	
+	<target name="info">
+		<echo> JCatan </echo>
+	</target>
+	
+	<target name="run" depends="build">
+		<java jar="build/jar/JCatan.jar" fork="true"/>
+	</target>
+	
+	<target name="build" depends="compile">
+			<mkdir dir="build/jar"/>
+			<jar destfile="build/jar/JCatan.jar" basedir="build/classes">
+			            <manifest>
+			                <attribute name="Main-Class" value="com.JCatan.gui.Main"/>
+			            </manifest>
+			</jar>
+			
+	</target>
+	
+	<target name="compile" depends="clean">
+	        <mkdir dir="build/classes"/>
+			<javac srcdir="src/" 
+						   destdir="build/classes"
+						   includeantruntime="false"
+						   source="1.8"
+						   target="1.8"
+						   fork="yes"
+						   compiler="javac1.8"/>
+	</target>
+	
+	<target name="clean">
+	        <delete dir="build"/>
+	</target>
+	
+	<target name="test" depends="compileTest">
+		<junit printsummary="true" showoutput="false">
+			<classPath>
+				<pathelement path="build/classes"/>
+				<pathelement location="../../../../.p2/pool/plugins/org.junit_4.13.0.v20200204-1500.jar"/>
+			</classPath>
+			<batchTest>
+				<fileset dir="build/classes" includes="**/*Test.*" />
+			</batchTest>
+
+		</junit>
+	</target>
+	
+	<target name="compileTest" depends="compile">
+		<mkdir dir="build/classes"/>
+		<javac srcdir="test/" 
+					   destdir="build/classes"
+					   includeantruntime="false"
+					   classpathref="JUnit 3.libraryclasspath"
+					   source="1.8"
+					   target="1.8"
+					   fork="yes"
+					   compiler="javac1.8"/>
+		
+	</target>
+
+	
+</project>
