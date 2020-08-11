@@ -1,5 +1,6 @@
 package com.JCatan;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,8 +16,22 @@ public abstract class Player {
 	int victoryPoints;
 	int diceRoll;
 	String name;
+	Color color;
 	Random randomGenerator;
-    boolean hasLongestRoad;
+	public String getName() {
+		return name;
+	}
+
+	
+    public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	boolean hasLongestRoad;
     boolean hasLargestArmy;
 
 	Player(String name) {
@@ -30,6 +45,7 @@ public abstract class Player {
 		initializeBuildingsAndRoads();
 		hasLongestRoad = false;
         	hasLargestArmy = false;
+        color = Color.BLACK;
 	}
 
 	/**

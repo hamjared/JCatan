@@ -70,20 +70,25 @@ public class GameGUI extends JFrame {
 
 		JPanel BankPanel = new BankPanel();
 		contentPane.add(BankPanel);
-
-		JPanel Player1Panel = new PlayerPanel(1441, 490, 463, 126);
+		
+		
+		controller.getPlayer(0).setColor(Color.BLUE);
+		JPanel Player1Panel = new PlayerPanel(1441, 490, 463, 126, controller.getPlayer(0));
 		Player1Panel.setBackground(Color.ORANGE);
 		contentPane.add(Player1Panel);
 
-		JPanel Player2Panel = new PlayerPanel(1441, 615, 463, 126);
+		controller.getPlayer(1).setColor(Color.RED);
+		JPanel Player2Panel = new PlayerPanel(1441, 615, 463, 126, controller.getPlayer(1) );
 		Player2Panel.setBackground(Color.PINK);
 		contentPane.add(Player2Panel);
 
-		JPanel Player3Panel = new PlayerPanel(1441, 741, 463, 126);
+		controller.getPlayer(2).setColor(Color.ORANGE);
+		JPanel Player3Panel = new PlayerPanel(1441, 741, 463, 126, controller.getPlayer(2));
 		Player3Panel.setBackground(Color.ORANGE);
 		contentPane.add(Player3Panel);
 
-		JPanel Player4Panel = new PlayerPanel(1441, 867, 463, 134);
+		controller.getPlayer(3).setColor(Color.WHITE);
+		JPanel Player4Panel = new PlayerPanel(1441, 867, 463, 134, controller.getPlayer(3));
 		Player4Panel.setBackground(Color.PINK);
 		contentPane.add(Player4Panel);
 
@@ -192,5 +197,5 @@ public class GameGUI extends JFrame {
 		master.add(diceTwoPanel, new Integer(1), 0);
 		
 		controller.startGame();
-	}
+	} 
 }

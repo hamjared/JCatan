@@ -52,6 +52,7 @@ public class StartMenuFrame extends JFrame
         contentPane.add(lblNewLabel_1);
         
         redPlayerName = new JTextField();
+        redPlayerName.setText("Joe");
         redPlayerName.setBounds(336, 111, 113, 20);
         contentPane.add(redPlayerName);
         redPlayerName.setColumns(10);
@@ -61,6 +62,7 @@ public class StartMenuFrame extends JFrame
         contentPane.add(lblNewLabel_2);
         
         whitePlayerName = new JTextField();
+        whitePlayerName.setText("Bob");
         whitePlayerName.setBounds(336, 159, 113, 20);
         contentPane.add(whitePlayerName);
         whitePlayerName.setColumns(10);
@@ -74,11 +76,13 @@ public class StartMenuFrame extends JFrame
         contentPane.add(lblNewLabel_4);
         
         bluePlayerName = new JTextField();
+        bluePlayerName.setText("Tim");
         bluePlayerName.setBounds(336, 208, 113, 20);
         contentPane.add(bluePlayerName);
         bluePlayerName.setColumns(10);
         
         orangePlayerName = new JTextField();
+        orangePlayerName.setText("Will");
         orangePlayerName.setBounds(336, 262, 113, 20);
         contentPane.add(orangePlayerName);
         orangePlayerName.setColumns(10);
