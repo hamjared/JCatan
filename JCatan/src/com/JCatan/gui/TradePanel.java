@@ -21,7 +21,9 @@ import javax.swing.border.TitledBorder;
 import com.JCatan.DomesticTrade;
 import com.JCatan.MaritimeTrade;
 import com.JCatan.Player;
+import com.JCatan.ResourceCard;
 import com.JCatan.ResourceType;
+import com.JCatan.Trade;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.ButtonGroup;
@@ -49,6 +51,13 @@ public class TradePanel extends JPanel {
 		confirmButton.addActionListener(list);
 		offerButton.addActionListener(list);
 		counterOfferButton.addActionListener(list);
+	}
+	
+	public void setTradeInfo(Trade trade) {
+		
+		//Just set up Labels...
+		List<ResourceCard> offering = trade.getOfferingCards();
+		List<ResourceCard> requesting = trade.getRequestingCards();
 	}
 	
 	private void setTraders() {
@@ -191,7 +200,7 @@ public class TradePanel extends JPanel {
 	 * Create the panel.
 	 */
 	public TradePanel(int x, int y, int width, int height) {
-		this.setBounds(x, y, width, 379);
+		this.setBounds(x, y, 578, 402);
 		selectedPlayer=null;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{569, 403, 0};
@@ -224,7 +233,7 @@ public class TradePanel extends JPanel {
 		GridBagLayout gbl_playerOffer = new GridBagLayout();
 		gbl_playerOffer.columnWidths = new int[] {0, 0, 0, 0, 0, 0};
 		gbl_playerOffer.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
-		gbl_playerOffer.columnWeights = new double[]{1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0};
+		gbl_playerOffer.columnWeights = new double[]{1.0, 1.0, 1.0, 0.0, 1.0, 1.0};
 		gbl_playerOffer.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 		playerOffer.setLayout(gbl_playerOffer);
 		add(playerOffer, gbc_playerOffer);
@@ -233,11 +242,17 @@ public class TradePanel extends JPanel {
 		theirOffer.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Participant's Offer", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GridBagConstraints gbc_theirOffer = new GridBagConstraints();
 		gbc_theirOffer.weightx = 1.0;
-		gbc_theirOffer.insets = new Insets(0, 0, 5, 0);
+		gbc_theirOffer.insets = new Insets(0, 0, 5, 5);
 		gbc_theirOffer.fill = GridBagConstraints.BOTH;
 		gbc_theirOffer.gridx = 1;
 		gbc_theirOffer.gridy = 1;
 		add(theirOffer, gbc_theirOffer);
+		GridBagLayout gbl_theirOffer = new GridBagLayout();
+		gbl_theirOffer.columnWidths = new int[] {0, 0, 0, 0, 0, 0};
+		gbl_theirOffer.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
+		gbl_theirOffer.columnWeights = new double[]{1.0, 1.0, 1.0, 0.0, 1.0, 1.0};
+		gbl_theirOffer.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+		theirOffer.setLayout(gbl_theirOffer);
 		
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -277,8 +292,8 @@ public class TradePanel extends JPanel {
 								//Throw and error here...
 								return;
 							
-							DomesticTrade trade = new DomesticTrade(currentPlayer, null, null);
-							GameGUI.controller.turnOnPlayersTradePanel(trade, player);
+							DomesticTrade trade = new DomesticTrade(currentPlayer, selectedPlayer, null, null);
+							GameGUI.controller.turnOnPlayersTradePanel(trade);
 							break;
 						}
 						

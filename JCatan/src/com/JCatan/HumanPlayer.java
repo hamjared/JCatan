@@ -1,9 +1,7 @@
 package com.JCatan;
 
 public class HumanPlayer extends Player
-{
-	private Object temp = new Object();
-	
+{	
     public HumanPlayer(String name)
     {
         super(name);
@@ -69,6 +67,7 @@ public class HumanPlayer extends Player
     public void proposeTrade(Trade trade)
     {
         // TODO Player: proposeTrade
+    	//Remember the trade is the middle man here.  Trade helps with GUI side...
 
     }
 
@@ -103,17 +102,7 @@ public class HumanPlayer extends Player
     @Override
     public void tradePhase()
     {   
-    synchronized(temp) {
-    	boolean finishedTrade = false;
-    		try {		
-    			while(!finishedTrade) {
-    				System.out.print("WAITING");	
-    				temp.wait();
-    			}
-    		} catch (Exception e) {
-				e.printStackTrace();
-			}
-    	}
+    	
     }
 
     @Override

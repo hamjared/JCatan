@@ -21,6 +21,14 @@ public abstract class Trade {
 		this.requestingCards = requestingCards;
 	}
 	
+	public List<ResourceCard> getOfferingCards(){
+		return offeringCards;
+	}
+	
+	public List<ResourceCard> getRequestingCards(){
+		return requestingCards;
+	}
+	
 	/**
 	 * 
 	 */

@@ -3,16 +3,27 @@ package com.JCatan;
 import java.util.List;
 
 public class DomesticTrade extends Trade {
+	Player receivingPlayer;
 	
-	public DomesticTrade(Player offeringPlayer, List<ResourceCard> offeringCards, List<ResourceCard> requestingCards) {
+	public DomesticTrade(Player offeringPlayer, Player receivingPlayer, List<ResourceCard> offeringCards, List<ResourceCard> requestingCards) {
 		super(offeringPlayer, offeringCards, requestingCards);
-		
+		this.receivingPlayer = receivingPlayer;
+	}
+	
+	public Player getReceivingPlayer() {
+		return receivingPlayer;
 	}
 
     @Override
     public void accept()
     {
-        // TODO Trade: accept
+        //offeringPlayer remove offering cards
+    	
+    	//player remove requesting cards
+    	
+    	//offeringPlayer insert requestingCards
+    	
+    	//player insert offering cards
         
     }
 

@@ -112,9 +112,11 @@ public class GameController {
 		
 	}
 	
-	public void turnOnPlayersTradePanel(DomesticTrade trade, Player player) {
+	public void turnOnPlayersTradePanel(DomesticTrade trade) {
 		//Turn the player's tradePanel on and insert the trade...
-		System.out.print("PLAYER MADE DOMESTIC TRADE OFFER!");
+		System.out.print(trade.getReceivingPlayer().getName() + " MADE DOMESTIC TRADE OFFER!");
+		
+		
 	}
 	
 	public void startGame() {

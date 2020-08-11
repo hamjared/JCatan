@@ -20,7 +20,13 @@ public class GameGUI extends JFrame
 {
 	private static final long serialVersionUID = -5012311744443108873L;
 	private JPanel contentPane = null;
+	private TradePanel tradePanel = null;
     public static GameController controller;
+    
+    //USE THIS AS AN EVENT DELEGATE...
+    public TradePanel getTradePanel() {
+    	return tradePanel;
+    }
     
     public GameGUI(List<Player> players, BoardFactory bf)
     {        
@@ -33,7 +39,7 @@ public class GameGUI extends JFrame
         
         controller = new GameController(players, bf);       		
         
-        TradePanel tradePanel = new TradePanel(1079, 0, 750, 800);
+        tradePanel = new TradePanel(1079, 0, 750, 800);
         JButton tradeBtn = new JButton("Trade");
         tradeBtn.setBounds(1352, 844, 89, 23);
         tradeBtn.addActionListener(e -> {
