@@ -15,6 +15,11 @@ public class ResourceCardTest extends TestCase
         super.tearDown();
     }
     
+    public void test() {
+    	ResourceCard rc = new ResourceCard(ResourceType.BRICK);
+    	assertEquals(ResourceType.BRICK, rc.getResourceType());
+    }
+    
     
 
 }
