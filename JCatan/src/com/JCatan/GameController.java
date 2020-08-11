@@ -39,6 +39,10 @@ public class GameController {
 	public GamePhase getGamePhase() {
 		return gamePhase;
 	}
+	
+	public Player getPlayer(int playerNumber) {
+		return players.get(playerNumber);
+	}
 
 	public void setGamePhase(GamePhase gamePhase) {
 		this.gamePhase = gamePhase;
