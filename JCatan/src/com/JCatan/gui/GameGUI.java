@@ -15,6 +15,8 @@ import com.JCatan.Dice;
 import com.JCatan.GameController;
 import com.JCatan.GamePhase;
 import com.JCatan.Player;
+import com.JCatan.ResourceCard;
+import com.JCatan.ResourceType;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -33,6 +35,12 @@ public class GameGUI extends JFrame {
 
 	private JPanel contentPane;
 	public static GameController controller;
+	private JLabel brickLabel;
+	private JLabel woodLabel;
+	private JLabel wheatLabel;
+	private JLabel sheepLabel;
+	private JLabel oreLabel;
+
 	ImageIcon one = new ImageIcon("images/one.png");
 	ImageIcon two = new ImageIcon("images/two.png");
 	ImageIcon three = new ImageIcon("images/three.png");
@@ -40,11 +48,27 @@ public class GameGUI extends JFrame {
 	ImageIcon five = new ImageIcon("images/five.png");
 	ImageIcon six = new ImageIcon("images/six.png");
 
+	ImageIcon brick = new ImageIcon("images/brick.jpg");
+	ImageIcon ore = new ImageIcon("images/ore.jpg");
+	ImageIcon sheep = new ImageIcon("images/sheep.jpg");
+	ImageIcon wheat = new ImageIcon("images/wheat.jpg");
+	ImageIcon wood = new ImageIcon("images/wood.jpg");
+	
+	ImageIcon bank = new ImageIcon("images/bank.png");
+
 	Image dieOne;
 	Image dieTwo;
-	
+	Image resourceCard;
+	Image bankImg = bank.getImage();
+	Image bankBrick = brick.getImage();
+	Image bankOre = ore.getImage();
+	Image bankSheep = sheep.getImage();
+	Image bankWheat = wheat.getImage();
+	Image bankWood = wood.getImage();
+
 	int die1;
 	int die2;
+	int j = 0;
 
 	public GameGUI(List<Player> players, BoardFactory bf) {
 		controller = new GameController(players, bf);
@@ -55,7 +79,7 @@ public class GameGUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLayeredPane master = new JLayeredPane();
 		master.setLocation(0, 0);
 		master.setSize(1441, 867);
@@ -68,8 +92,47 @@ public class GameGUI extends JFrame {
 		BoardPanel.setBounds(0, 0, 1441, 867);
 		master.add(BoardPanel, new Integer(0), 0);
 
-		JPanel BankPanel = new BankPanel();
+		JPanel BankPanel = new BankPanel() {
+			@Override
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				g.drawImage(bankImg, 15, 15, 90, 90, null);
+				g.drawImage(bankBrick, 150, 12, 38, 60, null);
+				g.drawImage(bankWood, 210, 12, 38, 60, null);
+				g.drawImage(bankWheat, 270, 12, 38, 60, null);
+				g.drawImage(bankSheep, 330, 12, 38, 60, null);
+				g.drawImage(bankOre, 390, 12, 38, 60, null);
+				drawBankLabels();
+			}
+		};
 		contentPane.add(BankPanel);
+		BankPanel.setLayout(null);
+		
+		brickLabel = new JLabel("");
+		
+		brickLabel.setBounds(145, 92, 46, 14);
+		brickLabel.setHorizontalAlignment(brickLabel.CENTER);
+		BankPanel.add(brickLabel);
+		
+		woodLabel = new JLabel();
+		woodLabel.setBounds(205, 92, 46, 14);
+		woodLabel.setHorizontalAlignment(woodLabel.CENTER);
+		BankPanel.add(woodLabel);
+		
+		wheatLabel = new JLabel("");
+		wheatLabel.setBounds(265, 92, 46, 14);
+		wheatLabel.setHorizontalAlignment(wheatLabel.CENTER);
+		BankPanel.add(wheatLabel);
+		
+		sheepLabel = new JLabel("");
+		sheepLabel.setBounds(325, 92, 46, 14);
+		sheepLabel.setHorizontalAlignment(sheepLabel.CENTER);
+		BankPanel.add(sheepLabel);
+		
+		oreLabel = new JLabel("");
+		oreLabel.setBounds(385, 92, 46, 14);
+		oreLabel.setHorizontalAlignment(oreLabel.CENTER);
+		BankPanel.add(oreLabel);
 
 		JPanel Player1Panel = new PlayerPanel(1441, 490, 463, 126);
 		Player1Panel.setBackground(Color.ORANGE);
@@ -148,6 +211,7 @@ public class GameGUI extends JFrame {
 					endButton.setText("End Turn");
 					controller.setGamePhase(GamePhase.GAMEBUILD);
 					controller.gamePhaseBuild();
+					repaint();
 					break;
 				case GAMEBUILD:
 					endButton.setText("Roll Dice");
@@ -166,8 +230,41 @@ public class GameGUI extends JFrame {
 		JPanel TradePanel = new TradePanel();
 		contentPane.add(TradePanel);
 
-		JPanel ResourcePanel = new ResourcesPanel();
+		JPanel ResourcePanel = new ResourcesPanel() {
+			@Override
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				try {
+					for (int i = 0; i < controller.getCurPlayer().getResources().size(); i++) {
+						ResourceCard resource = controller.getCurPlayer().getResources().get(i);
+						switch (resource.getResourceType()) {
+						case WOOD:
+							resourceCard = wood.getImage();
+							break;
+						case SHEEP:
+							resourceCard = sheep.getImage();
+							break;
+						case ORE:
+							resourceCard = ore.getImage();
+							break;
+						case BRICK:
+							resourceCard = brick.getImage();
+							break;
+						case WHEAT:
+							resourceCard = wheat.getImage();
+							break;
+						}
+						g.drawImage(resourceCard, j + 5, 18, 55, 95, null);
+						j += 56;
+					}
+					j = 0;
+				} catch (Exception e) {
+					
+				}
+			}
+		};
 		contentPane.add(ResourcePanel);
+		repaint();
 
 		JPanel diceOnePanel = new JPanel() {
 			@Override
@@ -190,7 +287,16 @@ public class GameGUI extends JFrame {
 		diceTwoPanel.setBackground(Color.WHITE);
 		diceTwoPanel.setBounds(1379, 798, 56, 58);
 		master.add(diceTwoPanel, new Integer(1), 0);
-		
+
 		controller.startGame();
+	}
+	
+	
+	private void drawBankLabels() {
+		brickLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.BRICK));
+		woodLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.WOOD));
+		wheatLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.WHEAT));
+		sheepLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.SHEEP));
+		oreLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.ORE));
 	}
 }

@@ -15,10 +15,16 @@ public class City extends Building
     }
 
 	@Override
-    public void gatherResources(ResourceType resource)
+    public void gatherResources(GameController controller, ResourceType resource)
     {
-        // TODO Building: gatherResources
-
+		for (int i = 0; i < 2; i++) {
+			try {
+				ResourceCard card = controller.getBank().takeResourceCard(resource);
+				player.getResources().add(card);
+			} catch (InsufficientResourceCardException e) {
+				e.printStackTrace();
+			}
+		}
     }
 
     @Override

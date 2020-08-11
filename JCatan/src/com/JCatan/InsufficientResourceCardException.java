@@ -6,8 +6,8 @@ package com.JCatan;
  */
 public class InsufficientResourceCardException extends Exception {
 
-	public InsufficientResourceCardException(String errorMessage) {
-		System.out.println(errorMessage);
+	public InsufficientResourceCardException() {
+		System.out.println("IM broken");
 	}
 	
 }
