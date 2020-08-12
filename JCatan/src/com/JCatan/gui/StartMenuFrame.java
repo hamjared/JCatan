@@ -7,8 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.JCatan.BoardFactory;
 import com.JCatan.HumanPlayer;
 import com.JCatan.Player;
+import com.JCatan.RandomBoardFactory;
 import com.JCatan.TraditionalBoardFactory;
 
 import javax.swing.JLabel;
@@ -31,6 +33,7 @@ public class StartMenuFrame extends JFrame
     private JTextField whitePlayerName;
     private JTextField bluePlayerName;
     private JTextField orangePlayerName;
+    private JComboBox boardType;
 
     public StartMenuFrame()
     {
@@ -87,10 +90,10 @@ public class StartMenuFrame extends JFrame
         contentPane.add(orangePlayerName);
         orangePlayerName.setColumns(10);
         
-        JComboBox comboBox = new JComboBox();
-        comboBox.setModel(new DefaultComboBoxModel(new String[] {"Traditional Board"}));
-        comboBox.setBounds(336, 317, 113, 22);
-        contentPane.add(comboBox);
+        boardType = new JComboBox();
+        boardType.setModel(new DefaultComboBoxModel(new String[] {"Traditional Board", "Random Board"}));
+        boardType.setBounds(336, 317, 113, 22);
+        contentPane.add(boardType);
         
         JLabel lblNewLabel_5 = new JLabel("BoardLayout");
         lblNewLabel_5.setBounds(213, 321, 80, 14);
@@ -109,9 +112,17 @@ public class StartMenuFrame extends JFrame
     protected void startGame()
     {
         List<Player> players = getPlayers();
+        BoardFactory bf = null;
+        if(boardType.getSelectedIndex() == 0) {
+        	bf = new TraditionalBoardFactory();
+        }
+        else {
+        	bf = new RandomBoardFactory();
+        	System.out.println("Random Board");
+        }
         
         
-        GameGUI game = new GameGUI(players, new TraditionalBoardFactory());
+        GameGUI game = new GameGUI(players, bf);
         game.setVisible(true);
         this.setVisible(false);
         
