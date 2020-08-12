@@ -19,22 +19,22 @@ public class Tile
         this.resourceType = resourceType;
         switch(resourceType) {
         case WHEAT :
-            this.color = Color.YELLOW;
+            this.color = Color.decode("#FFD700");
             break;
         case WOOD:
-            this.color = Color.GREEN;
+            this.color = Color.decode("#003300");
             break;
         case BRICK:
-            this.color = Color.RED;
+            this.color = Color.decode("#663300");
             break;
         case SHEEP:
-            this.color = Color.WHITE;
+            this.color = Color.decode("#99FF33");
             break;
         case ORE:
-            this.color = Color.DARK_GRAY;
+            this.color = Color.decode("#4C0099");
             break;
         case DESERT:
-            this.color = Color.lightGray;
+            this.color = Color.decode("#DEB887");
             break;
             
         }

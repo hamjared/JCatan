@@ -1,5 +1,6 @@
 package com.JCatan;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -9,14 +10,28 @@ import java.util.Set;
 public abstract class Player {
 	List<ResourceCard> resources;
 	List<DevelopmentCard> devCards;
+	List<Road> roads;
 	List<Building> buildings;
 	List<Road> playedRoads;
 	int victoryPoints;
 	int diceRoll;
 	String name;
+	Color color;
 	Random randomGenerator;
-    boolean hasLongestRoad;
-    boolean hasLargestArmy;
+  boolean hasLongestRoad;
+  boolean hasLargestArmy;
+  
+	public String getName() {
+		return name;
+	}
+
+    public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
 
 	Player(String name) {
 		resources = new ArrayList<ResourceCard>();
@@ -24,10 +39,12 @@ public abstract class Player {
 		victoryPoints = 0;
 		buildings = new ArrayList<Building>();
 		playedRoads = new ArrayList<Road>();
+		this.roads = new ArrayList<>();
 		this.name = name;
 		initializeBuildingsAndRoads();
 		hasLongestRoad = false;
-        hasLargestArmy = false;
+    hasLargestArmy = false;
+    color = Color.BLACK;
 	}
 
 	/**
@@ -124,7 +141,7 @@ public abstract class Player {
 	}
 
 	public void giveRoad(Road road) {
-		this.playedRoads.add(road);
+		this.roads.add(road);
 	}
 
 	/**
@@ -237,9 +254,6 @@ public abstract class Player {
     	return new LongestRoadCalculator(playedRoads).calcLongestRoad();
     }
     
-    public void addRoadToRoadPlayedList(Road road) {
-    	playedRoads.add(road);
-    }
 
 	public void setHasLongestRoad(boolean hasLongestRoad) {
 		this.hasLongestRoad = hasLongestRoad;

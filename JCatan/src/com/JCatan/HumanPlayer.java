@@ -45,6 +45,7 @@ public class HumanPlayer extends Player {
 			// Setup Phase Build
 			Road road = new Road(node1, node2, this);
 			road.setHasBeenPlayed(true);
+			this.playedRoads.add(road);
 			this.getRoads().remove(road);
 			node1.addRoad(road);
 			node2.addRoad(road);
@@ -112,6 +113,7 @@ public class HumanPlayer extends Player {
 
 				if (resourceCheck == 2) {
 					road.setHasBeenPlayed(true);
+					this.playedRoads.add(road);
 					this.getRoads().remove(road);
 					node1.addRoad(road);
 					node2.addRoad(road);
@@ -125,7 +127,7 @@ public class HumanPlayer extends Player {
 			}
 		}
 	}
-
+ 
 	@Override
 	public void buildSettlement(GamePhase phase, Node node, GameController controller) throws InsufficientResourceCardException {
 		if (phase == GamePhase.SETUP) {
@@ -136,7 +138,7 @@ public class HumanPlayer extends Player {
 			node.setBuilding(settlement);
 		} else {
 			// Game Phase Build
-			boolean settlementCheck = false;
+			boolean settlementCheck = false; 
 			for (Building b : this.getBuildings()) {
 				if (b.getClass().equals(Settlement.class)) {
 					settlementCheck = true;
