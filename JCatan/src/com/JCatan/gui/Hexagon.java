@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Stroke;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import com.JCatan.Tile;
 
@@ -99,7 +101,7 @@ public class Hexagon extends Polygon
             xpoints[p] = point.x;
             ypoints[p] = point.y;
             points[p] = point;
-            System.out.printf("%d. (%d, %d)\n", p, point.x, point.y);
+//            System.out.printf("%d. (%d, %d)\n", p, point.x, point.y);
         }
     }
 
@@ -123,4 +125,10 @@ public class Hexagon extends Polygon
         g.setColor(tmpC);
         g.setStroke(tmpS);
     }
+    
+    public void onClick() {
+    	System.out.println("Tile clicked: " + tile);
+    }
+
+
 }
