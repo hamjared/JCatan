@@ -85,7 +85,7 @@ public class HumanPlayer extends Player {
 
 				Map<ResourceType, Integer> mp = road.getCost();
 				List<ResourceType> list = new ArrayList<>();
-				Iterator it = mp.entrySet().iterator();
+				Iterator it = mp.entrySet().iterator(); 
 				while (it.hasNext()) {
 					Map.Entry pair = (Map.Entry) it.next();
 					ResourceType typeCheck = (ResourceType) pair.getKey();
@@ -134,7 +134,7 @@ public class HumanPlayer extends Player {
 			// SetUp Phase Build
 			Settlement settlement = new Settlement(this);
 			settlement.setHasBeenPlayed(true);
-			this.getBuildings().remove(settlement);
+			this.getBuildings().remove(settlement); 
 			node.setBuilding(settlement);
 		} else {
 			// Game Phase Build

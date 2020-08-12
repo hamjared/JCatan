@@ -10,8 +10,6 @@ public class InsufficientResourceCardException extends Exception {
 		System.out.println("IM broken");
 	}
 
-	public InsufficientResourceCardException() {
-		// TODO Auto-generated constructor stub
-	}
+
 	
 }

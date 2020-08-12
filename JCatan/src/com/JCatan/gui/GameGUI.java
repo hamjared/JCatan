@@ -41,7 +41,7 @@ public class GameGUI extends JFrame {
 	private JLabel sheepLabel;
 	private JLabel oreLabel;
 
-	ImageIcon one = new ImageIcon("images/one.png");
+	ImageIcon one = new ImageIcon("images/one.png"); 
 	ImageIcon two = new ImageIcon("images/two.png");
 	ImageIcon three = new ImageIcon("images/three.png");
 	ImageIcon four = new ImageIcon("images/four.png");
