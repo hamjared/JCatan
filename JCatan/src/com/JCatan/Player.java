@@ -18,11 +18,13 @@ public abstract class Player {
 	String name;
 	Color color;
 	Random randomGenerator;
+  boolean hasLongestRoad;
+  boolean hasLargestArmy;
+  
 	public String getName() {
 		return name;
 	}
 
-	
     public Color getColor() {
 		return color;
 	}
@@ -30,9 +32,6 @@ public abstract class Player {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-
-	boolean hasLongestRoad;
-    boolean hasLargestArmy;
 
 	Player(String name) {
 		resources = new ArrayList<ResourceCard>();
@@ -44,29 +43,29 @@ public abstract class Player {
 		this.name = name;
 		initializeBuildingsAndRoads();
 		hasLongestRoad = false;
-        	hasLargestArmy = false;
-        color = Color.BLACK;
+    hasLargestArmy = false;
+    color = Color.BLACK;
 	}
 
 	/**
 	 * @throws InsufficientResourceCardException
 	 */
-	public abstract void buildCity(Node node) throws InsufficientResourceCardException;
+	public abstract void buildCity(Node node, GameController controller) throws InsufficientResourceCardException;
 
 	/**
 	 * 
 	 */
-	public abstract void buildPhase(Node node1, Node node2);
+	public abstract void buildPhase(Node node1, Node node2, GameController contoller);
 
 	/**
 	 * @throws InsufficientResourceCardException
 	 */
-	public abstract void buildRoad(GamePhase phase, Node node1, Node node2) throws InsufficientResourceCardException;
+	public abstract void buildRoad(GamePhase phase, Node node1, Node node2, GameController controller) throws InsufficientResourceCardException;
 
 	/**
 	 * @throws InsufficientResourceCardException
 	 */
-	public abstract void buildSettlement(GamePhase phase, Node node) throws InsufficientResourceCardException;
+	public abstract void buildSettlement(GamePhase phase, Node node, GameController controller) throws InsufficientResourceCardException;
 
 	/**
 	 * @throws InsufficientResourceCardException
@@ -185,7 +184,7 @@ public abstract class Player {
 	/**
 	 * 
 	 */
-	public abstract void setup(Node node1, Node node2);
+	public abstract void setup(Node node1, Node node2, GameController controller);
 
 	public abstract void sevenRolled(Player activePlayer);
 
@@ -244,7 +243,7 @@ public abstract class Player {
 	}
 
 	public List<Road> getRoads() {
-		return roads;
+		return playedRoads;
 	}
 
 	public void setResources(List<ResourceCard> resources) {
