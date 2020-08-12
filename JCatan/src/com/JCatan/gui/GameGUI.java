@@ -61,7 +61,7 @@ public class GameGUI extends JFrame {
 		master.setSize(1441, 867);
 		contentPane.add(master);
 
-		JPanel ChatPanel = new ChatPanel();
+		JPanel ChatPanel = new ChatPanel(controller.getChat());
 		contentPane.add(ChatPanel);
 
 		JPanel BoardPanel = new BoardPanel();
