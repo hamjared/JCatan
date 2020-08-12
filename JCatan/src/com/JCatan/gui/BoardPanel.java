@@ -2,6 +2,7 @@ package com.JCatan.gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -15,17 +16,52 @@ import javax.swing.JPanel;
 
 import com.JCatan.ResourceType;
 import com.JCatan.Tile;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 public class BoardPanel extends JPanel
 {
+	
+	private List<Hexagon> hexagons;
     public BoardPanel()
     {
         super();
+
+        addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mousePressed(MouseEvent e) {
+        		
+        		int x = e.getX();
+        		int y = e.getY();
+        		
+        		for(Hexagon hex: hexagons) {
+        			if(hex.contains(x, y)) {
+        				hex.onClick();
+        				break;
+        			}
+        		}
+        	}
+        });
         setBackground(Color.BLUE);
         setBounds(0, 0, 1441, 867);
+        hexagons = new ArrayList<>();
     }
 
-    private static final long serialVersionUID = 1L;
+    protected void handleMouseMoved(int x, int y) {
+		
+		for(Hexagon hex: hexagons) {
+			if(hex.contains(x, y)) {
+				setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+			else {
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		}
+		
+	}
+
+	private static final long serialVersionUID = 1L;
     private final int WIDTH = 1441;
     private final int HEIGHT = 867;
 
@@ -121,6 +157,7 @@ public class BoardPanel extends JPanel
             Tile tile, String text)
     {
         Hexagon hex = new Hexagon(x, y, r, tile);
+        hexagons.add(hex);
 
         int w = metrics.stringWidth(text);
         int h = metrics.getHeight();

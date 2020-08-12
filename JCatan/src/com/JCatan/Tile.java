@@ -115,4 +115,7 @@ public class Tile
         return resourceType;
     }
 
+    public String toString() {
+    	return new StringBuilder().append(resourceType).append(" ").append(number).toString();
+    }
 }
