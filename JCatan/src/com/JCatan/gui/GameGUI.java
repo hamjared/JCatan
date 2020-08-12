@@ -250,8 +250,8 @@ public class GameGUI extends JFrame {
 		});
 		endButton.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		EndTurnPanel.add(endButton);
-
-		JPanel BuildingPanel = new BuildingPanel();
+		
+		BuildingPanel BuildingPanel = new BuildingPanel(controller);
 		contentPane.add(BuildingPanel);
 		
 		JPanel ResourcePanel = new ResourcesPanel() {
