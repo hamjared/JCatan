@@ -20,8 +20,9 @@ public class Board {
 	 */
 	public Board(BoardFactory bf) {
 		board = bf.getBoard();
-		diceRollToTiles = bf.createDiceRollToTiles();
 		tiles = bf.getTiles();
+		diceRollToTiles = bf.createDiceRollToTiles();
+		
 	}
 	
 	/**
