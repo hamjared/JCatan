@@ -3,7 +3,6 @@ package com.JCatan.gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
@@ -93,7 +92,6 @@ public class PlayerPanel extends JPanel
         add(R);
         
         setLabels();
-        
     }
     
     @Override
@@ -111,14 +109,7 @@ public class PlayerPanel extends JPanel
     	drawImage("images/dcs__back.png", 180, 175, 90, 35, 50, g2 );
     	
     	setLabels();
-
-    	
-    	
-    	
-    	
-    	
     }
-    
     
     private void drawImage(String filename, int rotateDegrees , int x, int y, int width, int height, Graphics2D g2) {
     	BufferedImage image = null;
@@ -135,8 +126,6 @@ public class PlayerPanel extends JPanel
 		
 		g2.drawImage(image, 0, 0, width, height, null);
 		g2.setTransform(prev);
-		
-		
 	}
 
 	private void setLabels() {
@@ -162,6 +151,5 @@ public class PlayerPanel extends JPanel
     	g2.draw(shape);
     	g2.setTransform(prev);
     	g2.setColor(prevColor);
-    	
     }
 }

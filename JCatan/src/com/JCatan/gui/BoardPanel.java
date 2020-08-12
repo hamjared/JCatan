@@ -10,15 +10,10 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import com.JCatan.ResourceType;
 import com.JCatan.Tile;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 
 public class BoardPanel extends JPanel
 {

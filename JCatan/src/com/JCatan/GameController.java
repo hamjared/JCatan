@@ -1,7 +1,5 @@
 package com.JCatan;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -15,6 +13,11 @@ public class GameController {
 	Player curPlayer;
 	boolean gameEnded = false;
 	GamePhase gamePhase;
+	Consumer action;
+
+	public List<Player> getPlayers(){
+		return players;
+	}
 	Bank bank;
 	Chat chat;
 
@@ -35,7 +38,6 @@ public class GameController {
 
 	}
 	
-
 	public Bank getBank() {
 		return bank;
 	}
@@ -68,7 +70,6 @@ public class GameController {
 
 		players.sort(new Comparator() {
 
-			@SuppressWarnings("null")
 			@Override
 			public int compare(Object o1, Object o2) {
 				Player p1 = null; 
@@ -88,6 +89,15 @@ public class GameController {
 
 	}
 
+	public void setAction(Consumer c) {
+		action = c;
+	}
+	
+	public void endTrade() {
+		//Could display message player accepted the trade...
+		action.accept(this);
+	}
+	
 	private void setupPhase() {
 		chat.addToChat("Beginning setup phase");
 
@@ -162,10 +172,17 @@ public class GameController {
 
 			board.dishOutResources(this, diceRoll);
 	}
+    
+	
+	public void initiateTrade(Trade trade) {
+		if(trade instanceof DomesticTrade) {
+			DomesticTrade dt = (DomesticTrade)trade;
+			dt.accept();
+		}
+	}
 	
 	public void gamePhaseTrade() {
 		curPlayer = players.get(playerTurnIndex);
-		//curPlayer.tradePhase();
 	}
 	
 	public void gamePhaseBuild() {
@@ -187,89 +204,6 @@ public class GameController {
 			playerTurnIndex = 0;
 		}
 	}
-
-//	private void gamePhase() {
-//		playerTurnIndex = 0;
-//		while (!gameEnded) {
-//
-//			curPlayer = players.get(playerTurnIndex);
-//
-//			int diceRoll = curPlayer.getDiceRoll();
-//
-//			if (diceRoll == 7) {
-//				players.forEach(p -> p.sevenRolled(curPlayer));
-//				boolean cardStolen = false;
-//				while (cardStolen == false) {
-//					cardStolen = curPlayer.sevenRolledSteal(players.get(playerTurnIndex + 1)); // Pass in a player to
-//																								// steal from here right
-//																								// now it is set to
-//																								// curPlayer + 1
-//				}
-//			}
-//
-//			board.dishOutResources(diceRoll);
-//
-//			// curPlayer.tradePhase();
-//
-//			List<ResourceCard> resources = new ArrayList<>();
-//			ResourceCard card = new ResourceCard(ResourceType.WOOD);
-//			ResourceCard card2 = new ResourceCard(ResourceType.BRICK);
-//			ResourceCard card3 = new ResourceCard(ResourceType.SHEEP);
-//			ResourceCard card4 = new ResourceCard(ResourceType.WHEAT);
-//			ResourceCard card5 = new ResourceCard(ResourceType.WOOD);
-//			ResourceCard card6 = new ResourceCard(ResourceType.BRICK);
-//			ResourceCard card7 = new ResourceCard(ResourceType.ORE);
-//			ResourceCard card8 = new ResourceCard(ResourceType.ORE);
-//			ResourceCard card9 = new ResourceCard(ResourceType.ORE);
-//			ResourceCard card10 = new ResourceCard(ResourceType.WHEAT);
-//			ResourceCard card11 = new ResourceCard(ResourceType.WHEAT);
-//			resources.add(card);
-//			resources.add(card2);
-//			resources.add(card3);
-//			resources.add(card4);
-//			resources.add(card5);
-//			resources.add(card6);
-//			resources.add(card7);
-//			resources.add(card8);
-//			resources.add(card9);
-//			resources.add(card10);
-//			resources.add(card11);
-//
-//			curPlayer.setResources(resources);
-//
-//			curPlayer.buildPhase(board.getTiles().get(12).getNodes().get(0),
-//					board.getTiles().get(12).getNodes().get(1));
-//			if (board.getTiles().get(12).getNodes().get(0).getRoads().isEmpty()) {
-//				System.out.println("No road here");
-//			} else {
-//				System.out.println(board.getTiles().get(12).getNodes().get(0).getRoads().get(0));
-//			}
-//			if (board.getTiles().get(12).getNodes().get(0).getBuilding() == null) {
-//				System.out.println("No building here");
-//			} else {
-//				System.out.println(board.getTiles().get(12).getNodes().get(0).getBuilding());
-//			}
-//			if (curPlayer.getResources().isEmpty()) {
-//				System.out.println("The resources have been removed correctly");
-//			} else {
-//				System.out.println("I still have resources");
-//			}
-//
-//			gameEnded = true;
-//
-//			if (curPlayer.calcVictoryPoints() > POINTS_TO_WIN) {
-//				gameWinnerIndex = playerTurnIndex;
-//				gameEnded = true;
-//			}
-//
-//			playerTurnIndex++;
-//
-//			if (playerTurnIndex >= players.size()) {
-//				playerTurnIndex = 0;
-//			}
-//		}
-//
-//	}
   
 	private void setLargestArmy() {
 		int largestArmy = 0;
@@ -281,10 +215,8 @@ public class GameController {
 				player.setHasLargestArmy(true);
 			}
 		}
-		
 	}
-
-
+	
 	private void setLongestRoad() {
 		int longestRoad = 0;
 		for(Player player: players) {
@@ -298,9 +230,6 @@ public class GameController {
 		
 	}
 
-	/**
-	 * 
-	 */
 	public void startGame() {
 		chat.addToChat("Game started");
 		diceRollPhase();
@@ -315,8 +244,6 @@ public class GameController {
 				System.out.println("Settlement");
 			}
 		}
-
-		//gamePhase();
-
+		//	gamePhase();
 	}
 }

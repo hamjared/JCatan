@@ -2,8 +2,6 @@ package com.JCatan.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -23,12 +21,7 @@ public class ChatPanel extends JPanel
         chatArea = new JTextArea();
         chatArea.setBounds(10, 11, 443, 342);
         add(chatArea);
-        
         this.chat = chat;
-        
-        
-        
-        
     }
     
     @Override
@@ -36,6 +29,4 @@ public class ChatPanel extends JPanel
     	super.paint(g);
     	chatArea.setText(chat.toString());
     }
-    
-    
 }

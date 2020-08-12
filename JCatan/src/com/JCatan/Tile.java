@@ -19,22 +19,22 @@ public class Tile
         this.resourceType = resourceType;
         switch(resourceType) {
         case WHEAT :
-            this.color = Color.decode("#FFD700");
+            this.color = Color.YELLOW;
             break;
         case WOOD:
-            this.color = Color.decode("#003300");
+            this.color = Color.GREEN;
             break;
         case BRICK:
-            this.color = Color.decode("#663300");
+            this.color = Color.RED;
             break;
         case SHEEP:
-            this.color = Color.decode("#99FF33");
+            this.color = Color.WHITE;
             break;
         case ORE:
-            this.color = Color.decode("#4C0099");
+            this.color = Color.DARK_GRAY;
             break;
         case DESERT:
-            this.color = Color.decode("#DEB887");
+            this.color = Color.lightGray;
             break;
             
         }
@@ -113,9 +113,5 @@ public class Tile
     public ResourceType getResourceType()
     {
         return resourceType;
-    }
-
-    public String toString() {
-    	return new StringBuilder().append(resourceType).append(" ").append(number).toString();
     }
 }

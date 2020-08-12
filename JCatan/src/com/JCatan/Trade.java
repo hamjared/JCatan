@@ -8,6 +8,7 @@ public abstract class Trade {
 	Player receivingPlayer;
 	List<ResourceCard> offeringCards;
 	List<ResourceCard> requestingCards;
+	boolean acceptedOffer;
 	
 	/**
 	 * @param offeringPlayer  Player proposing the trade
@@ -18,6 +19,22 @@ public abstract class Trade {
 		this.offeringPlayer = offeringPlayer;
 		this.offeringCards = offeringCards;
 		this.requestingCards = requestingCards;
+	}
+	
+	public List<ResourceCard> getOfferingCards(){
+		return offeringCards;
+	}
+	
+	public List<ResourceCard> getRequestingCards(){
+		return requestingCards;
+	}
+	
+	public Player getReceivingPlayer() {
+		return receivingPlayer;
+	}
+	
+	public Player getOfferingPlayer() {
+		return offeringPlayer;
 	}
 	
 	/**
