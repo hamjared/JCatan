@@ -243,7 +243,7 @@ public abstract class Player {
 	}
 
 	public List<Road> getRoads() {
-		return playedRoads;
+		return roads;
 	}
 
 	public void setResources(List<ResourceCard> resources) {

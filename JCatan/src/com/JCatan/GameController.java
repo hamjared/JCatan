@@ -38,6 +38,7 @@ public class GameController {
 
 	public Bank getBank() {
 		return bank;
+	}
     
 	public Chat getChat() {
 		return chat;

@@ -41,7 +41,7 @@ public class GameGUI extends JFrame {
 	private JLabel sheepLabel;
 	private JLabel oreLabel;
 
-	ImageIcon one = new ImageIcon("images/one.png");
+	ImageIcon one = new ImageIcon("images/one.png"); 
 	ImageIcon two = new ImageIcon("images/two.png");
 	ImageIcon three = new ImageIcon("images/three.png");
 	ImageIcon four = new ImageIcon("images/four.png");
@@ -134,7 +134,7 @@ public class GameGUI extends JFrame {
 		oreLabel.setHorizontalAlignment(oreLabel.CENTER);
 		BankPanel.add(oreLabel);
 
-		JPanel Player1Panel = new PlayerPanel(1441, 490, 463, 126);
+
 		controller.getPlayer(0).setColor(Color.BLUE);
 		JPanel Player1Panel = new PlayerPanel(1441, 490, 463, 126, controller.getPlayer(0));
 		Player1Panel.setBackground(Color.ORANGE);
