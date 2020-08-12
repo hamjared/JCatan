@@ -134,7 +134,6 @@ public class GameGUI extends JFrame {
 		oreLabel.setHorizontalAlignment(oreLabel.CENTER);
 		BankPanel.add(oreLabel);
 
-		JPanel Player1Panel = new PlayerPanel(1441, 490, 463, 126);
 		controller.getPlayer(0).setColor(Color.BLUE);
 		JPanel Player1Panel = new PlayerPanel(1441, 490, 463, 126, controller.getPlayer(0));
 		Player1Panel.setBackground(Color.ORANGE);
@@ -228,8 +227,8 @@ public class GameGUI extends JFrame {
 		});
 		endButton.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		EndTurnPanel.add(endButton);
-
-		JPanel BuildingPanel = new BuildingPanel();
+		
+		BuildingPanel BuildingPanel = new BuildingPanel(controller);
 		contentPane.add(BuildingPanel);
 
 		JPanel TradePanel = new TradePanel();

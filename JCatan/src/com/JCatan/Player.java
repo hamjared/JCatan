@@ -3,7 +3,9 @@ package com.JCatan;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -71,7 +73,7 @@ public abstract class Player {
 	 * @throws InsufficientResourceCardException
 	 */
 	public abstract void buyDevelopmentCard() throws InsufficientResourceCardException;
-
+	
 	/**
 	 * 
 	 */
