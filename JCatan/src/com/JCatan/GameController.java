@@ -18,6 +18,8 @@ public class GameController {
 	public List<Player> getPlayers(){
 		return players;
 	}
+	Bank bank;
+	Chat chat;
 
 	public Board getBoard() {
 		return board;
@@ -31,15 +33,29 @@ public class GameController {
 		this.players = players;
 		this.board = new Board(bf);
 		playerTurnIndex = 0;
+		bank = new Bank();
+		this.chat = new Chat();
 
 	}
 	
+	public Bank getBank() {
+		return bank;
+	}
+    
+	public Chat getChat() {
+		return chat;
+	}
+
 	public Player getCurPlayer() {
 		return curPlayer;
 	}
 
 	public GamePhase getGamePhase() {
 		return gamePhase;
+	}
+	
+	public Player getPlayer(int playerNumber) {
+		return players.get(playerNumber);
 	}
 
 	public void setGamePhase(GamePhase gamePhase) {
@@ -83,6 +99,7 @@ public class GameController {
 	}
 	
 	private void setupPhase() {
+		chat.addToChat("Beginning setup phase");
 
 		int playerNum = 0;
 		Node node1 = null;
@@ -107,7 +124,7 @@ public class GameController {
 				break;
 			}
 			playerNum++;
-			player.setup(node1, node2);
+			player.setup(node1, node2, this);
 		}
 		playerNum = 3;
 		for (int i = players.size() - 1; i >= 0; i--) {
@@ -130,7 +147,7 @@ public class GameController {
 				break;
 			}
 			playerNum--;
-			players.get(i).setup(node1, node2);
+			players.get(i).setup(node1, node2, this);
 		}
 		
 		gamePhase = GamePhase.GAMEROLL;
@@ -153,7 +170,7 @@ public class GameController {
 //				}
 			}
 
-			board.dishOutResources(diceRoll);
+			board.dishOutResources(this, diceRoll);
 	}
     
 	
@@ -172,7 +189,7 @@ public class GameController {
 		curPlayer = players.get(playerTurnIndex);
 		//board.getBoard().getNodes().get()
 		curPlayer.buildPhase(board.getTiles().get(12).getNodes().get(0),
-				board.getTiles().get(12).getNodes().get(1));
+				board.getTiles().get(12).getNodes().get(1), this);
 	}
 	
 	public void gamePhaseEnd() {
@@ -214,7 +231,7 @@ public class GameController {
 	}
 
 	public void startGame() {
-
+		chat.addToChat("Game started");
 		diceRollPhase();
 
 		setupPhase();

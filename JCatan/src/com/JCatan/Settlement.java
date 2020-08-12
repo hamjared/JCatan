@@ -35,6 +35,9 @@ public class Settlement extends Building
         return cost;
     }
 
-
-
+	@Override
+	public void gatherResources(GameController controller, ResourceType resource) {
+		// TODO Auto-generated method stub
+		
+	}
 }

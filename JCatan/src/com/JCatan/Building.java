@@ -16,7 +16,7 @@ public abstract class Building implements ICost {
 	/**
 	 * @param resource
 	 */
-	public abstract void gatherResources(ResourceType resource);
+	public abstract void gatherResources(GameController controller, ResourceType resource);
 	
 	public  int getVictoryPoints() {
 	    return victoryPoints;
@@ -31,6 +31,11 @@ public abstract class Building implements ICost {
     {
         this.hasBeenPlayed = hasBeenPlayed;
     }
+
+	public void gatherResources(ResourceType resource) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

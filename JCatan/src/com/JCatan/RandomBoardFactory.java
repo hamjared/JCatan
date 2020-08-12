@@ -25,9 +25,4 @@ public class RandomBoardFactory extends BoardFactory {
         // TODO BoardFactory: getTiles
         return null;
     }
-
-
-
-
-
 }

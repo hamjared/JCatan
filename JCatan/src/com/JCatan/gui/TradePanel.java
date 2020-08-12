@@ -22,7 +22,6 @@ import javax.swing.border.TitledBorder;
 
 import com.JCatan.Consumer;
 import com.JCatan.DomesticTrade;
-import com.JCatan.HumanPlayer;
 import com.JCatan.MaritimeTrade;
 import com.JCatan.Player;
 import com.JCatan.ResourceCard;
@@ -277,7 +276,7 @@ public class TradePanel extends JPanel {
 	 * Create the panel.
 	 */
 	public TradePanel(int x, int y, int width, int height) {
-		this.setBounds(x, y, 578, 402);
+		this.setBounds(x, y, width, height);
 		
 		selectedPlayer=null;
 		requestingResourceTypeAndAmount = new HashMap<String, Integer>();

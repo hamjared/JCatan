@@ -123,4 +123,8 @@ public class Hexagon extends Polygon
         g.setColor(tmpC);
         g.setStroke(tmpS);
     }
+    
+    public void onClick() {
+    	System.out.println("Tile clicked: " + tile);
+    }
 }

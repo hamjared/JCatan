@@ -15,5 +15,4 @@ public class InsufficientResourceCardException extends Exception {
 	public InsufficientResourceCardException() {
 		// TODO Auto-generated constructor stub
 	}
-	
 }

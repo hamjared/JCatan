@@ -114,5 +114,4 @@ public class Tile
     {
         return resourceType;
     }
-
 }

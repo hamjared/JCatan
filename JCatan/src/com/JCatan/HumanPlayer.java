@@ -10,35 +10,29 @@ public class HumanPlayer extends Player {
 
 	public HumanPlayer(String name) {
 		super(name);
-		for(int i = 0; i < 10; i++) {
-        	this.resources.add(new ResourceCard(ResourceType.BRICK));
-        	this.resources.add(new ResourceCard(ResourceType.ORE));
-        	this.resources.add(new ResourceCard(ResourceType.SHEEP));
-        	this.resources.add(new ResourceCard(ResourceType.WHEAT));
-        	this.resources.add(new ResourceCard(ResourceType.WOOD));
-        }
+
 	}
 
 	@Override
-	public void buildPhase(Node node1, Node node2) {
+	public void buildPhase(Node node1, Node node2, GameController controller) {
 		// Check for listener about player wanting to building road/building
 
 		try {
-			buildRoad(GamePhase.GAME, node1, node2);
+			buildRoad(GamePhase.GAME, node1, node2, controller);
 		} catch (InsufficientResourceCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		try {
-			buildSettlement(GamePhase.GAME, node1);
+			buildSettlement(GamePhase.GAME, node1, controller);
 		} catch (InsufficientResourceCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		try {
-			buildCity(node1);
+			buildCity(node1, controller);
 		} catch (InsufficientResourceCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -47,7 +41,7 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
-	public void buildRoad(GamePhase phase, Node node1, Node node2) throws InsufficientResourceCardException {
+	public void buildRoad(GamePhase phase, Node node1, Node node2, GameController controller) throws InsufficientResourceCardException {
 		if (phase == GamePhase.SETUP) {
 			// Setup Phase Build
 			Road road = new Road(node1, node2, this);
@@ -94,9 +88,9 @@ public class HumanPlayer extends Player {
 
 				Map<ResourceType, Integer> mp = road.getCost();
 				List<ResourceType> list = new ArrayList<>();
-				Iterator<Entry<ResourceType, Integer>> it = mp.entrySet().iterator();
+				Iterator it = mp.entrySet().iterator(); 
 				while (it.hasNext()) {
-					Map.Entry<ResourceType, Integer> pair = (Map.Entry<ResourceType, Integer>) it.next();
+					Map.Entry pair = (Map.Entry) it.next();
 					ResourceType typeCheck = (ResourceType) pair.getKey();
 					switch (typeCheck) {
 					case BRICK:
@@ -130,6 +124,8 @@ public class HumanPlayer extends Player {
 					node2.addRoad(road);
 					for (ResourceType type : list) {
 						this.removeResource(type);
+						ResourceCard card = new ResourceCard(type);
+						controller.getBank().giveResourceCard(card);
 					}
 				}
 			}
@@ -137,12 +133,12 @@ public class HumanPlayer extends Player {
 	}
  
 	@Override
-	public void buildSettlement(GamePhase phase, Node node) throws InsufficientResourceCardException {
+	public void buildSettlement(GamePhase phase, Node node, GameController controller) throws InsufficientResourceCardException {
 		if (phase == GamePhase.SETUP) {
 			// SetUp Phase Build
 			Settlement settlement = new Settlement(this);
 			settlement.setHasBeenPlayed(true);
-			this.getBuildings().remove(settlement);
+			this.getBuildings().remove(settlement); 
 			node.setBuilding(settlement);
 		} else {
 			// Game Phase Build
@@ -187,9 +183,9 @@ public class HumanPlayer extends Player {
 				}
 				Map<ResourceType, Integer> mp = settlement.getCost();
 				List<ResourceType> list = new ArrayList<>();
-				Iterator<Entry<ResourceType, Integer>> it = mp.entrySet().iterator();
+				Iterator it = mp.entrySet().iterator();
 				while (it.hasNext()) {
-					Map.Entry<ResourceType, Integer> pair = (Map.Entry<ResourceType, Integer>) it.next();
+					Map.Entry pair = (Map.Entry) it.next();
 					ResourceType typeCheck = (ResourceType) pair.getKey();
 					switch (typeCheck) {
 					case BRICK:
@@ -238,6 +234,8 @@ public class HumanPlayer extends Player {
 					node.setBuilding(settlement);
 					for (ResourceType type : list) {
 						this.removeResource(type);
+						ResourceCard card = new ResourceCard(type);
+						controller.getBank().giveResourceCard(card);
 					}
 				}
 			}
@@ -289,7 +287,7 @@ public class HumanPlayer extends Player {
 
 
 	@Override
-	public void buildCity(Node node) throws InsufficientResourceCardException {
+	public void buildCity(Node node, GameController controller) throws InsufficientResourceCardException {
 		if (node.getBuilding() == null) {
 			System.out.println("This node does not have a settlement so you cannot build a city here.");
 		} else {
@@ -372,6 +370,8 @@ public class HumanPlayer extends Player {
 					node.setBuilding(city);
 					for (ResourceType type : list) {
 						this.removeResource(type);
+						ResourceCard card = new ResourceCard(type);
+						controller.getBank().giveResourceCard(card);
 					}
 				}
 			}
@@ -406,15 +406,15 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
-	public void setup(Node node1, Node node2) {
+	public void setup(Node node1, Node node2, GameController controller) {
 		// Player needs to put down 1 Settlement and 1 Road
 		try {
-			buildSettlement(GamePhase.SETUP, node1);
+			buildSettlement(GamePhase.SETUP, node1, controller);
 		} catch (InsufficientResourceCardException e) {
 			e.printStackTrace();
 		}
 		try {
-			buildRoad(GamePhase.SETUP, node1, node2);
+			buildRoad(GamePhase.SETUP, node1, node2, controller);
 		} catch (InsufficientResourceCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -436,5 +436,6 @@ public class HumanPlayer extends Player {
 				cardsToDrop = (handSize - 1) / 2;
 			}
 		}
+
 	}
 }
