@@ -15,6 +15,7 @@ public class GameController {
 	Player curPlayer;
 	boolean gameEnded = false;
 	GamePhase gamePhase;
+	Chat chat;
 
 	public Board getBoard() {
 		return board;
@@ -28,9 +29,14 @@ public class GameController {
 		this.players = players;
 		this.board = new Board(bf);
 		playerTurnIndex = 0;
+		this.chat = new Chat();
 
 	}
 	
+
+	public Chat getChat() {
+		return chat;
+	}
 
 	public Player getCurPlayer() {
 		return curPlayer;
@@ -77,6 +83,7 @@ public class GameController {
 	}
 
 	private void setupPhase() {
+		chat.addToChat("Beginning setup phase");
 
 		int playerNum = 0;
 		Node node1 = null;
@@ -289,7 +296,7 @@ public class GameController {
 	 * 
 	 */
 	public void startGame() {
-
+		chat.addToChat("Game started");
 		diceRollPhase();
 
 		setupPhase();
