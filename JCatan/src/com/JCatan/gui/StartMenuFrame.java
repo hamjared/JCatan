@@ -1,19 +1,19 @@
 package com.JCatan.gui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.JCatan.BoardFactory;
 import com.JCatan.HumanPlayer;
 import com.JCatan.Player;
+import com.JCatan.RandomBoardFactory;
 import com.JCatan.TraditionalBoardFactory;
 
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -25,12 +25,13 @@ import java.awt.event.ActionEvent;
 
 public class StartMenuFrame extends JFrame
 {
-
-    private JPanel contentPane;
+	private static final long serialVersionUID = 7807675421410822657L;
+	private JPanel contentPane;
     private JTextField redPlayerName;
     private JTextField whitePlayerName;
     private JTextField bluePlayerName;
     private JTextField orangePlayerName;
+    private JComboBox<String> boardType;
 
     public StartMenuFrame()
     {
@@ -87,10 +88,10 @@ public class StartMenuFrame extends JFrame
         contentPane.add(orangePlayerName);
         orangePlayerName.setColumns(10);
         
-        JComboBox comboBox = new JComboBox();
-        comboBox.setModel(new DefaultComboBoxModel(new String[] {"Traditional Board"}));
-        comboBox.setBounds(336, 317, 113, 22);
-        contentPane.add(comboBox);
+        boardType = new JComboBox<String>();
+        boardType.setModel(new DefaultComboBoxModel<String>(new String[] {"Traditional Board", "Random Board"}));
+        boardType.setBounds(336, 317, 113, 22);
+        contentPane.add(boardType);
         
         JLabel lblNewLabel_5 = new JLabel("BoardLayout");
         lblNewLabel_5.setBounds(213, 321, 80, 14);
@@ -109,12 +110,23 @@ public class StartMenuFrame extends JFrame
     protected void startGame()
     {
         List<Player> players = getPlayers();
+        BoardFactory bf = null;
+        if(boardType.getSelectedIndex() == 0) {
+        	bf = new TraditionalBoardFactory();
+        } 
+        else {
+        	bf = new RandomBoardFactory();
+        	System.out.println("Random Board");
+        }
         
-        
-        GameGUI game = new GameGUI(players, new TraditionalBoardFactory());
-        game.setVisible(true);
-        this.setVisible(false);
-        
+        SwingUtilities.invokeLater(new Runnable() {
+    		public void run() {
+    			GameGUI game = new GameGUI(players, new TraditionalBoardFactory());
+    	        game.setVisible(true);
+    		}
+    	});
+        setVisible(false);
+        dispose();
     }
     
     protected List<Player> getPlayers(){
@@ -131,7 +143,6 @@ public class StartMenuFrame extends JFrame
         if(!orangePlayerName.getText().isEmpty()) {
             players.add(new HumanPlayer(orangePlayerName.getText()));
         }
-        
         return players;
     }
 }

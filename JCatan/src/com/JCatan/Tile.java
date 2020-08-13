@@ -6,9 +6,7 @@ import java.util.List;
 
 public class Tile
 {
-
     Color color;
-
     ResourceType resourceType;
     boolean hasRobber;
     int number;
@@ -36,7 +34,6 @@ public class Tile
         case DESERT:
             this.color = Color.decode("#DEB887");
             break;
-            
         }
     }
 
@@ -113,9 +110,5 @@ public class Tile
     public ResourceType getResourceType()
     {
         return resourceType;
-    }
-
-    public String toString() {
-    	return new StringBuilder().append(resourceType).append(" ").append(number).toString();
     }
 }

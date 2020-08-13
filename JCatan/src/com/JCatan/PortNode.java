@@ -7,4 +7,8 @@ public class PortNode extends Node {
 	    this.port = port;
 	}
 	
+	public Port getPort() {
+		return port;
+	}
+	
 }

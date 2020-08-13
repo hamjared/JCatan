@@ -122,37 +122,40 @@ public abstract class BoardFactory {
         nodes = new ArrayList<>();
         for (int i = 0; i < NUM_NODES; i++)
         {
-            if (Arrays.asList(WHEAT_PORT_NODES).contains(i))
+            if (contains(WHEAT_PORT_NODES,i))
             {
                 nodes.add(new PortNode(
                         new Port(Port.PortType.SPECIAL, ResourceType.WHEAT)));
             }
-            if (Arrays.asList(BRICK_PORT_NODES).contains(i))
+            else if (contains(BRICK_PORT_NODES,i))
             {
                 nodes.add(new PortNode(
                         new Port(Port.PortType.SPECIAL, ResourceType.BRICK)));
             }
-            if (Arrays.asList(ORE_PORT_NODES).contains(i))
+            else if (contains(ORE_PORT_NODES,i))
             {
                 nodes.add(new PortNode(
                         new Port(Port.PortType.SPECIAL, ResourceType.ORE)));
             }
-            if (Arrays.asList(WOOD_PORT_NODES).contains(i))
+            else if (contains(WOOD_PORT_NODES,i))
             {
                 nodes.add(new PortNode(
                         new Port(Port.PortType.SPECIAL, ResourceType.WOOD)));
             }
-            if (Arrays.asList(SHEEP_PORT_NODES).contains(i))
+            else if (contains(SHEEP_PORT_NODES,i))
             {
                 nodes.add(new PortNode(
                         new Port(Port.PortType.SPECIAL, ResourceType.SHEEP)));
             }
-            if (Arrays.asList(GENERIC_PORT_NODES).contains(i))
+            else if (contains(GENERIC_PORT_NODES,i))
             {
                 nodes.add(new PortNode(new Port(Port.PortType.GENERIC, null)));
             }
+            else {
+            	nodes.add(new InteriorNode());
+            }
 
-            nodes.add(new InteriorNode());
+            
             
             nodes.get(i).setNodeIndex(i);
         }
@@ -160,6 +163,17 @@ public abstract class BoardFactory {
         
         
         return nodes;
+    }
+    
+    private boolean contains(int[] array, int number) {
+    	boolean contains = false;
+    	for (int i = 0; i < array.length; i++) {
+    		if(array[i] == number) {
+    			contains = true;
+    			break;
+    		}
+    	}
+    	return contains;
     }
 
 
@@ -176,18 +190,18 @@ public abstract class BoardFactory {
                 {nodes.get(12),nodes.get(8),nodes.get(13),nodes.get(18),nodes.get(23),nodes.get(17)},//4
                 {nodes.get(13),nodes.get(9),nodes.get(14),nodes.get(19),nodes.get(24),nodes.get(18)},//5
                 {nodes.get(14),nodes.get(10),nodes.get(15),nodes.get(20),nodes.get(25),nodes.get(19)},//6   
-                {nodes.get(16), nodes.get(22), nodes.get(28), nodes.get(33), nodes.get(27), nodes.get(21)}, //7
-                {nodes.get(17), nodes.get(23), nodes.get(29), nodes.get(34), nodes.get(28), nodes.get(22)}, //8
-                {nodes.get(18), nodes.get(24), nodes.get(30), nodes.get(35), nodes.get(29), nodes.get(23)}, //9
-                {nodes.get(19), nodes.get(25), nodes.get(31), nodes.get(36), nodes.get(30), nodes.get(24)}, //10
-                {nodes.get(20), nodes.get(26), nodes.get(32), nodes.get(37), nodes.get(31), nodes.get(25)}, //11
-                {nodes.get(28), nodes.get(33), nodes.get(38), nodes.get(43), nodes.get(39), nodes.get(34)}, //12
-                {nodes.get(17), nodes.get(22), nodes.get(28), nodes.get(34), nodes.get(29), nodes.get(23)}, //13
-                {nodes.get(30), nodes.get(35), nodes.get(40), nodes.get(45), nodes.get(41), nodes.get(36)}, //14
-                {nodes.get(31), nodes.get(36), nodes.get(41), nodes.get(46), nodes.get(42), nodes.get(37)}, //15
-                {nodes.get(39), nodes.get(43), nodes.get(47), nodes.get(51), nodes.get(48), nodes.get(44)}, //16
-                {nodes.get(40), nodes.get(44), nodes.get(48), nodes.get(52), nodes.get(49), nodes.get(45)}, //17
-                {nodes.get(41), nodes.get(45), nodes.get(49), nodes.get(53), nodes.get(50), nodes.get(46)} //18
+                {nodes.get(21), nodes.get(16), nodes.get(22), nodes.get(28), nodes.get(33), nodes.get(27) }, //7
+                {nodes.get(22), nodes.get(17), nodes.get(23), nodes.get(29), nodes.get(34), nodes.get(28) }, //8
+                {nodes.get(23), nodes.get(18), nodes.get(24), nodes.get(30), nodes.get(35), nodes.get(29) }, //9
+                {nodes.get(24), nodes.get(19), nodes.get(25), nodes.get(31), nodes.get(36), nodes.get(30) }, //10
+                {nodes.get(25), nodes.get(20), nodes.get(26), nodes.get(32), nodes.get(37), nodes.get(31) }, //11
+                {nodes.get(33), nodes.get(28), nodes.get(34), nodes.get(39), nodes.get(43), nodes.get(38)}, //12
+                {nodes.get(34), nodes.get(29), nodes.get(35), nodes.get(40), nodes.get(44), nodes.get(39)}, //13
+                {nodes.get(35), nodes.get(30), nodes.get(36), nodes.get(41), nodes.get(45), nodes.get(40)}, //14
+                {nodes.get(36), nodes.get(31), nodes.get(37), nodes.get(42), nodes.get(46), nodes.get(41)}, //15
+                {nodes.get(43), nodes.get(39), nodes.get(44), nodes.get(48), nodes.get(51), nodes.get(47)}, //16
+                {nodes.get(44), nodes.get(40), nodes.get(45), nodes.get(49), nodes.get(52), nodes.get(48)}, //17
+                {nodes.get(45), nodes.get(41), nodes.get(46), nodes.get(50), nodes.get(53), nodes.get(49)} //18
 
             };
         

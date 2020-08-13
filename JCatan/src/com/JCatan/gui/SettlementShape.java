@@ -29,6 +29,7 @@ public class SettlementShape extends Path2D.Double{
 	       lineTo(3*width/4, height/2);
 	       lineTo(3*width/4, height);
 	       lineTo(width/4, height);
+	       
 	}
 
 	

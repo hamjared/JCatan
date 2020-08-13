@@ -1,11 +1,11 @@
 package com.JCatan;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class TraditionalBoardFactory extends BoardFactory
 {
@@ -37,9 +37,9 @@ public class TraditionalBoardFactory extends BoardFactory
             diceToTiles.put(i, Arrays.asList(array[i]));
         }
         
-        Iterator it = diceToTiles.entrySet().iterator();
+        Iterator<Entry<Integer, List<Tile>>> it = diceToTiles.entrySet().iterator();
         while(it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
+            Map.Entry<Integer, List<Tile>> pair = (Map.Entry<Integer, List<Tile>>) it.next();
             List<Tile> tileList = (List<Tile>) pair.getValue();
             tileList.forEach(tile ->tile.setNumber((int) pair.getKey()));
         }

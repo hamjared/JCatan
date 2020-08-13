@@ -1,9 +1,7 @@
 package com.JCatan;
 
-
 import java.util.EmptyStackException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -36,7 +34,6 @@ public class Bank
         resourceTypeToResourceCards.put(ResourceType.WHEAT, wheat);
         resourceTypeToResourceCards.put(ResourceType.ORE, ore);
         resourceTypeToResourceCards.put(ResourceType.SHEEP, sheep);
-
     }
     
     public ResourceCard takeResourceCard(ResourceType resourceType) throws InsufficientResourceCardException{
@@ -68,6 +65,4 @@ public class Bank
         }
         return devCards.pop();
     }
-
-
 }

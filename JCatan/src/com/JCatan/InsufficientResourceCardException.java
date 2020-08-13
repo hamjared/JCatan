@@ -6,12 +6,13 @@ package com.JCatan;
  */
 public class InsufficientResourceCardException extends Exception {
 
-	public InsufficientResourceCardException() {
-		System.out.println("IM broken");
+	private static final long serialVersionUID = -8448680843430085319L;
+
+	public InsufficientResourceCardException(String errorMessage) {
+		System.out.println(errorMessage);
 	}
 
 	public InsufficientResourceCardException() {
 		// TODO Auto-generated constructor stub
 	}
-	
 }

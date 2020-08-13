@@ -4,6 +4,8 @@ import java.util.List;
 
 public class MaritimeTrade extends Trade {
 
+	
+	//NOTE: Always available 4:1 trade with banks.
 	public MaritimeTrade(Player offeringPlayer, List<ResourceCard> offeringCards, List<ResourceCard> requestingCards) {
 		super(offeringPlayer, offeringCards, requestingCards);
 
