@@ -10,7 +10,7 @@ public class LongestRoadCalculatorTest extends TestCase {
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
-	}
+	} 
 
 	public void test() throws InsufficientResourceCardException {
 		Board board = new Board(new TraditionalBoardFactory());

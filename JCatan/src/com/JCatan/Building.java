@@ -36,6 +36,10 @@ public abstract class Building implements ICost {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public Player getPlayer() {
+		return player;
+	}
 	
 	
 }

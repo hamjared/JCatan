@@ -21,7 +21,7 @@ public class PortShape {
 		this.port = pn.getPort();
 		this.g2 = g2;
 		portShape = new Ellipse2D.Double(x, y, 30, 30);
-		System.out.println(port);
+//		System.out.println(port);
 	}
 
 	public void draw() {
