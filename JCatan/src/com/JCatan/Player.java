@@ -2,10 +2,13 @@ package com.JCatan;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
-import java.util.Set;
+
 
 public abstract class Player {
 	List<ResourceCard> resources;
@@ -18,8 +21,8 @@ public abstract class Player {
 	String name;
 	Color color;
 	Random randomGenerator;
-  boolean hasLongestRoad;
-  boolean hasLargestArmy;
+    boolean hasLongestRoad;
+    boolean hasLargestArmy;
   
 	public String getName() {
 		return name;
@@ -43,10 +46,21 @@ public abstract class Player {
 		this.name = name;
 		initializeBuildingsAndRoads();
 		hasLongestRoad = false;
-    hasLargestArmy = false;
-    color = Color.BLACK;
+		hasLargestArmy = false;
+		color = Color.BLACK;
 	}
 
+	public List<ResourceCard> getResources(){
+		return resources;
+	}
+	
+    public Map<ResourceType, Integer> getUniqueResourcesCount(){
+   	 Map<ResourceType, Integer> temp = resources.stream().collect(
+   			 										Collectors.toMap(t->((ResourceCard)t).getResourceType(),
+   			 										v->1, (existing, addition)-> existing + addition));
+   	 return temp;
+   }
+	
 	/**
 	 * @throws InsufficientResourceCardException
 	 */
@@ -71,7 +85,7 @@ public abstract class Player {
 	 * @throws InsufficientResourceCardException
 	 */
 	public abstract void buyDevelopmentCard() throws InsufficientResourceCardException;
-
+	
 	/**
 	 * 
 	 */
@@ -148,16 +162,12 @@ public abstract class Player {
 	 * 
 	 */
 	public abstract void endTurn();
-
+	
 	/**
 	 * @return
 	 */
 	public int getDiceRoll() {
 		return diceRoll;
-	}
-
-	public List<ResourceCard> getResources() {
-		return resources;
 	}
 
 	/**

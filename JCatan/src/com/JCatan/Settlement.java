@@ -15,15 +15,10 @@ public class Settlement extends Building
     }
 
 	@Override
-    public void gatherResources(GameController controller, ResourceType resource)
+    public void gatherResources(ResourceType resource)
     {
-		try {
-			ResourceCard card = controller.getBank().takeResourceCard(resource);
-			player.getResources().add(card); 
-		} catch (InsufficientResourceCardException e) {
-			e.printStackTrace();
-		}
-		
+        // TODO Building: gatherResources
+        
 
     }
 
@@ -40,6 +35,9 @@ public class Settlement extends Building
         return cost;
     }
 
-
-
+	@Override
+	public void gatherResources(GameController controller, ResourceType resource) {
+		// TODO Auto-generated method stub
+		
+	}
 }

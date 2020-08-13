@@ -1,16 +1,16 @@
 package com.JCatan.gui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.JCatan.BoardFactory;
+import com.JCatan.Consumer;
 import com.JCatan.Dice;
 import com.JCatan.GameController;
 import com.JCatan.GamePhase;
@@ -19,20 +19,18 @@ import com.JCatan.ResourceCard;
 import com.JCatan.ResourceType;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Font;
 import java.awt.Graphics;
-
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.SwingConstants;
 
 public class GameGUI extends JFrame {
 
+	private static final long serialVersionUID = -5012311744443108873L;
+	private TradePanel tradePanel = null;
 	private JPanel contentPane;
 	public static GameController controller;
 	private JLabel brickLabel;
@@ -69,17 +67,33 @@ public class GameGUI extends JFrame {
 	int die1;
 	int die2;
 	int j = 0;
+      
+    @Override
+	public void paint(Graphics g) {
+    	try {
+	    	super.paint(g);
+	    	revalidate();
+    	}finally {
+    		g.dispose();
+    	}
+    }
+    
+    public GameGUI(List<Player> players, BoardFactory bf)
+    {        
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(0, 0, 1920, 1040);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+        
+        controller = new GameController(players, bf);       		
 
-	public GameGUI(List<Player> players, BoardFactory bf) {
-		controller = new GameController(players, bf);
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 1920, 1040);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-
+		tradePanel = new TradePanel(865, 0, 578, 402);
+		tradePanel.setVisible(false);
+		tradePanel.setEnabled(false);
+		contentPane.add(tradePanel);
+				
 		JLayeredPane master = new JLayeredPane();
 		master.setLocation(0, 0);
 		master.setSize(1441, 867);
@@ -134,7 +148,6 @@ public class GameGUI extends JFrame {
 		oreLabel.setHorizontalAlignment(oreLabel.CENTER);
 		BankPanel.add(oreLabel);
 
-
 		controller.getPlayer(0).setColor(Color.BLUE);
 		JPanel Player1Panel = new PlayerPanel(1441, 490, 463, 126, controller.getPlayer(0));
 		Player1Panel.setBackground(Color.ORANGE);
@@ -160,6 +173,10 @@ public class GameGUI extends JFrame {
 		EndTurnPanel.setLayout(new GridLayout(1, 0, 0, 0));
 
 		JButton endButton = new JButton("Roll Dice");
+		Consumer<JButton> turnOnEndButton = b -> endButton.setEnabled(true);
+		tradePanel.setDelegate(turnOnEndButton);
+		controller.setAction(t -> tradePanel.close());
+		
 		endButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				switch (controller.getGamePhase()) {
@@ -210,12 +227,15 @@ public class GameGUI extends JFrame {
 					endButton.setText("Start Build");
 					controller.setGamePhase(GamePhase.GAMETRADE);
 					controller.gamePhaseTrade();
+					tradePanel.setEnabled(true);
+					tradePanel.setVisible(true);
+					endButton.setEnabled(false);
 					repaint();
 					break;
 				case GAMETRADE:
-					endButton.setText("End Turn");
+					endButton.setText("Start End");
 					controller.setGamePhase(GamePhase.GAMEBUILD);
-					controller.gamePhaseBuild();
+					//controller.gamePhaseBuild();
 					repaint();
 					break;
 				case GAMEBUILD:
@@ -223,18 +243,17 @@ public class GameGUI extends JFrame {
 					controller.setGamePhase(GamePhase.GAMEROLL);
 					controller.gamePhaseEnd();
 					break;
+				default:
+					break;
 				}
 			}
 		});
 		endButton.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		EndTurnPanel.add(endButton);
-
-		JPanel BuildingPanel = new BuildingPanel();
+		
+		BuildingPanel BuildingPanel = new BuildingPanel(controller);
 		contentPane.add(BuildingPanel);
-
-		JPanel TradePanel = new TradePanel();
-		contentPane.add(TradePanel);
-
+		
 		JPanel ResourcePanel = new ResourcesPanel() {
 			@Override
 			public void paintComponent(Graphics g) {
@@ -258,6 +277,8 @@ public class GameGUI extends JFrame {
 						case WHEAT:
 							resourceCard = wheat.getImage();
 							break;
+						default:
+							break;
 						}
 						g.drawImage(resourceCard, j + 5, 18, 55, 95, null);
 						j += 56;
@@ -268,6 +289,7 @@ public class GameGUI extends JFrame {
 				}
 			}
 		};
+		ResourcePanel.setBounds(0, 867, 874, 134);
 		contentPane.add(ResourcePanel);
 		repaint();
 
@@ -295,7 +317,6 @@ public class GameGUI extends JFrame {
 
 		controller.startGame();
 	}
-	
 	
 	private void drawBankLabels() {
 		brickLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.BRICK));

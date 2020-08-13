@@ -1,11 +1,8 @@
 package com.JCatan;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class LongestRoadCalculator {
@@ -19,9 +16,6 @@ public class LongestRoadCalculator {
 	}
 
 	public int calcLongestRoad() {
-		if(roads.isEmpty()) {
-			return 0;
-		}
 		int longestLength = 0;
 		int curLength = 0;
 		for (Road road : roads) {

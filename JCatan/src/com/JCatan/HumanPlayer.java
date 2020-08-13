@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class HumanPlayer extends Player {
 
@@ -80,6 +81,8 @@ public class HumanPlayer extends Player {
 					case BRICK:
 						numBrick++;
 						break;
+					default:
+						break;
 					}
 				}
 
@@ -107,6 +110,8 @@ public class HumanPlayer extends Player {
 							resourceCheck++;
 							list.add((ResourceType) pair.getKey());
 						}
+					default:
+						break;
 					}
 					it.remove(); // avoids a ConcurrentModificationException
 				}
@@ -123,7 +128,6 @@ public class HumanPlayer extends Player {
 						controller.getBank().giveResourceCard(card);
 					}
 				}
-
 			}
 		}
 	}
@@ -173,6 +177,8 @@ public class HumanPlayer extends Player {
 					case BRICK:
 						numBrick++;
 						break;
+					default:
+						break;
 					}
 				}
 				Map<ResourceType, Integer> mp = settlement.getCost();
@@ -217,10 +223,11 @@ public class HumanPlayer extends Player {
 							resourceCheck++;
 							list.add((ResourceType) pair.getKey());
 						}
+					default:
+						break;
 					}
 					it.remove(); // avoids a ConcurrentModificationException
 				}
-
 				if (resourceCheck == 4) {
 					settlement.setHasBeenPlayed(true);
 					this.getBuildings().remove(settlement);
@@ -234,6 +241,50 @@ public class HumanPlayer extends Player {
 			}
 		}
 	}
+
+	@Override
+	public void receiveTrade(Trade trade) {
+		List<ResourceCard> requesting = null;
+		List<ResourceCard> offering = null;
+		
+		if(trade.getOfferingPlayer().equals(this)) {
+			requesting = trade.getRequestingCards();
+			offering = trade.getOfferingCards();
+		} else {
+			 requesting = trade.getOfferingCards();
+			 offering = trade.getRequestingCards();
+		}
+		
+		for(ResourceCard card : offering) {
+			resources.removeIf(c -> c.resourceType.equals(card.resourceType));
+		}
+		
+		for(ResourceCard card : requesting) {
+			resources.add(card);
+		}
+		System.out.print(resources.size());
+		System.out.print("Has received trade!");
+	}
+	
+	@Override
+	public void tradePhase() {
+		
+	}
+	
+    @Override
+    public void proposeTrade(Trade trade){
+    	//Remember the trade is the middle man here.  Trade helps with GUI side...
+    	try {
+    		if(trade instanceof DomesticTrade) {
+    			System.out.print("Proposing trade!");
+    		} else if(trade instanceof MaritimeTrade) {
+    			
+    		}
+    	} catch(Exception e) {
+    		
+    	}
+	}
+
 
 	@Override
 	public void buildCity(Node node, GameController controller) throws InsufficientResourceCardException {
@@ -256,7 +307,6 @@ public class HumanPlayer extends Player {
 				int numSheep = 0;
 				int numBrick = 0;
 				int resourceCheck = 0;
-
 				for (ResourceCard r : resources) {
 					ResourceType type = r.getResourceType();
 					switch (type) {
@@ -275,13 +325,15 @@ public class HumanPlayer extends Player {
 					case BRICK:
 						numBrick++;
 						break;
+					default:
+						break;
 					}
 				}
 				Map<ResourceType, Integer> mp = city.getCost();
 				List<ResourceType> list = new ArrayList<>();
-				Iterator it = mp.entrySet().iterator();
+				Iterator<Entry<ResourceType, Integer>> it = mp.entrySet().iterator();
 				while (it.hasNext()) {
-					Map.Entry pair = (Map.Entry) it.next();
+					Map.Entry<ResourceType, Integer> pair = (Map.Entry<ResourceType, Integer>) it.next();
 					ResourceType typeCheck = (ResourceType) pair.getKey();
 					for (int i = 0; i < (int) pair.getValue(); i++) {
 
@@ -303,11 +355,13 @@ public class HumanPlayer extends Player {
 								resourceCheck++;
 								list.add((ResourceType) pair.getKey());
 							}
+						default:
+							break;
 						}
 					}
 					it.remove(); // avoids a ConcurrentModificationException
 				}
-
+				
 				if (resourceCheck == 5) {
 					city.setHasBeenPlayed(true);
 					this.getBuildings().remove(city);
@@ -322,8 +376,8 @@ public class HumanPlayer extends Player {
 				}
 			}
 		}
-	}
-
+    }
+   
 	@Override
 	public void buyDevelopmentCard() throws InsufficientResourceCardException {
 		// TODO Player: buyDevelopmentCard
@@ -333,7 +387,6 @@ public class HumanPlayer extends Player {
 	@Override
 	public void endTurn() {
 		// TODO Player: endTurn
-
 	}
 
 	@Override
@@ -343,19 +396,6 @@ public class HumanPlayer extends Player {
 		}
 		card.performAction();
 		this.devCards.remove(card);
-
-	}
-
-	@Override
-	public void proposeTrade(Trade trade) {
-		// TODO Player: proposeTrade
-
-	}
-
-	@Override
-	public void receiveTrade(Trade trade) {
-		// TODO Player: receiveTrade
-
 	}
 
 	@Override
@@ -398,11 +438,4 @@ public class HumanPlayer extends Player {
 		}
 
 	}
-
-	@Override
-	public void tradePhase() {
-		// TODO Player: tradePhase
-
-	}
-
 }

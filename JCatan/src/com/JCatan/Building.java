@@ -31,6 +31,11 @@ public abstract class Building implements ICost {
     {
         this.hasBeenPlayed = hasBeenPlayed;
     }
+
+	public void gatherResources(ResourceType resource) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

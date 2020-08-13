@@ -11,9 +11,8 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
+
 
 import com.JCatan.PortNode;
 import com.JCatan.ResourceType;
@@ -26,6 +25,7 @@ import java.awt.geom.Ellipse2D.Double;
 import java.awt.geom.Line2D;
 
 public class BoardPanel extends JPanel {
+
 
 	private List<Hexagon> hexagons;
 
