@@ -99,12 +99,14 @@ public class GameController {
 	}
 	
 	private void setupPhase() {
+		
 		chat.addToChat("Beginning setup phase");
 
 		int playerNum = 0;
 		Node node1 = null;
 		Node node2 = null;
 		for (Player player : players) {
+
 			switch (playerNum) {
 			case 0:
 				node1 = board.getTiles().get(0).getNodes().get(0);
@@ -156,6 +158,8 @@ public class GameController {
 	
 	public void gamePhaseRoll() {
 			Player curPlayer = players.get(playerTurnIndex);
+			chat.addToChat(curPlayer.getName() + "'s turn");
+			
 
 			int diceRoll = curPlayer.rollDice();
 
@@ -203,6 +207,10 @@ public class GameController {
 		if (playerTurnIndex >= players.size()) {
 			playerTurnIndex = 0;
 		}
+		
+		
+		
+		
 	}
   
 	private void setLargestArmy() {
@@ -236,14 +244,7 @@ public class GameController {
 
 		setupPhase();
 
-		for (Tile tile : board.getTiles()) {
-			System.out.print(tile.getNumber() + ": ");
-			if (tile.getNodes().get(0).getBuilding() == null) {
-				System.out.println("No settlement");
-			} else {
-				System.out.println("Settlement");
-			}
-		}
-		//	gamePhase();
+		
+
 	}
 }

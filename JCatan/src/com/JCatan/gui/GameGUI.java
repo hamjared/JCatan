@@ -20,6 +20,8 @@ import com.JCatan.ResourceType;
 
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -32,6 +34,7 @@ public class GameGUI extends JFrame {
 	private static final long serialVersionUID = -5012311744443108873L;
 	private TradePanel tradePanel = null;
 	private JPanel contentPane;
+	private BoardPanel BoardPanel;
 	public static GameController controller;
 	private JLabel brickLabel;
 	private JLabel woodLabel;
@@ -95,14 +98,14 @@ public class GameGUI extends JFrame {
 		contentPane.add(tradePanel);
 				
 		JLayeredPane master = new JLayeredPane();
-		master.setLocation(0, 0);
+		master.setLocation(0, 0); 
 		master.setSize(1441, 867);
 		contentPane.add(master);
 
 		JPanel ChatPanel = new ChatPanel(controller.getChat());
 		contentPane.add(ChatPanel);
 
-		JPanel BoardPanel = new BoardPanel();
+		BoardPanel = new BoardPanel();
 		BoardPanel.setBounds(0, 0, 1441, 867);
 		master.add(BoardPanel, new Integer(0), 0);
 
@@ -207,7 +210,7 @@ public class GameGUI extends JFrame {
 					switch (die2) {
 					case 1:
 						dieTwo = one.getImage();
-						break;
+						break; 
 					case 2:
 						dieTwo = two.getImage();
 						break;
@@ -253,6 +256,44 @@ public class GameGUI extends JFrame {
 		
 		BuildingPanel BuildingPanel = new BuildingPanel(controller);
 		contentPane.add(BuildingPanel);
+		BuildingPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {      
+            	
+            	int x = e.getX();
+        		int y = e.getY();
+        		
+        		if((x >= 30 && x <= 60) && (y >= 20 && y <= 110)) {
+        			
+        			clickOnRoad();
+        		}
+        		if ((x >= 121 && x <= 167) && (y >= 43 && y <= 109)) {
+        			
+        			clickOnSettlement();
+        		} else if ((x >= 62 && x <= 188) && (y >= 53 && y <= 64)) {
+        			
+        			clickOnSettlement();
+        		} else if ((x >= 135 && x <= 155) && (y >= 20 && y <= 110)) {
+        			
+        			clickOnSettlement();
+        		}
+        		if ((x >= 243 && x <= 310) && (y >= 89 && y <= 110)) {
+        			
+        			clickOnCity();
+        		} else if ((x >= 243 && x <= 266) && (y >= 33 && y <= 110)) {
+        			
+        			clickOnCity();
+        		} else if ((x >= 220 && x <= 290) && (y >= 37 && y <= 65)) {
+        			
+        			clickOnCity();
+        		} else if ((x >= 30 && x <= 37) && (y >= 18 && y <= 110)) {
+        			
+        			clickOnCity();
+        		}
+        		 
+                buyDevCard();
+            }
+		});
 		
 		JPanel ResourcePanel = new ResourcesPanel() {
 			@Override
@@ -314,10 +355,34 @@ public class GameGUI extends JFrame {
 		diceTwoPanel.setBackground(Color.WHITE);
 		diceTwoPanel.setBounds(1379, 798, 56, 58);
 		master.add(diceTwoPanel, new Integer(1), 0);
+		
+		
 
 		controller.startGame();
+		
 	}
 	
+	protected void buyDevCard() {
+		// TODO GameGUI: buyDevCard
+		
+	}
+
+	protected void clickOnCity() {
+		System.out.println("Clicked on City");
+		BoardPanel.buildCity();
+		
+	}
+
+	protected void clickOnSettlement() {
+		BoardPanel.buildSettlement();
+		
+	}
+
+	protected void clickOnRoad() {
+		BoardPanel.buildRoad();
+		
+	}
+
 	private void drawBankLabels() {
 		brickLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.BRICK));
 		woodLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.WOOD));

@@ -35,7 +35,11 @@ public class Hexagon extends Polygon
         this.tile = tile;
     }
 
-    public Hexagon(int x, int y, int radius, Tile tile)
+    public Tile getTile() {
+		return tile;
+	}
+
+	public Hexagon(int x, int y, int radius, Tile tile)
     {
         this(new Point(x, y), radius, tile);
         
@@ -126,5 +130,9 @@ public class Hexagon extends Polygon
     
     public void onClick() {
     	System.out.println("Tile clicked: " + tile);
+    }
+    
+    public Point getVertex(int v) {
+    	return points[v];
     }
 }

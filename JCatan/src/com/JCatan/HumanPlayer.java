@@ -294,7 +294,7 @@ public class HumanPlayer extends Player {
 			boolean cityCheck = false;
 			for (Building b : this.getBuildings()) {
 				if (b.getClass().equals(Settlement.class)) {
-					cityCheck = true;
+					cityCheck = true; 
 				}
 			}
 			if (cityCheck == true) {

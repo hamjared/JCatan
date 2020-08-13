@@ -37,7 +37,11 @@ public class Settlement extends Building
 
 	@Override
 	public void gatherResources(GameController controller, ResourceType resource) {
-		// TODO Auto-generated method stub
-		
+		try {
+            ResourceCard card = controller.getBank().takeResourceCard(resource);
+            player.getResources().add(card); 
+        } catch (InsufficientResourceCardException e) {
+            e.printStackTrace();
+        }
 	}
 }

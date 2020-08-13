@@ -25,7 +25,12 @@ public class Road implements ICost
     }
     
 
-    public Node getNode1() {
+    public Player getPlayer() {
+		return player;
+	}
+
+
+	public Node getNode1() {
 		return node1;
 	}
 
@@ -46,6 +51,30 @@ public class Road implements ICost
 
 	public void setHasBeenPlayed(boolean hasBeenPlayed) {
 		this.hasBeenPlayed = hasBeenPlayed;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Road)) {
+			return false;
+		}
+		
+		Road road = (Road) obj;
+		
+		if(this.node1 == road.getNode1()) {
+			if(this.node2 == road.getNode2()) {
+				return true;
+			}
+		}
+		
+		if(this.node1 == road.getNode2()) {
+			if(this.node2 == road.getNode1()) {
+				return true;
+			}
+		}
+		
+		return false;
+		
 	}
     
     

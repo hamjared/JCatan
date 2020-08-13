@@ -113,7 +113,7 @@ public class StartMenuFrame extends JFrame
         BoardFactory bf = null;
         if(boardType.getSelectedIndex() == 0) {
         	bf = new TraditionalBoardFactory();
-        }
+        } 
         else {
         	bf = new RandomBoardFactory();
         	System.out.println("Random Board");

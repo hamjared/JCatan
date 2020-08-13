@@ -1,7 +1,10 @@
 package com.JCatan;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+
 
 public class Board {
 	
@@ -87,6 +90,130 @@ public class Board {
 
 	public void setBoard(BoardGraph board) {
 		this.board = board;
+	}
+
+	public List<Node> getBuildableNodes(Player curPlayer) {
+		List<Node> playableNodes = new ArrayList<>();
+		int curNodeIndex = 0;
+		for (List<Node> nodes: board.getNodes()) {
+			Node curNode = board.getNodeList().get(curNodeIndex);
+			if(curNode.getBuilding() != null) {
+				curNodeIndex++;
+				continue;
+			}
+			for(Road road: curNode.getRoads()) {
+				if(road.getPlayer().equals(curPlayer)) {
+					int i = 0;
+					for(i = 0; i < nodes.size(); i++) {
+						if(nodes.get(i).getBuilding() != null) {
+							break;
+						}
+					}
+					if(i == (nodes.size() )) {
+						playableNodes.add(curNode);
+					}
+				}
+
+			}
+				
+			curNodeIndex++;
+		}
+		return playableNodes;
+	}
+
+	public List<Road> getBuildableRoads(Player curPlayer) {
+		List<Road> roads = new ArrayList<>();
+		int curNodeIndex = 0;
+		for( List<Node> nodes: board.getNodes()) {
+			for(Node node: nodes) {
+				Road road = new Road(node, board.getNodeList().get(curNodeIndex), curPlayer); 
+				
+				boolean playerCanPlayRoad = false;
+				if(road.getNode1().getBuilding() != null ) {
+					
+					if(road.getNode1().getBuilding().getPlayer().equals(curPlayer)) {
+						playerCanPlayRoad = true;
+					}
+					
+					for(Road r: road.getNode1().getRoads()) {
+						if(r != null) {
+							if(r.getPlayer().equals(curPlayer)) {
+								playerCanPlayRoad = true;
+							}
+						}
+					}
+				}
+				if(road.getNode2().getBuilding() != null ) {
+					if(road.getNode2().getBuilding().getPlayer().equals(curPlayer)) {
+						playerCanPlayRoad = true;
+					}
+					
+					for(Road r: road.getNode2().getRoads()) {
+						if(r != null) {
+							if(r.getPlayer().equals(curPlayer)) {
+								playerCanPlayRoad = true;
+							}
+						}
+					}
+				}
+				
+				for(Road r: node.getRoads()) {
+					if(r.getPlayer().equals(curPlayer)) {
+						if(r.getNode1().equals(road.getNode1())) {
+							playerCanPlayRoad = true;
+						}
+						if(r.getNode2().equals(road.getNode1())) {
+							playerCanPlayRoad = true;
+						}
+						if(r.getNode2().equals(road.getNode2())) {
+							playerCanPlayRoad = true;
+						}
+						if(r.getNode1().equals(road.getNode2())) {
+							playerCanPlayRoad = true;
+						}
+					}
+				}
+				
+				for(Road r: board.getNodeList().get(curNodeIndex).getRoads()) {
+					if(r.getPlayer().equals(curPlayer)) {
+						if(r.getNode1().equals(road.getNode1())) {
+							playerCanPlayRoad = true;
+						}
+						if(r.getNode2().equals(road.getNode1())) {
+							playerCanPlayRoad = true;
+						}
+						if(r.getNode2().equals(road.getNode2())) {
+							playerCanPlayRoad = true;
+						}
+						if(r.getNode1().equals(road.getNode2())) {
+							playerCanPlayRoad = true;
+						}
+					}
+				}
+				
+				
+				if(!roads.contains(road) && playerCanPlayRoad) {
+					roads.add(road);
+				}
+				
+			}
+			
+			curNodeIndex++;
+		}
+		return roads;
+	}
+
+	public List<Node> getBuildableCities(Player curPlayer) {
+		List<Node> nodes = new ArrayList<>();
+		for(Node node: board.getNodeList()) {
+			if(node.getBuilding() != null) {
+				if(node.getBuilding().getPlayer().equals(curPlayer)) {
+					nodes.add(node);
+				}
+			}
+		}
+		return nodes; 
+		
 	}
 	
 	

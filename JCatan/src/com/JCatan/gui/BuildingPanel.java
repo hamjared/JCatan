@@ -10,10 +10,14 @@ import java.awt.Shape;
 import javax.swing.JPanel;
 
 import com.JCatan.GameController;
+import com.JCatan.InsufficientResourceCardException;
+import com.JCatan.Node;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -34,6 +38,7 @@ public class BuildingPanel extends JPanel
 	List<Shape> shapes;
 	Color c;
 	BufferedImage img;
+	List<ActionListener> actionListeners;
 	
     public BuildingPanel(GameController controller) {
         setBackground(Color.PINK);
@@ -56,30 +61,7 @@ public class BuildingPanel extends JPanel
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {      	
-            	
-            	int x = e.getX();
-        		int y = e.getY();
-        		
-        		if((x >= 30 && x <= 60) && (y >= 20 && y <= 110)) {
-        			System.out.println("Click on Road");
-        		}
-        		if ((x >= 121 && x <= 167) && (y >= 43 && y <= 109)) {
-        			System.out.println("Click on Settlement");
-        		} else if ((x >= 62 && x <= 188) && (y >= 53 && y <= 64)) {
-        			System.out.println("Click on Settlement");
-        		} else if ((x >= 135 && x <= 155) && (y >= 20 && y <= 110)) {
-        			System.out.println("Click on Settlement");
-        		}
-        		if ((x >= 243 && x <= 310) && (y >= 89 && y <= 110)) {
-        			System.out.println("Click on City");
-        		} else if ((x >= 243 && x <= 266) && (y >= 33 && y <= 110)) {
-        			System.out.println("Click on City");
-        		} else if ((x >= 220 && x <= 290) && (y >= 37 && y <= 65)) {
-        			System.out.println("Click on City");
-        		} else if ((x >= 30 && x <= 37) && (y >= 18 && y <= 110)) {
-        			System.out.println("Click on City");
-        		}
-        		
+
                 buyDevCard();
             }
             @Override
@@ -107,7 +89,32 @@ public class BuildingPanel extends JPanel
     }
     
     
-    @Override
+    protected void clickOnSettlement() {
+    	System.out.println("Click on Settlement");
+		
+	}
+
+
+	protected void clickOnRoad() {
+		System.out.println("Click on Road");
+		
+	}
+
+
+	protected void clickOnCity() {
+		System.out.println("Click on City");
+		Node node = null;
+		try {
+			GameGUI.controller.getCurPlayer().buildCity(node, GameGUI.controller);
+		} catch (InsufficientResourceCardException e) {
+
+			e.printStackTrace();
+		}
+		
+	}
+
+
+	@Override
     public void paint(Graphics g) {
     	super.paint(g);
     	Graphics2D g2 = (Graphics2D) g;
@@ -140,6 +147,10 @@ public class BuildingPanel extends JPanel
         // TODO BuildingPanel: buyDevCard
         
     }
+	
+	public void addActionListener(ActionListener al) {
+		actionListeners.add(al);
+	}
 
 
 }
