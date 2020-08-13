@@ -15,4 +15,14 @@ public class Port {
 		this.portType = portType;
 		this.resourceType = resourceType;
 	}
+
+	public PortType getPortType() {
+		return portType;
+	}
+
+	public ResourceType getResourceType() {
+		return resourceType;
+	}
+	
+	
 }
