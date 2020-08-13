@@ -122,37 +122,40 @@ public abstract class BoardFactory {
         nodes = new ArrayList<>();
         for (int i = 0; i < NUM_NODES; i++)
         {
-            if (Arrays.asList(WHEAT_PORT_NODES).contains(i))
+            if (contains(WHEAT_PORT_NODES,i))
             {
                 nodes.add(new PortNode(
                         new Port(Port.PortType.SPECIAL, ResourceType.WHEAT)));
             }
-            if (Arrays.asList(BRICK_PORT_NODES).contains(i))
+            else if (contains(BRICK_PORT_NODES,i))
             {
                 nodes.add(new PortNode(
                         new Port(Port.PortType.SPECIAL, ResourceType.BRICK)));
             }
-            if (Arrays.asList(ORE_PORT_NODES).contains(i))
+            else if (contains(ORE_PORT_NODES,i))
             {
                 nodes.add(new PortNode(
                         new Port(Port.PortType.SPECIAL, ResourceType.ORE)));
             }
-            if (Arrays.asList(WOOD_PORT_NODES).contains(i))
+            else if (contains(WOOD_PORT_NODES,i))
             {
                 nodes.add(new PortNode(
                         new Port(Port.PortType.SPECIAL, ResourceType.WOOD)));
             }
-            if (Arrays.asList(SHEEP_PORT_NODES).contains(i))
+            else if (contains(SHEEP_PORT_NODES,i))
             {
                 nodes.add(new PortNode(
                         new Port(Port.PortType.SPECIAL, ResourceType.SHEEP)));
             }
-            if (Arrays.asList(GENERIC_PORT_NODES).contains(i))
+            else if (contains(GENERIC_PORT_NODES,i))
             {
                 nodes.add(new PortNode(new Port(Port.PortType.GENERIC, null)));
             }
+            else {
+            	nodes.add(new InteriorNode());
+            }
 
-            nodes.add(new InteriorNode());
+            
             
             nodes.get(i).setNodeIndex(i);
         }
@@ -160,6 +163,17 @@ public abstract class BoardFactory {
         
         
         return nodes;
+    }
+    
+    private boolean contains(int[] array, int number) {
+    	boolean contains = false;
+    	for (int i = 0; i < array.length; i++) {
+    		if(array[i] == number) {
+    			contains = true;
+    			break;
+    		}
+    	}
+    	return contains;
     }
 
 
