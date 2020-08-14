@@ -36,7 +36,7 @@ public class PlayerPanel extends JPanel
     public PlayerPanel(int x, int y, int width, int height, Player player)
     {
         super();
-        setBackground(Color.ORANGE);
+        setBackground(Color.ORANGE); 
         setBounds(x, y, 463, 126);
         setLayout(null);
         this.player = player;
@@ -135,7 +135,8 @@ public class PlayerPanel extends JPanel
 		this.numSettlementsLabel.setText("" + player.getBuildings().stream().filter(b -> b instanceof Settlement).count());
 		this.numCitiesLabel.setText("" + player.getBuildings().stream().filter(b -> b instanceof City).count());
 		this.victoryPointsLabel.setText("" + player.calcVictoryPoints());
-		this.longestRoadLabel.setText("" + player.calcLongestRoad());
+		int lr = player.calcLongestRoad();
+		this.longestRoadLabel.setText("" + lr);
 	}
 
 	private void drawShape(Shape shape, int rotateDegrees, int translate_x, int translate_y, int scale, Graphics2D g2, Color color) {
