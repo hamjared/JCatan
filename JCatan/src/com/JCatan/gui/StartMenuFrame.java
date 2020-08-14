@@ -116,7 +116,6 @@ public class StartMenuFrame extends JFrame
         } 
         else {
         	bf = new RandomBoardFactory();
-        	System.out.println("Random Board");
         }
         
         SwingUtilities.invokeLater(new Runnable() {
