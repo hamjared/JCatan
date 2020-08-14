@@ -212,7 +212,6 @@ public class BoardPanel extends JPanel {
 		start = System.nanoTime();
 		drawRoads(g2d);
 
-		
 		end = System.nanoTime();
 		System.out.println("Time to draw Roads: " + (end - start) / 10e9);
 
@@ -223,16 +222,15 @@ public class BoardPanel extends JPanel {
 		Node node2;
 		Hexagon hexagon;
 		Hexagon hex2;
-		
-		for(Player player : GameGUI.controller.getPlayers()) {
-			for(Road road: player.getPlayedRoads()) {
+
+		for (Player player : GameGUI.controller.getPlayers()) {
+			for (Road road : player.getPlayedRoads()) {
 				node1 = road.getNode1();
 				node2 = road.getNode2();
-				
+
 				hexagon = tileToHexagon.get(node1.getTiles().get(0));
 				hex2 = tileToHexagon.get(node2.getTiles().get(0));
-				
-				
+
 				int vertex1 = hexagon.getTile().getNodes().indexOf(node1);
 				vertex1 = vertex1 - 1;
 				if (vertex1 < 0) {
@@ -247,8 +245,7 @@ public class BoardPanel extends JPanel {
 				Point p1 = hexagon.getVertex(vertex1);
 				Point p2 = hex2.getVertex(vertex2);
 
-				Shape c = new Ellipse2D.Double((p1.getX() + p2.getX()) / 2, (p1.getY() + p2.getY()) / 2,
-						30, 30);
+				Shape c = new Ellipse2D.Double((p1.getX() + p2.getX()) / 2, (p1.getY() + p2.getY()) / 2, 30, 30);
 				AffineTransform prev = g2d.getTransform();
 				Color prevColor = g2d.getColor();
 				g2d.setColor(road.getPlayer().getColor());
@@ -260,7 +257,7 @@ public class BoardPanel extends JPanel {
 				g2d.setColor(prevColor);
 			}
 		}
-		
+
 	}
 
 	private void drawBuildableCities(Graphics2D g2) {
@@ -298,34 +295,35 @@ public class BoardPanel extends JPanel {
 			return;
 		}
 
+		Node node1;
+		Node node2;
+		Hexagon hexagon;
+		Hexagon hex2;
+
 		for (Road road : roads) {
-			for (Hexagon hexagon : hexagons) {
-				if (hexagon.getTile().getNodes().contains(road.getNode1())) {
-					for (Hexagon hex2 : hexagons) {
-						if (hex2.getTile().getNodes().contains(road.getNode2())) {
-							Node node1 = road.getNode1();
-							Node node2 = road.getNode2();
-							int vertex1 = hexagon.getTile().getNodes().indexOf(node1);
-							vertex1 = vertex1 - 1;
-							if (vertex1 < 0) {
-								vertex1 = 5;
-							}
-							int vertex2 = hex2.getTile().getNodes().indexOf(node2);
-							vertex2 = vertex2 - 1;
-							if (vertex2 < 0) {
-								vertex2 = 5;
-							}
 
-							Point p1 = hexagon.getVertex(vertex1);
-							Point p2 = hex2.getVertex(vertex2);
+			node1 = road.getNode1();
+			node2 = road.getNode2();
 
-							buildableRoads.add(new BuildableRoad((p1.getX() + p2.getX()) / 2,
-									(p1.getY() + p2.getY()) / 2, g2, road));
+			hexagon = tileToHexagon.get(node1.getTiles().get(0));
+			hex2 = tileToHexagon.get(node2.getTiles().get(0));
 
-						}
-					}
-				}
+			int vertex1 = hexagon.getTile().getNodes().indexOf(node1);
+			vertex1 = vertex1 - 1;
+			if (vertex1 < 0) {
+				vertex1 = 5;
 			}
+			int vertex2 = hex2.getTile().getNodes().indexOf(node2);
+			vertex2 = vertex2 - 1;
+			if (vertex2 < 0) {
+				vertex2 = 5;
+			}
+
+			Point p1 = hexagon.getVertex(vertex1);
+			Point p2 = hex2.getVertex(vertex2);
+
+			buildableRoads.add(new BuildableRoad((p1.getX() + p2.getX()) / 2, (p1.getY() + p2.getY()) / 2, g2, road));
+
 		}
 
 	}
