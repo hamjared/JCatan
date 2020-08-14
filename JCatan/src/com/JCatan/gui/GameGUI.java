@@ -161,7 +161,7 @@ public class GameGUI extends JFrame {
 		Player2Panel.setBackground(Color.PINK);
 		contentPane.add(Player2Panel);
 
-		controller.getPlayer(2).setColor(Color.ORANGE);
+		controller.getPlayer(2).setColor(Color.decode("#FFA500"));
 		JPanel Player3Panel = new PlayerPanel(1441, 741, 463, 126, controller.getPlayer(2));
 		Player3Panel.setBackground(Color.ORANGE);
 		contentPane.add(Player3Panel);
