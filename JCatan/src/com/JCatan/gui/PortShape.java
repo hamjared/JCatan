@@ -16,12 +16,10 @@ public class PortShape {
 	Port port;
 
 	public PortShape(int x, int y, Graphics2D g2, int portIndex) {
-		System.out.println(portIndex);
 		PortNode pn = (PortNode) GameGUI.controller.getBoard().getBoard().getNodeList().get(portIndex);
 		this.port = pn.getPort();
 		this.g2 = g2;
 		portShape = new Ellipse2D.Double(x, y, 30, 30);
-//		System.out.println(port);
 	}
 
 	public void draw() {
