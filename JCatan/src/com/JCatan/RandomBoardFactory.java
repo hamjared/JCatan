@@ -75,7 +75,6 @@ public class RandomBoardFactory extends BoardFactory {
 
 	@Override
 	public Map<Integer, List<Tile>> createDiceRollToTiles() {
-		System.out.println(diceToTiles);
 		return diceToTiles;
 	}
 
@@ -86,7 +85,6 @@ public class RandomBoardFactory extends BoardFactory {
 
 	@Override
 	public List<Tile> getTiles() {
-		System.out.println(tiles.size());
 		for(Tile tile: tiles) {
 			tile.setResourceType(randomResourceStack.pop());
 			if(tile.getResourceType() == ResourceType.DESERT) {
