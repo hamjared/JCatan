@@ -110,18 +110,17 @@ public class StartMenuFrame extends JFrame
     protected void startGame()
     {
         List<Player> players = getPlayers();
-        BoardFactory bf = null;
+        BoardFactory bf ;
         if(boardType.getSelectedIndex() == 0) {
         	bf = new TraditionalBoardFactory();
         } 
         else {
         	bf = new RandomBoardFactory();
-        	System.out.println("Random Board");
         }
         
         SwingUtilities.invokeLater(new Runnable() {
     		public void run() {
-    			GameGUI game = new GameGUI(players, new TraditionalBoardFactory());
+    			GameGUI game = new GameGUI(players, bf);
     	        game.setVisible(true);
     		}
     	});

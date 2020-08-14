@@ -129,7 +129,7 @@ public class Hexagon extends Polygon
     }
     
     public void onClick() {
-    	System.out.println("Tile clicked: " + tile);
+    	
     }
     
     public Point getVertex(int v) {
