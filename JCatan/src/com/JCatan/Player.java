@@ -24,6 +24,10 @@ public abstract class Player {
     boolean hasLongestRoad;
     boolean hasLargestArmy;
   
+	public List<Road> getPlayedRoads() {
+		return playedRoads;
+	}
+
 	public String getName() {
 		return name;
 	}
