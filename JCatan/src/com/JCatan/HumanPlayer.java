@@ -95,18 +95,18 @@ public class HumanPlayer extends Player {
 					switch (typeCheck) {
 					case BRICK:
 						if (numBrick < (int) pair.getValue()) {
-							System.out.println("Insufficient Resources");
+//							System.out.println("Insufficient Resources");
 						} else {
-							System.out.println("Im in the resourceCheck");
+//							System.out.println("Im in the resourceCheck");
 							resourceCheck++;
 							list.add((ResourceType) pair.getKey());
 						}
 						break;
 					case WOOD:
 						if (numWood < (int) pair.getValue()) {
-							System.out.println("Insufficient Resources");
+//							System.out.println("Insufficient Resources");
 						} else {
-							System.out.println("Im in the resourceCheck");
+//							System.out.println("Im in the resourceCheck");
 							resourceCheck++;
 							list.add((ResourceType) pair.getKey());
 						}
@@ -136,9 +136,9 @@ public class HumanPlayer extends Player {
 	public void buildSettlement(GamePhase phase, Node node, GameController controller) throws InsufficientResourceCardException {
 		if (phase == GamePhase.SETUP) {
 			// SetUp Phase Build
-			Settlement settlement = new Settlement(this);
+			Settlement settlement = this.getNextSettlement();
 			settlement.setHasBeenPlayed(true);
-			this.getBuildings().remove(settlement); 
+//			this.getBuildings().remove(settlement); 
 			node.setBuilding(settlement);
 		} else {
 			// Game Phase Build
@@ -150,7 +150,7 @@ public class HumanPlayer extends Player {
 			}
 			if (settlementCheck == true) {
 
-				Settlement settlement = new Settlement(this);
+				Settlement settlement = this.getNextSettlement();
 				List<ResourceCard> resources = this.getResources();
 				int numWheat = 0;
 				int numWood = 0;
@@ -190,36 +190,36 @@ public class HumanPlayer extends Player {
 					switch (typeCheck) {
 					case BRICK:
 						if (numBrick < (int) pair.getValue()) {
-							System.out.println("Insufficient Resources");
+//							System.out.println("Insufficient Resources");
 						} else {
-							System.out.println("Im in the resourceCheck");
+//							System.out.println("Im in the resourceCheck");
 							resourceCheck++;
 							list.add((ResourceType) pair.getKey());
 						}
 						break;
 					case WOOD:
 						if (numWood < (int) pair.getValue()) {
-							System.out.println("Insufficient Resources");
+//							System.out.println("Insufficient Resources");
 						} else {
-							System.out.println("Im in the resourceCheck");
+//							System.out.println("Im in the resourceCheck");
 							resourceCheck++;
 							list.add((ResourceType) pair.getKey());
 						}
 						break;
 					case SHEEP:
 						if (numSheep < (int) pair.getValue()) {
-							System.out.println("Insufficient Resources");
+//							System.out.println("Insufficient Resources");
 						} else {
-							System.out.println("Im in the resourceCheck");
+//							System.out.println("Im in the resourceCheck");
 							resourceCheck++;
 							list.add((ResourceType) pair.getKey());
 						}
 						break;
 					case WHEAT:
 						if (numWheat < (int) pair.getValue()) {
-							System.out.println("Insufficient Resources");
+//							System.out.println("Insufficient Resources");
 						} else {
-							System.out.println("Im in the resourceCheck");
+//							System.out.println("Im in the resourceCheck");
 							resourceCheck++;
 							list.add((ResourceType) pair.getKey());
 						}
@@ -230,7 +230,7 @@ public class HumanPlayer extends Player {
 				}
 				if (resourceCheck == 4) {
 					settlement.setHasBeenPlayed(true);
-					this.getBuildings().remove(settlement);
+//					this.getBuildings().remove(settlement);
 					node.setBuilding(settlement);
 					for (ResourceType type : list) {
 						this.removeResource(type);
@@ -240,6 +240,18 @@ public class HumanPlayer extends Player {
 				}
 			}
 		}
+	}
+
+	private Settlement getNextSettlement() {
+		for(Building building: buildings) {
+			if(! (building instanceof Settlement)) {
+				continue;
+			}
+			if(building.hasBeenPlayed == false) {
+				return (Settlement) building;
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -340,9 +352,9 @@ public class HumanPlayer extends Player {
 						switch (typeCheck) {
 						case WHEAT:
 							if (numWheat < (int) pair.getValue()) {
-								System.out.println("Insufficient Resources");
+//								System.out.println("Insufficient Resources");
 							} else {
-								System.out.println("Im in the resourceCheck");
+//								System.out.println("Im in the resourceCheck");
 								resourceCheck++;
 								list.add((ResourceType) pair.getKey());
 							}
@@ -351,7 +363,7 @@ public class HumanPlayer extends Player {
 							if (numOre < (int) pair.getValue()) {
 								System.out.println("Insufficient Resources");
 							} else {
-								System.out.println("Im in the resourceCheck");
+//								System.out.println("Im in the resourceCheck");
 								resourceCheck++;
 								list.add((ResourceType) pair.getKey());
 							}
@@ -401,7 +413,7 @@ public class HumanPlayer extends Player {
 	@Override
 	public int rollDice() {
 		diceRoll = new Dice().rollDice();
-		System.out.println("Dice roll: " + diceRoll);
+//		System.out.println("Dice roll: " + diceRoll);
 		return diceRoll;
 	}
 

@@ -35,7 +35,6 @@ public class BuildableCity {
 	}
 
 	public void onclick() {
-		System.out.println("Clicked to Build City: " + node.getNodeIndex());
 		try {
 			GameGUI.controller.getCurPlayer().buildCity(node, GameGUI.controller);
 		} catch (InsufficientResourceCardException e) {
