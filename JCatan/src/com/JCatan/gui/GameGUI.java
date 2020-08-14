@@ -368,7 +368,6 @@ public class GameGUI extends JFrame {
 	}
 
 	protected void clickOnCity() {
-		System.out.println("Clicked on City");
 		BoardPanel.buildCity();
 		
 	}
@@ -379,8 +378,9 @@ public class GameGUI extends JFrame {
 	}
 
 	protected void clickOnRoad() {
+		System.out.println("Clicked on Build Road");
 		BoardPanel.buildRoad();
-		
+
 	}
 
 	private void drawBankLabels() {
