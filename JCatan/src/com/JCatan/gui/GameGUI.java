@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -90,7 +91,8 @@ public class GameGUI extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
         
-        controller = new GameController(players, bf);       		
+        controller = new GameController(players, bf);
+        controller.setNotifyPlayer(s -> JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE));
 
 		tradePanel = new TradePanel(865, 0, 578, 402);
 		tradePanel.setVisible(false);
@@ -174,11 +176,22 @@ public class GameGUI extends JFrame {
 		JPanel EndTurnPanel = new EndTurnPanel();
 		contentPane.add(EndTurnPanel);
 		EndTurnPanel.setLayout(new GridLayout(1, 0, 0, 0));
+		
 
+		JButton tradeButton = new JButton("Trade");
 		JButton endButton = new JButton("Roll Dice");
-		Consumer<JButton> turnOnEndButton = b -> endButton.setEnabled(true);
+		Consumer<JButton> turnOnEndButton = b -> {endButton.setEnabled(true); tradeButton.setEnabled(false);};
 		tradePanel.setDelegate(turnOnEndButton);
 		controller.setAction(t -> tradePanel.close());
+		
+		tradeButton.setEnabled(false);
+		tradeButton.setBounds(750, 867, 122, 134);
+		tradeButton.addActionListener(e ->{
+			tradePanel.setEnabled(true);
+			tradePanel.setVisible(true);
+			endButton.setEnabled(false);
+		});
+		contentPane.add(tradeButton);
 		
 		endButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -230,12 +243,11 @@ public class GameGUI extends JFrame {
 					endButton.setText("Start Build");
 					controller.setGamePhase(GamePhase.GAMETRADE);
 					controller.gamePhaseTrade();
-					tradePanel.setEnabled(true);
-					tradePanel.setVisible(true);
-					endButton.setEnabled(false);
+					tradeButton.setEnabled(true);
 					repaint();
 					break;
 				case GAMETRADE:
+					tradeButton.setEnabled(false);
 					endButton.setText("Start End");
 					controller.setGamePhase(GamePhase.GAMEBUILD);
 					//controller.gamePhaseBuild();
@@ -330,7 +342,7 @@ public class GameGUI extends JFrame {
 				}
 			}
 		};
-		ResourcePanel.setBounds(0, 867, 874, 134);
+		ResourcePanel.setBounds(0, 867, 750, 134);
 		contentPane.add(ResourcePanel);
 		repaint();
 

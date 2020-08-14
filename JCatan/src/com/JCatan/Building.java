@@ -5,12 +5,14 @@ public abstract class Building implements ICost {
 	protected int victoryPoints;
 	protected boolean hasBeenPlayed;
 	Player player;
+	protected Node node;
 	
-	public Building(Player player, int victoryPoints) {
+	public Building(Player player, int victoryPoints, Node node) {
 	    this.player = player;
 	    this.victoryPoints = victoryPoints;
 	    this.hasBeenPlayed = false;
 	    player.giveBuilding(this);
+	    this.node = node;
 	}
 
 	/**
@@ -27,6 +29,10 @@ public abstract class Building implements ICost {
         return hasBeenPlayed;
     }
 
+    public Node getNode() {
+    	return node;
+    }
+    
     public void setHasBeenPlayed(boolean hasBeenPlayed)
     {
         this.hasBeenPlayed = hasBeenPlayed;

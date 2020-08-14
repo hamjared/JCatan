@@ -3,7 +3,7 @@ package com.JCatan;
 public class Port {
 	PortType portType;
 	ResourceType resourceType;
-	public enum PortType{
+	public static enum PortType{
 	    GENERIC,
 	    SPECIAL
 	}

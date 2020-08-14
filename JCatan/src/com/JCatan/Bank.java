@@ -2,6 +2,7 @@ package com.JCatan;
 
 import java.util.EmptyStackException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -34,6 +35,23 @@ public class Bank
         resourceTypeToResourceCards.put(ResourceType.WHEAT, wheat);
         resourceTypeToResourceCards.put(ResourceType.ORE, ore);
         resourceTypeToResourceCards.put(ResourceType.SHEEP, sheep);
+    }
+    
+    public Map<ResourceType, Stack<ResourceCard>> getResourceMap(){
+    	return resourceTypeToResourceCards;
+    }
+    
+    public void receiveTrade(Trade trade) {
+    	List<ResourceCard> requesting = trade.getRequestingCards();
+		List<ResourceCard> playerOffering = trade.getOfferingCards();
+		
+		for(ResourceCard card : requesting) {
+			resourceTypeToResourceCards.get(card.resourceType).removeIf(c -> c.resourceType == card.resourceType);
+		}
+		
+		for(ResourceCard card : playerOffering) {
+			giveResourceCard(card);
+		}
     }
     
     public ResourceCard takeResourceCard(ResourceType resourceType) throws InsufficientResourceCardException{

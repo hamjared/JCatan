@@ -14,6 +14,7 @@ public class GameController {
 	boolean gameEnded = false;
 	GamePhase gamePhase;
 	Consumer action;
+	Consumer<String> notify;
 
 	public List<Player> getPlayers(){
 		return players;
@@ -36,6 +37,14 @@ public class GameController {
 		bank = new Bank();
 		this.chat = new Chat();
 
+	}
+	
+	public void setNotifyPlayer(Consumer<String> c) {
+		notify = c;
+	}
+	
+	public void notifyPlayer(String message) {
+		notify.accept(message);
 	}
 	
 	public Bank getBank() {
@@ -183,6 +192,10 @@ public class GameController {
 			DomesticTrade dt = (DomesticTrade)trade;
 			dt.accept();
 		}
+		if(trade instanceof MaritimeTrade) {
+			MaritimeTrade mt = (MaritimeTrade)trade;
+			mt.accept();
+		}
 	}
 	
 	public void gamePhaseTrade() {
@@ -207,10 +220,6 @@ public class GameController {
 		if (playerTurnIndex >= players.size()) {
 			playerTurnIndex = 0;
 		}
-		
-		
-		
-		
 	}
   
 	private void setLargestArmy() {

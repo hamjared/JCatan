@@ -8,9 +8,9 @@ public class Settlement extends Building
 
     private static final int SETTLEMENT_VICTORY_POINTS = 1;
 
-    public Settlement(Player player)
+    public Settlement(Player player, Node node)
     {
-        super(player, SETTLEMENT_VICTORY_POINTS);
+        super(player, SETTLEMENT_VICTORY_POINTS, node);
 
     }
 
