@@ -35,7 +35,6 @@ public class BuildableRoad {
 	}
 
 	public void onclick() {
-		System.out.println("Road clicked: " + road.getNode1().getNodeIndex() + ", " + road.getNode2().getNodeIndex());
 		List<ResourceCard> res = new ArrayList<>();
 		res.add(new ResourceCard(ResourceType.WOOD));
 		res.add(new ResourceCard(ResourceType.BRICK));
@@ -47,6 +46,8 @@ public class BuildableRoad {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+
 
 	}
 
