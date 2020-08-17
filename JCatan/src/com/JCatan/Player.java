@@ -240,7 +240,7 @@ public abstract class Player {
 	public abstract void tradePhase();
 	
 	public boolean hasEnoughResource(ResourceType resource, int amount) {
-		return amount > resources.stream().filter(re -> re.getResourceType() == resource).count();
+		return amount <= resources.stream().filter(re -> re.getResourceType() == resource).count();
 	}
 
 	public boolean isHasLongestRoad() {
