@@ -96,9 +96,12 @@ public abstract class Player {
 		}
 		
 		removeResourceCards(cost);
-		
+		 
 		try {
-			this.devCards.add(bank.takeDevelopmentCard());
+			DevelopmentCard card = bank.takeDevelopmentCard();
+			this.devCards.add(card);
+			card.setHasBeenPlayed(false);
+			
 		} catch (OutOfDevelopmentCardsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -141,7 +144,7 @@ public abstract class Player {
                 .reduce(0, (subtotal, b) -> subtotal + b.getVictoryPoints(),
                         Integer::sum);
 
-        victoryPoints += devCards.stream().reduce(0,
+        victoryPoints += devCards.stream().filter(c -> c.isHasBeenPlayed()).reduce(0,
                 (subtotal, dc) -> subtotal + dc.getVictoryPoints(),
                 Integer::sum);
         

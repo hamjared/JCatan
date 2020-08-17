@@ -37,6 +37,7 @@ public class BuildableCity {
 	public void onclick() {
 		try {
 			GameGUI.controller.getCurPlayer().buildCity(node, GameGUI.controller);
+			GameGUI.ResourcePanel.repaint();
 		} catch (InsufficientResourceCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
