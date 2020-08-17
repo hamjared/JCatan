@@ -1,6 +1,7 @@
 package com.JCatan.gui;
 
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -43,7 +44,7 @@ public class GameGUI extends JFrame {
 	private JLabel sheepLabel;
 	private JLabel oreLabel;
 
-	ImageIcon one = new ImageIcon("images/one.png"); 
+	ImageIcon one = new ImageIcon("images/one.png");
 	ImageIcon two = new ImageIcon("images/two.png");
 	ImageIcon three = new ImageIcon("images/three.png");
 	ImageIcon four = new ImageIcon("images/four.png");
@@ -55,7 +56,7 @@ public class GameGUI extends JFrame {
 	ImageIcon sheep = new ImageIcon("images/sheep.jpg");
 	ImageIcon wheat = new ImageIcon("images/wheat.jpg");
 	ImageIcon wood = new ImageIcon("images/wood.jpg");
-	
+
 	ImageIcon bank = new ImageIcon("images/bank.png");
 
 	Image dieOne;
@@ -71,8 +72,10 @@ public class GameGUI extends JFrame {
 	int die1;
 	int die2;
 	int j = 0;
-      
-    @Override
+	int setupNum = 0;
+	boolean setupReverse = false;
+
+	@Override
 	public void paint(Graphics g) {
     	try {
 	    	super.paint(g);
@@ -98,9 +101,9 @@ public class GameGUI extends JFrame {
 		tradePanel.setVisible(false);
 		tradePanel.setEnabled(false);
 		contentPane.add(tradePanel);
-				
+
 		JLayeredPane master = new JLayeredPane();
-		master.setLocation(0, 0); 
+		master.setLocation(0, 0);
 		master.setSize(1441, 867);
 		contentPane.add(master);
 
@@ -126,28 +129,28 @@ public class GameGUI extends JFrame {
 		};
 		contentPane.add(BankPanel);
 		BankPanel.setLayout(null);
-		
+
 		brickLabel = new JLabel("");
-		
+
 		brickLabel.setBounds(145, 92, 46, 14);
 		brickLabel.setHorizontalAlignment(brickLabel.CENTER);
 		BankPanel.add(brickLabel);
-		
+
 		woodLabel = new JLabel();
 		woodLabel.setBounds(205, 92, 46, 14);
 		woodLabel.setHorizontalAlignment(woodLabel.CENTER);
 		BankPanel.add(woodLabel);
-		
+
 		wheatLabel = new JLabel("");
 		wheatLabel.setBounds(265, 92, 46, 14);
 		wheatLabel.setHorizontalAlignment(wheatLabel.CENTER);
 		BankPanel.add(wheatLabel);
-		
+
 		sheepLabel = new JLabel("");
 		sheepLabel.setBounds(325, 92, 46, 14);
 		sheepLabel.setHorizontalAlignment(sheepLabel.CENTER);
 		BankPanel.add(sheepLabel);
-		
+
 		oreLabel = new JLabel("");
 		oreLabel.setBounds(385, 92, 46, 14);
 		oreLabel.setHorizontalAlignment(oreLabel.CENTER);
@@ -159,7 +162,7 @@ public class GameGUI extends JFrame {
 		contentPane.add(Player1Panel);
 
 		controller.getPlayer(1).setColor(Color.RED);
-		JPanel Player2Panel = new PlayerPanel(1441, 615, 463, 126, controller.getPlayer(1) );
+		JPanel Player2Panel = new PlayerPanel(1441, 615, 463, 126, controller.getPlayer(1));
 		Player2Panel.setBackground(Color.PINK);
 		contentPane.add(Player2Panel);
 
@@ -177,6 +180,10 @@ public class GameGUI extends JFrame {
 		contentPane.add(EndTurnPanel);
 		EndTurnPanel.setLayout(new GridLayout(1, 0, 0, 0));
 		
+		JButton endButton = new JButton("Start Setup");
+		Consumer<JButton> turnOnEndButton = b -> endButton.setEnabled(true);
+		tradePanel.setDelegate(turnOnEndButton);
+		controller.setAction(t -> tradePanel.close());
 
 		JButton tradeButton = new JButton("Trade");
 		JButton endButton = new JButton("Roll Dice");
@@ -196,6 +203,34 @@ public class GameGUI extends JFrame {
 		endButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				switch (controller.getGamePhase()) {
+				case SETUP:
+					if (endButton.getText().equals("Build Settlement") || endButton.getText().equals("Start Setup")) {
+						BoardPanel.buildSettlement();
+						endButton.setText("Build Road");
+					} else if (endButton.getText().equals("Build Road")) {
+						BoardPanel.buildRoad();
+						endButton.setText("End Turn");
+					} else {
+						if (setupNum == 3 && setupReverse == false) {
+							controller.setCurPlayer(controller.getPlayers().get(setupNum));
+							setupReverse = true;
+							endButton.setText("Build Settlement");
+						} else if (setupNum <= 3 && setupReverse == true) {
+							if (setupNum == 0) {
+								controller.setGamePhase(GamePhase.GAMEROLL);
+								endButton.setText("Roll Dice");
+							} else {
+								controller.setCurPlayer(controller.getPlayers().get(setupNum - 1));
+								setupNum--;
+								endButton.setText("Build Settlement");
+							}
+						} else {
+							controller.setCurPlayer(controller.getPlayers().get(setupNum + 1));
+							setupNum++;
+							endButton.setText("Build Settlement");
+						}
+					}
+					break;
 				case GAMEROLL:
 					controller.gamePhaseRoll();
 					die1 = Dice.getDie1();
@@ -223,7 +258,7 @@ public class GameGUI extends JFrame {
 					switch (die2) {
 					case 1:
 						dieTwo = one.getImage();
-						break; 
+						break;
 					case 2:
 						dieTwo = two.getImage();
 						break;
@@ -250,7 +285,7 @@ public class GameGUI extends JFrame {
 					tradeButton.setEnabled(false);
 					endButton.setText("Start End");
 					controller.setGamePhase(GamePhase.GAMEBUILD);
-					//controller.gamePhaseBuild();
+					// controller.gamePhaseBuild();
 					repaint();
 					break;
 				case GAMEBUILD:
@@ -265,48 +300,48 @@ public class GameGUI extends JFrame {
 		});
 		endButton.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		EndTurnPanel.add(endButton);
-		
+
 		BuildingPanel BuildingPanel = new BuildingPanel(controller);
 		contentPane.add(BuildingPanel);
 		BuildingPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {      
-            	
-            	int x = e.getX();
-        		int y = e.getY();
-        		
-        		if((x >= 30 && x <= 60) && (y >= 20 && y <= 110)) {
-        			
-        			clickOnRoad();
-        		}
-        		if ((x >= 121 && x <= 167) && (y >= 43 && y <= 109)) {
-        			
-        			clickOnSettlement();
-        		} else if ((x >= 62 && x <= 188) && (y >= 53 && y <= 64)) {
-        			
-        			clickOnSettlement();
-        		} else if ((x >= 135 && x <= 155) && (y >= 20 && y <= 110)) {
-        			
-        			clickOnSettlement();
-        		}
-        		if ((x >= 243 && x <= 310) && (y >= 89 && y <= 110)) {
-        			
-        			clickOnCity();
-        		} else if ((x >= 243 && x <= 266) && (y >= 33 && y <= 110)) {
-        			
-        			clickOnCity();
-        		} else if ((x >= 220 && x <= 290) && (y >= 37 && y <= 65)) {
-        			
-        			clickOnCity();
-        		} else if ((x >= 30 && x <= 37) && (y >= 18 && y <= 110)) {
-        			
-        			clickOnCity();
-        		}
-        		 
-                buyDevCard();
-            }
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+				int x = e.getX();
+				int y = e.getY();
+
+				if ((x >= 30 && x <= 60) && (y >= 20 && y <= 110)) {
+
+					clickOnRoad();
+				}
+				if ((x >= 121 && x <= 167) && (y >= 43 && y <= 109)) {
+
+					clickOnSettlement();
+				} else if ((x >= 62 && x <= 188) && (y >= 53 && y <= 64)) {
+
+					clickOnSettlement();
+				} else if ((x >= 135 && x <= 155) && (y >= 20 && y <= 110)) {
+
+					clickOnSettlement();
+				}
+				if ((x >= 243 && x <= 310) && (y >= 89 && y <= 110)) {
+
+					clickOnCity();
+				} else if ((x >= 243 && x <= 266) && (y >= 33 && y <= 110)) {
+
+					clickOnCity();
+				} else if ((x >= 220 && x <= 290) && (y >= 37 && y <= 65)) {
+
+					clickOnCity();
+				} else if ((x >= 30 && x <= 37) && (y >= 18 && y <= 110)) {
+
+					clickOnCity();
+				}
+
+				buyDevCard();
+			}
 		});
-		
+
 		JPanel ResourcePanel = new ResourcesPanel() {
 			@Override
 			public void paintComponent(Graphics g) {
@@ -338,7 +373,7 @@ public class GameGUI extends JFrame {
 					}
 					j = 0;
 				} catch (Exception e) {
-					
+
 				}
 			}
 		};
@@ -367,30 +402,28 @@ public class GameGUI extends JFrame {
 		diceTwoPanel.setBackground(Color.WHITE);
 		diceTwoPanel.setBounds(1379, 798, 56, 58);
 		master.add(diceTwoPanel, new Integer(1), 0);
-		
-		
 
 		controller.startGame();
-		
+
 	}
-	
+
 	protected void buyDevCard() {
 		// TODO GameGUI: buyDevCard
-		
+
 	}
 
 	protected void clickOnCity() {
 		BoardPanel.buildCity();
 		
+
 	}
 
 	protected void clickOnSettlement() {
 		BoardPanel.buildSettlement();
-		
+
 	}
 
 	protected void clickOnRoad() {
-		System.out.println("Clicked on Build Road");
 		BoardPanel.buildRoad();
 
 	}

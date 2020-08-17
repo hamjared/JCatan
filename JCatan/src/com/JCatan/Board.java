@@ -88,12 +88,25 @@ public class Board {
 		this.board = board;
 	}
 
-	public List<Node> getBuildableNodes(Player curPlayer) {
+	public List<Node> getBuildableNodes(Player curPlayer, GamePhase gamePhase) {
 		List<Node> playableNodes = new ArrayList<>();
 		int curNodeIndex = 0;
 		for (List<Node> nodes : board.getNodes()) {
 			Node curNode = board.getNodeList().get(curNodeIndex);
 			if (curNode.getBuilding() != null) {
+				curNodeIndex++;
+				continue;
+			}
+			if (gamePhase.equals(GamePhase.SETUP)) {
+				int i = 0;
+				for (i = 0; i < nodes.size(); i++) {
+					if (nodes.get(i).getBuilding() != null) {
+						break;
+					}
+				}
+				if (i == (nodes.size())) {
+					playableNodes.add(curNode);
+				}
 				curNodeIndex++;
 				continue;
 			}
@@ -114,6 +127,7 @@ public class Board {
 
 			curNodeIndex++;
 		}
+		System.out.println(playableNodes.size());
 		return playableNodes;
 	}
 

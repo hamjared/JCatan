@@ -42,10 +42,6 @@ public class BuildableNode {
 	public void onclick() {
 
 		List<ResourceCard> res = new ArrayList<>();
-		res.add(new ResourceCard(ResourceType.BRICK));
-		res.add(new ResourceCard(ResourceType.SHEEP));
-		res.add(new ResourceCard(ResourceType.WOOD));
-		res.add(new ResourceCard(ResourceType.WHEAT));
 		GameGUI.controller.getCurPlayer().setResources(res);
 		try {
 			GameGUI.controller.getCurPlayer().buildSettlement(GameGUI.controller.getGamePhase(), node, GameGUI.controller);

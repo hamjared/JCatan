@@ -36,8 +36,6 @@ public class BuildableRoad {
 
 	public void onclick() {
 		List<ResourceCard> res = new ArrayList<>();
-		res.add(new ResourceCard(ResourceType.WOOD));
-		res.add(new ResourceCard(ResourceType.BRICK));
 		GameGUI.controller.getCurPlayer().setResources(res);
 		try {
 			GameGUI.controller.getCurPlayer().buildRoad(GameGUI.controller.getGamePhase(), road.getNode1(),
