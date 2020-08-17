@@ -1,12 +1,13 @@
 package com.JCatan.gui;
 
+import java.awt.Point;
 import java.awt.geom.Path2D;
 
-public class CityShape extends Path2D.Double{
-
-	private static final long serialVersionUID = -4383515309053719082L;
+public class RobberShape extends Path2D.Double {
+private static final long serialVersionUID = -2383215309053719082L;
+	Point p;
 	
-	public CityShape() {
+	public RobberShape() {
 		moveTo(1,5);
 		lineTo(1,2);
 		lineTo(0,2);
@@ -17,9 +18,22 @@ public class CityShape extends Path2D.Double{
 		lineTo(5,3);
 		lineTo(5,5);
 		lineTo(1,5);
+		p = new Point();
 	}
 	
-	public CityShape( double width, double height) {
+	public void setPoint(int x, int y) {
+		p = new Point(x, y);
+	}
+	
+	public void setPoint(Point p) {
+		this.p = p;
+	}
+	
+	public Point getPoint() {
+		return p;
+	}
+	
+	public RobberShape(double width, double height) {
 		moveTo(width/4, height);
 		lineTo(width/4, height/2);
 		lineTo(0, height/2);
@@ -30,6 +44,6 @@ public class CityShape extends Path2D.Double{
 		lineTo(width, 7*height/9);
 		lineTo(width, height);
 		lineTo(width/4,height);
+		p = new Point();
 	}
-
 }
