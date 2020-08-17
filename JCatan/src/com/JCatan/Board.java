@@ -272,7 +272,9 @@ public class Board {
 			}
 		}
 		return nodes;
-
 	}
-
+	
+	public boolean isRobberMoving(GamePhase phase) {
+		return phase == GamePhase.ROBBERMOVE;
+	}
 }

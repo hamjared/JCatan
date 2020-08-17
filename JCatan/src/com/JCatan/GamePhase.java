@@ -6,5 +6,6 @@ public enum GamePhase {
 	GAME,
 	GAMEROLL,
 	GAMETRADE,
-	GAMEBUILD
+	GAMEBUILD,
+	ROBBERMOVE
 }

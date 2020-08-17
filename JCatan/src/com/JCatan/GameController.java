@@ -115,6 +115,11 @@ public class GameController {
 		action.accept(this);
 	}
 	
+	public void robberMovePhase() {
+		curPlayer = players.get(playerTurnIndex);
+		//this.gamePhase = GamePhase.GAMETRADE;
+	}
+	
 	public void setupPhase() {
 		
 		chat.addToChat("Beginning setup phase");

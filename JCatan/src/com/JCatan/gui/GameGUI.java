@@ -40,7 +40,7 @@ public class GameGUI extends JFrame {
 	public static GameController controller;
 	private JLabel brickLabel;
 	private JLabel woodLabel;
-	private JLabel wheatLabel; 
+	private JLabel wheatLabel;
 	private JLabel sheepLabel;
 	private JLabel oreLabel;
 
@@ -101,9 +101,6 @@ public class GameGUI extends JFrame {
 		tradePanel.setVisible(false);
 		tradePanel.setEnabled(false);
 		contentPane.add(tradePanel);
-		
-
-		
 
 		JLayeredPane master = new JLayeredPane();
 		master.setLocation(0, 0);
@@ -135,7 +132,7 @@ public class GameGUI extends JFrame {
 
 		brickLabel = new JLabel("");
 
-		brickLabel.setBounds(145, 92, 46, 14);  
+		brickLabel.setBounds(145, 92, 46, 14);
 		brickLabel.setHorizontalAlignment(brickLabel.CENTER);
 		BankPanel.add(brickLabel);
 
@@ -178,14 +175,14 @@ public class GameGUI extends JFrame {
 		JPanel Player4Panel = new PlayerPanel(1441, 867, 463, 134, controller.getPlayer(3));
 		Player4Panel.setBackground(Color.PINK);
 		contentPane.add(Player4Panel);
-		
+
 		JPanel devCardPanel = new DevCardPanel(1125, 675, 300, 100);
 		devCardPanel.setVisible(false);
 		devCardPanel.setEnabled(false);
 		master.add(devCardPanel, new Integer(1), 0);
-		
+
 		JButton devCardPanelButton = new JButton("Play Dev Card");
-		devCardPanelButton.setBounds(1150,800, 150, 50);
+		devCardPanelButton.setBounds(1150, 800, 150, 50);
 		devCardPanelButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -193,7 +190,7 @@ public class GameGUI extends JFrame {
 				((DevCardPanel) devCardPanel).showPanel();
 
 			}
-			
+
 		});
 		master.add(devCardPanelButton, new Integer(1), 0);
 
@@ -295,9 +292,17 @@ public class GameGUI extends JFrame {
 						dieTwo = five.getImage();
 						break;
 					}
-					endButton.setText("Start Build");
-					controller.setGamePhase(GamePhase.GAMETRADE);
-					controller.gamePhaseTrade();
+
+					if (die1 + die2 != 7) {
+						endButton.setText("Start Build");
+						controller.setGamePhase(GamePhase.GAMETRADE);
+						controller.gamePhaseTrade();
+					} else {
+						endButton.setText("End Robber Move");
+						controller.setGamePhase(GamePhase.ROBBERMOVE);
+						controller.robberMovePhase();
+					}
+
 					repaint();
 					break;
 				case GAMETRADE:
@@ -310,6 +315,9 @@ public class GameGUI extends JFrame {
 					endButton.setText("Roll Dice");
 					controller.setGamePhase(GamePhase.GAMEROLL);
 					controller.gamePhaseEnd();
+					break;
+				case ROBBERMOVE:
+					controller.setGamePhase(GamePhase.GAMETRADE);
 					break;
 				default:
 					break;
@@ -375,7 +383,7 @@ public class GameGUI extends JFrame {
 							resourceCard = sheep.getImage();
 							break;
 						case ORE:
-							resourceCard = ore.getImage();  
+							resourceCard = ore.getImage();
 							break;
 						case BRICK:
 							resourceCard = brick.getImage();
@@ -421,8 +429,6 @@ public class GameGUI extends JFrame {
 		diceTwoPanel.setBounds(1379, 798, 56, 58);
 		master.add(diceTwoPanel, new Integer(1), 0);
 
-
-		
 		controller.startGame();
 
 	}

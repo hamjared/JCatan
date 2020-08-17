@@ -2,7 +2,6 @@ package com.JCatan.gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -49,6 +48,7 @@ public class BoardPanel extends JPanel {
 	private boolean drawSettlements = false;
 	private boolean drawCities = false;
 	private Map<Tile, Hexagon> tileToHexagon;
+	private List<SelectableRobberTile> robberTiles;
 
 	public BoardPanel() {
 		super();
@@ -56,6 +56,7 @@ public class BoardPanel extends JPanel {
 		buildableRoads = new ArrayList<>();
 		buildableCities = new ArrayList<>();
 		tileToHexagon = new HashMap<>();
+		robberTiles = new ArrayList<>();
 
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -87,7 +88,16 @@ public class BoardPanel extends JPanel {
 						repaint();
 						break;
 					}
+				}
 
+				if (GameGUI.controller.getBoard().isRobberMoving(GameGUI.controller.getGamePhase())) {
+					for (SelectableRobberTile circle : robberTiles) {
+						if (circle.getCircle().contains(x, y)) {
+							circle.onClick();
+							repaint();
+							break;
+						}
+					}
 				}
 			}
 		});
@@ -108,7 +118,6 @@ public class BoardPanel extends JPanel {
 
 	@Override
 	public void paintComponent(Graphics g) {
-
 		Graphics2D g2d = (Graphics2D) g;
 
 		g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
@@ -147,6 +156,7 @@ public class BoardPanel extends JPanel {
 		end = System.nanoTime();
 		System.out.println("Time to draw Board pieces: " + (end - start) / (10e9));
 
+		drawValidRobberSpots(g2d, 40.0d);
 		System.out.println("---------------END OF PAINT------------------");
 
 	}
@@ -325,7 +335,6 @@ public class BoardPanel extends JPanel {
 			buildableRoads.add(new BuildableRoad((p1.getX() + p2.getX()) / 2, (p1.getY() + p2.getY()) / 2, g2, road));
 
 		}
-
 	}
 
 	private void drawBuildingNodes(Graphics2D g2) {
@@ -511,7 +520,8 @@ public class BoardPanel extends JPanel {
 		if (GameGUI.controller.getCurPlayer() == null) {
 			return;
 		}
-		nodes = GameGUI.controller.getBoard().getBuildableNodes(GameGUI.controller.getCurPlayer(), GameGUI.controller.getGamePhase());
+		nodes = GameGUI.controller.getBoard().getBuildableNodes(GameGUI.controller.getCurPlayer(),
+				GameGUI.controller.getGamePhase());
 		drawCities = false;
 		drawRoads = false;
 		drawSettlements = true;
@@ -529,7 +539,25 @@ public class BoardPanel extends JPanel {
 		drawSettlements = false;
 		repaint();
 		revalidate();
-
 	}
 
+	public void drawValidRobberSpots(Graphics2D g, double diameter) {
+		if (GameGUI.controller.getCurPlayer() == null) {
+			return;
+		}
+
+		if (!robberTiles.isEmpty() && GameGUI.controller.getBoard().isRobberMoving(GameGUI.controller.getGamePhase())) {
+			robberTiles.forEach(t -> {
+				t.drawRobberPosition(g);
+			});
+		} else {
+			for (Hexagon hex : hexagons) {
+				Point center = hex.getCenter();
+				SelectableRobberTile tile = new SelectableRobberTile(center.getX() - (diameter / 2),
+						center.getY() - (diameter / 2), diameter);
+				robberTiles.add(tile);
+			}
+		}
+		revalidate();
+	}
 }
