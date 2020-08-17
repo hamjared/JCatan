@@ -5,6 +5,5 @@ public enum GamePhase {
 	SETUP,
 	GAME,
 	GAMEROLL,
-	GAMETRADE,
-	GAMEBUILD
+	GAMEMAIN
 }
