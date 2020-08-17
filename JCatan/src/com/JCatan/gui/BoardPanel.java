@@ -336,7 +336,6 @@ public class BoardPanel extends JPanel {
 		if (!drawSettlements) {
 			return;
 		}
-
 		for (Node node : nodes) {
 			for (Hexagon hexagon : hexagons) {
 				if (hexagon.getTile().getNodes().contains(node)) {
@@ -347,7 +346,6 @@ public class BoardPanel extends JPanel {
 					}
 					Point p = hexagon.getVertex(vertex);
 					buildableNodes.add(new BuildableNode(p.getX(), p.getY(), g2, node));
-
 				}
 			}
 		}
@@ -513,12 +511,12 @@ public class BoardPanel extends JPanel {
 		if (GameGUI.controller.getCurPlayer() == null) {
 			return;
 		}
-		nodes = GameGUI.controller.getBoard().getBuildableNodes(GameGUI.controller.getCurPlayer());
+		nodes = GameGUI.controller.getBoard().getBuildableNodes(GameGUI.controller.getCurPlayer(), GameGUI.controller.getGamePhase());
 		drawCities = false;
 		drawRoads = false;
 		drawSettlements = true;
-		this.repaint();
-
+		repaint();
+		revalidate();
 	}
 
 	public void buildRoad() {
@@ -529,7 +527,8 @@ public class BoardPanel extends JPanel {
 		drawCities = false;
 		drawRoads = true;
 		drawSettlements = false;
-		this.repaint();
+		repaint();
+		revalidate();
 
 	}
 

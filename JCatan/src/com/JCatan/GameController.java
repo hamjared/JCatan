@@ -50,6 +50,10 @@ public class GameController {
 		return curPlayer;
 	}
 
+	public void setCurPlayer(Player curPlayer) {
+		this.curPlayer = curPlayer;
+	}
+
 	public GamePhase getGamePhase() {
 		return gamePhase;
 	}
@@ -86,6 +90,10 @@ public class GameController {
 			}
 
 		});
+		
+		curPlayer = players.get(playerTurnIndex);
+		
+		this.setGamePhase(GamePhase.SETUP);
 
 	}
 
@@ -98,15 +106,18 @@ public class GameController {
 		action.accept(this);
 	}
 	
-	private void setupPhase() {
+	public void setupPhase() {
 		
 		chat.addToChat("Beginning setup phase");
+		
+		curPlayer = players.get(playerTurnIndex);
 
 		int playerNum = 0;
 		Node node1 = null;
 		Node node2 = null;
 		for (Player player : players) {
-
+			chat.addToChat(player.getName() + "Click on a settlement from the building panel and place it on the board.");
+			
 			switch (playerNum) {
 			case 0:
 				node1 = board.getTiles().get(0).getNodes().get(0);
@@ -157,7 +168,7 @@ public class GameController {
 	}
 	
 	public void gamePhaseRoll() {
-			Player curPlayer = players.get(playerTurnIndex);
+			curPlayer = players.get(playerTurnIndex);
 			chat.addToChat(curPlayer.getName() + "'s turn");
 			
 
@@ -186,14 +197,11 @@ public class GameController {
 	}
 	
 	public void gamePhaseTrade() {
-		curPlayer = players.get(playerTurnIndex);
+		Player curPlayer = players.get(playerTurnIndex);
 	}
 	
 	public void gamePhaseBuild() {
 		curPlayer = players.get(playerTurnIndex);
-		//board.getBoard().getNodes().get()
-		curPlayer.buildPhase(board.getTiles().get(12).getNodes().get(0),
-				board.getTiles().get(12).getNodes().get(1), this);
 	}
 	
 	public void gamePhaseEnd() {
@@ -242,7 +250,7 @@ public class GameController {
 		chat.addToChat("Game started");
 		diceRollPhase();
 
-		setupPhase();
+		//setupPhase();
 
 		
 

@@ -10,7 +10,6 @@ public abstract class Building implements ICost {
 	    this.player = player;
 	    this.victoryPoints = victoryPoints;
 	    this.hasBeenPlayed = false;
-	    player.giveBuilding(this);
 	}
 
 	/**
