@@ -8,6 +8,10 @@ public class MonopolyDevelopmentCard extends DevelopmentCard {
         // TODO DevelopmentCard: performAction
         
     }
+    
+    public String toString() {
+    	return "Monopoly";
+    }
 
 
 

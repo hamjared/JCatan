@@ -8,6 +8,10 @@ public class YearOfPlentyDevelopmentCard extends DevelopmentCard {
         // TODO DevelopmentCard: performAction
         
     }
+    
+    public String toString() {
+    	return "Year of Plenty";
+    }
 
 
 

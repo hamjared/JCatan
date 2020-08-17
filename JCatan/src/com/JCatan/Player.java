@@ -218,7 +218,13 @@ public abstract class Player {
 	 * @param card
 	 * @throws InvalidDevCardUseException
 	 */
-	public abstract void playDevelopmentCard(DevelopmentCard card) throws InvalidDevCardUseException;
+	public void playDevelopmentCard(DevelopmentCard card) throws InvalidDevCardUseException{
+		if(! card.isCanBePlayed()) {
+			throw new InvalidDevCardUseException();
+		}
+		card.performAction();
+		card.setHasBeenPlayed(true);
+	}
 
 	/**
 	 * @param trade

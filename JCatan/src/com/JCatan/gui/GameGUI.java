@@ -40,7 +40,7 @@ public class GameGUI extends JFrame {
 	public static GameController controller;
 	private JLabel brickLabel;
 	private JLabel woodLabel;
-	private JLabel wheatLabel;
+	private JLabel wheatLabel; 
 	private JLabel sheepLabel;
 	private JLabel oreLabel;
 
@@ -101,6 +101,9 @@ public class GameGUI extends JFrame {
 		tradePanel.setVisible(false);
 		tradePanel.setEnabled(false);
 		contentPane.add(tradePanel);
+		
+
+		
 
 		JLayeredPane master = new JLayeredPane();
 		master.setLocation(0, 0);
@@ -132,7 +135,7 @@ public class GameGUI extends JFrame {
 
 		brickLabel = new JLabel("");
 
-		brickLabel.setBounds(145, 92, 46, 14);
+		brickLabel.setBounds(145, 92, 46, 14);  
 		brickLabel.setHorizontalAlignment(brickLabel.CENTER);
 		BankPanel.add(brickLabel);
 
@@ -175,6 +178,24 @@ public class GameGUI extends JFrame {
 		JPanel Player4Panel = new PlayerPanel(1441, 867, 463, 134, controller.getPlayer(3));
 		Player4Panel.setBackground(Color.PINK);
 		contentPane.add(Player4Panel);
+		
+		JPanel devCardPanel = new DevCardPanel(1125, 675, 300, 100);
+		devCardPanel.setVisible(false);
+		devCardPanel.setEnabled(false);
+		master.add(devCardPanel, new Integer(1), 0);
+		
+		JButton devCardPanelButton = new JButton("Play Dev Card");
+		devCardPanelButton.setBounds(1150,800, 150, 50);
+		devCardPanelButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				((DevCardPanel) devCardPanel).showPanel();
+
+			}
+			
+		});
+		master.add(devCardPanelButton, new Integer(1), 0);
 
 		JPanel EndTurnPanel = new EndTurnPanel();
 		contentPane.add(EndTurnPanel);
@@ -199,6 +220,7 @@ public class GameGUI extends JFrame {
 		
 		endButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				((DevCardPanel) devCardPanel).hidePanel();
 				switch (controller.getGamePhase()) {
 				case SETUP:
 					if (endButton.getText().equals("Build Settlement") || endButton.getText().equals("Start Setup")) {
@@ -354,7 +376,7 @@ public class GameGUI extends JFrame {
 							resourceCard = sheep.getImage();
 							break;
 						case ORE:
-							resourceCard = ore.getImage();
+							resourceCard = ore.getImage();  
 							break;
 						case BRICK:
 							resourceCard = brick.getImage();
@@ -400,6 +422,8 @@ public class GameGUI extends JFrame {
 		diceTwoPanel.setBounds(1379, 798, 56, 58);
 		master.add(diceTwoPanel, new Integer(1), 0);
 
+
+		
 		controller.startGame();
 
 	}
