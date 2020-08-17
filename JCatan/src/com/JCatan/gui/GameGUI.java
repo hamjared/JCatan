@@ -186,9 +186,6 @@ public class GameGUI extends JFrame {
 		controller.setAction(t -> tradePanel.close());
 
 		JButton tradeButton = new JButton("Trade");
-		JButton endButton = new JButton("Roll Dice");
-		Consumer<JButton> turnOnEndButton = b -> {endButton.setEnabled(true); tradeButton.setEnabled(false);};
-		tradePanel.setDelegate(turnOnEndButton);
 		controller.setAction(t -> tradePanel.close());
 		
 		tradeButton.setEnabled(false);
@@ -196,7 +193,7 @@ public class GameGUI extends JFrame {
 		tradeButton.addActionListener(e ->{
 			tradePanel.setEnabled(true);
 			tradePanel.setVisible(true);
-			endButton.setEnabled(false);
+			endButton.setEnabled(false); 
 		});
 		contentPane.add(tradeButton);
 		
