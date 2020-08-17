@@ -23,7 +23,7 @@ public class DomesticTrade extends Trade {
 	        receivingPlayer.receiveTrade(this);
 	        GameGUI.controller.endTrade();
     	} catch(InvalidTradeException ex) {
-    		//ex.printStackTrace();
+    		ex.printStackTrace();
     		GameGUI.controller.notifyPlayer(ex.getMessage());
     		decline();
     	}

@@ -77,25 +77,25 @@ public class GameGUI extends JFrame {
 
 	@Override
 	public void paint(Graphics g) {
-    	try {
-	    	super.paint(g);
-	    	revalidate();
-    	}finally {
-    		g.dispose();
-    	}
-    }
-    
-    public GameGUI(List<Player> players, BoardFactory bf)
-    {        
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(0, 0, 1920, 1040);
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
-        contentPane.setLayout(null);
-        
-        controller = new GameController(players, bf);
-        controller.setNotifyPlayer(s -> JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE));
+		try {
+			super.paint(g);
+			revalidate();
+		} finally {
+			g.dispose();
+		}
+	}
+
+	public GameGUI(List<Player> players, BoardFactory bf) {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(0, 0, 1920, 1040);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		controller = new GameController(players, bf);
+		controller.setNotifyPlayer(
+				s -> JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE));
 
 		tradePanel = new TradePanel(865, 0, 578, 402);
 		tradePanel.setVisible(false);
@@ -179,7 +179,7 @@ public class GameGUI extends JFrame {
 		JPanel EndTurnPanel = new EndTurnPanel();
 		contentPane.add(EndTurnPanel);
 		EndTurnPanel.setLayout(new GridLayout(1, 0, 0, 0));
-		
+
 		JButton endButton = new JButton("Start Setup");
 		Consumer<JButton> turnOnEndButton = b -> endButton.setEnabled(true);
 		tradePanel.setDelegate(turnOnEndButton);
@@ -187,16 +187,17 @@ public class GameGUI extends JFrame {
 
 		JButton tradeButton = new JButton("Trade");
 		controller.setAction(t -> tradePanel.close());
-		
-		tradeButton.setEnabled(false);
+
+		tradeButton.setEnabled(true);
+		tradeButton.setVisible(true);
 		tradeButton.setBounds(750, 867, 122, 134);
-		tradeButton.addActionListener(e ->{
+		tradeButton.addActionListener(e -> {
 			tradePanel.setEnabled(true);
 			tradePanel.setVisible(true);
-			endButton.setEnabled(false); 
+			endButton.setEnabled(false);
 		});
 		contentPane.add(tradeButton);
-		
+
 		endButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				switch (controller.getGamePhase()) {
@@ -275,11 +276,9 @@ public class GameGUI extends JFrame {
 					endButton.setText("Start Build");
 					controller.setGamePhase(GamePhase.GAMETRADE);
 					controller.gamePhaseTrade();
-					tradeButton.setEnabled(true);
 					repaint();
 					break;
 				case GAMETRADE:
-					tradeButton.setEnabled(false);
 					endButton.setText("Start End");
 					controller.setGamePhase(GamePhase.GAMEBUILD);
 					// controller.gamePhaseBuild();
@@ -411,7 +410,6 @@ public class GameGUI extends JFrame {
 
 	protected void clickOnCity() {
 		BoardPanel.buildCity();
-		
 
 	}
 
