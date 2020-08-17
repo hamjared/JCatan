@@ -83,4 +83,8 @@ public class Bank
         }
         return devCards.pop();
     }
+    
+    public Map<ResourceType, Integer> getDevCardCost(){
+    	return devCards.peek().getCost();
+    }
 }

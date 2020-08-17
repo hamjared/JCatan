@@ -8,6 +8,10 @@ public class KnightDevelopmentCard extends DevelopmentCard {
         // TODO DevelopmentCard: performAction
         
     }
+    
+    public String toString() {
+    	return "Knight";
+    }
 
 
 

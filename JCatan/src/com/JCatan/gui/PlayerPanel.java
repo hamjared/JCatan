@@ -20,6 +20,9 @@ import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PlayerPanel extends JPanel
 {
@@ -116,7 +119,7 @@ public class PlayerPanel extends JPanel
     	try {
 			image = ImageIO.read(new File(filename));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generated catch block 
 			e.printStackTrace();
 		}
 		

@@ -149,14 +149,18 @@ public class GameController {
 	}
 	
 	public void gamePhaseTrade() {
-		Player curPlayer = players.get(playerTurnIndex);
+		curPlayer = players.get(playerTurnIndex);
 	}
 	
 	public void gamePhaseBuild() {
+
 		curPlayer = players.get(playerTurnIndex);
 	}
 	
 	public void gamePhaseEnd() {
+		for(DevelopmentCard card: curPlayer.getDevCards()) {
+			card.setCanBePlayed(true);
+		}
 		if (curPlayer.calcVictoryPoints() > POINTS_TO_WIN) {
 			gameWinnerIndex = playerTurnIndex;
 			gameEnded = true;
