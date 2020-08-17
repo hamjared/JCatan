@@ -576,7 +576,7 @@ public class BoardPanel extends JPanel {
 		}
 		revalidate();
 	}
-}
+
 	public void setDrawRoads(boolean drawRoads) {
 		this.drawRoads = drawRoads;
 	}

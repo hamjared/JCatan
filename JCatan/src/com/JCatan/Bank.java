@@ -46,11 +46,11 @@ public class Bank
 		List<ResourceCard> playerOffering = trade.getOfferingCards();
 		
 		for(ResourceCard card : requesting) {
-			resourceTypeToResourceCards.get(card.resourceType).removeIf(c -> c.resourceType == card.resourceType);
+			resourceTypeToResourceCards.get(card.resourceType).pop();
 		}
 		
 		for(ResourceCard card : playerOffering) {
-			giveResourceCard(card);
+			giveResourceCard(card); 
 		}
     }
     

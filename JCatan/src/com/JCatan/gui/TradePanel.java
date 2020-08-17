@@ -398,6 +398,7 @@ public class TradePanel extends JPanel {
 						MaritimeTrade trade = new MaritimeTrade(currentPlayer, GameGUI.controller.getBank(), offering,
 								requesting);
 						GameGUI.controller.initiateTrade(trade);
+						GameGUI.ResourcePanel.repaint();
 					}
 
 					// Special Trade
