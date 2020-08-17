@@ -49,6 +49,7 @@ public class BoardPanel extends JPanel {
 	private boolean drawCities = false;
 	private Map<Tile, Hexagon> tileToHexagon;
 	private List<SelectableRobberTile> robberTiles;
+	private RobberShape robber;
 
 	public BoardPanel() {
 		super();
@@ -90,10 +91,10 @@ public class BoardPanel extends JPanel {
 					}
 				}
 
-				if (GameGUI.controller.getBoard().isRobberMoving(GameGUI.controller.getGamePhase())) {
+				if (GameGUI.controller.getBoard().isRobberMoving()) {
 					for (SelectableRobberTile circle : robberTiles) {
 						if (circle.getCircle().contains(x, y)) {
-							circle.onClick();
+							circle.onClick(robber);
 							repaint();
 							break;
 						}
@@ -104,6 +105,7 @@ public class BoardPanel extends JPanel {
 		setBackground(Color.BLUE);
 		setBounds(0, 0, 1441, 867);
 		hexagons = new ArrayList<>();
+		robber = new RobberShape(40,40);
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -221,7 +223,15 @@ public class BoardPanel extends JPanel {
 
 		start = System.nanoTime();
 		drawRoads(g2d);
-
+		
+		AffineTransform prev = g2d.getTransform();
+		Color prevColor = g2d.getColor();
+		g2d.setColor(Color.BLACK);
+		g2d.translate(robber.getPoint().getX(), robber.getPoint().getY());
+		g2d.draw(robber);
+		g2d.fill(robber);
+		g2d.setTransform(prev);
+		g2d.setColor(prevColor);
 		end = System.nanoTime();
 		System.out.println("Time to draw Roads: " + (end - start) / 10e9);
 
@@ -546,7 +556,7 @@ public class BoardPanel extends JPanel {
 			return;
 		}
 
-		if (!robberTiles.isEmpty() && GameGUI.controller.getBoard().isRobberMoving(GameGUI.controller.getGamePhase())) {
+		if (!robberTiles.isEmpty() && GameGUI.controller.getBoard().isRobberMoving()) {
 			robberTiles.forEach(t -> {
 				t.drawRobberPosition(g);
 			});

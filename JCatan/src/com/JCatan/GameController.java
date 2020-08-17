@@ -117,7 +117,7 @@ public class GameController {
 	
 	public void robberMovePhase() {
 		curPlayer = players.get(playerTurnIndex);
-		//this.gamePhase = GamePhase.GAMETRADE;
+		
 	}
 	
 	public void setupPhase() {

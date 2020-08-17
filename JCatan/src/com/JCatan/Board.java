@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.JCatan.gui.GameGUI;
+
 public class Board {
 
 	BoardGraph board;
@@ -274,7 +276,7 @@ public class Board {
 		return nodes;
 	}
 	
-	public boolean isRobberMoving(GamePhase phase) {
-		return phase == GamePhase.ROBBERMOVE;
+	public boolean isRobberMoving() {
+		return GamePhase.ROBBERMOVE == GameGUI.controller.gamePhase;
 	}
 }

@@ -300,7 +300,6 @@ public class GameGUI extends JFrame {
 					} else {
 						endButton.setText("End Robber Move");
 						controller.setGamePhase(GamePhase.ROBBERMOVE);
-						controller.robberMovePhase();
 					}
 
 					repaint();
@@ -318,6 +317,8 @@ public class GameGUI extends JFrame {
 					break;
 				case ROBBERMOVE:
 					controller.setGamePhase(GamePhase.GAMETRADE);
+					controller.robberMovePhase();
+					repaint();
 					break;
 				default:
 					break;
