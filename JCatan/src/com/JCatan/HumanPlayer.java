@@ -387,12 +387,7 @@ public class HumanPlayer extends Player {
 			}
 		}
     }
-   
-	@Override
-	public void buyDevelopmentCard() throws InsufficientResourceCardException {
-		// TODO Player: buyDevelopmentCard
 
-	}
 
 	@Override
 	public void endTurn() {

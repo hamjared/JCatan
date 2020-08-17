@@ -88,7 +88,47 @@ public abstract class Player {
 	/**
 	 * @throws InsufficientResourceCardException
 	 */
-	public abstract void buyDevelopmentCard() throws InsufficientResourceCardException;
+	public void buyDevelopmentCard(GameController controller) throws InsufficientResourceCardException{
+		Bank bank = controller.getBank();
+		Map<ResourceType, Integer> cost = bank.getDevCardCost();
+		if(!resourceCheck(cost)) {
+			throw new InsufficientResourceCardException();
+		}
+		
+		removeResourceCards(cost);
+		
+		try {
+			this.devCards.add(bank.takeDevelopmentCard());
+		} catch (OutOfDevelopmentCardsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void removeResourceCards(Map<ResourceType, Integer> cost) {
+		for(Map.Entry mapElement : cost.entrySet()) {
+			ResourceType resource = (ResourceType) mapElement.getKey();
+			Integer numResourcesRequired = (Integer) mapElement.getValue();
+			for ( int i = 0 ; i < numResourcesRequired; i++) {
+				this.resources.remove(new ResourceCard(resource));
+			}
+		}
+		
+	}
+
+	@SuppressWarnings("rawtypes")
+	public boolean resourceCheck(Map<ResourceType, Integer> cost) {
+		for(Map.Entry mapElement : cost.entrySet()) {
+			ResourceType resource = (ResourceType) mapElement.getKey();
+			Integer numResourcesRequired = (Integer) mapElement.getValue();
+			long numResources = this.resources.parallelStream().filter(r -> r.getResourceType() == resource).count();
+			if(numResources < numResourcesRequired) {
+				return false;
+			}
+			
+		}
+		return true;
+	}
 	
 	/**
 	 * 
@@ -178,7 +218,13 @@ public abstract class Player {
 	 * @param card
 	 * @throws InvalidDevCardUseException
 	 */
-	public abstract void playDevelopmentCard(DevelopmentCard card) throws InvalidDevCardUseException;
+	public void playDevelopmentCard(DevelopmentCard card) throws InvalidDevCardUseException{
+		if(! card.isCanBePlayed()) {
+			throw new InvalidDevCardUseException();
+		}
+		card.performAction();
+		card.setHasBeenPlayed(true);
+	}
 
 	/**
 	 * @param trade

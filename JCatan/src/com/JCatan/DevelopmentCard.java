@@ -5,6 +5,14 @@ import java.util.Map;
 
 public abstract class DevelopmentCard implements ICost {
 	private boolean canBePlayed;
+	public boolean isCanBePlayed() {
+		return canBePlayed;
+	}
+
+	public void setCanBePlayed(boolean canBePlayed) {
+		this.canBePlayed = canBePlayed;
+	}
+
 	private boolean hasBeenPlayed;
 	
 	

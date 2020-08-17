@@ -14,6 +14,10 @@ public class VictoryPointDevelopmentCard extends DevelopmentCard {
     public int getVictoryPoints() {
         return 1;
     }
+    
+    public String toString() {
+    	return "VictoryPoint";
+    }
 	
 	
 

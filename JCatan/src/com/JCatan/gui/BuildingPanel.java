@@ -71,7 +71,7 @@ public class BuildingPanel extends JPanel {
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); 
 			}
 		});
 
@@ -116,7 +116,15 @@ public class BuildingPanel extends JPanel {
 	}
 
 	protected void buyDevCard() {
-		// TODO BuildingPanel: buyDevCard
+		try {
+			GameGUI.controller.getCurPlayer().buyDevelopmentCard(GameGUI.controller);
+			GameGUI.controller.getChat().addToChat(GameGUI.controller.getCurPlayer().getName() + " Bought a dev card");
+			this.getParent().repaint();
+		} catch (InsufficientResourceCardException e) {
+			// TODO Auto-generated catch block
+			GameGUI.controller.getChat().addToChat("Cannot buy development card - insufficient resources");
+			this.getParent().repaint();
+		}
 
 	}
 
