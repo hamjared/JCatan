@@ -17,8 +17,10 @@ public class PlayerTest extends TestCase
     
     public void testCalcVictoryPoints() {
         Player player = new HumanPlayer("Test");
-        Building city = new City(player);
-        Building settlement = new Settlement(player); 
+        Building city = new City(player, null);
+        Building settlement = new Settlement(player, null); 
+        player.giveBuilding(city);
+        player.giveBuilding(settlement);
         city.setHasBeenPlayed(true);
         player.giveDevelopmentCard(new VictoryPointDevelopmentCard());
         player.giveDevelopmentCard(new KnightDevelopmentCard());

@@ -149,7 +149,6 @@ public class HumanPlayer extends Player {
 				}
 			}
 			if (settlementCheck == true) {
-
 				Settlement settlement = this.getNextSettlement();
 				List<ResourceCard> resources = this.getResources();
 				int numWheat = 0;
@@ -274,8 +273,7 @@ public class HumanPlayer extends Player {
 		for(ResourceCard card : requesting) {
 			resources.add(card);
 		}
-		System.out.print(resources.size());
-		System.out.print("Has received trade!");
+		System.out.print(this.name + " Has received trade!");
 	}
 	
 	@Override
@@ -311,7 +309,7 @@ public class HumanPlayer extends Player {
 			}
 			if (cityCheck == true) {
 
-				City city = new City(this);
+				City city = new City(this, node);
 				List<ResourceCard> resources = this.getResources();
 				int numWheat = 0;
 				int numWood = 0;
@@ -377,7 +375,7 @@ public class HumanPlayer extends Player {
 				if (resourceCheck == 5) {
 					city.setHasBeenPlayed(true);
 					this.getBuildings().remove(city);
-					Settlement settlement = new Settlement(this);
+					Settlement settlement = new Settlement(this, node);
 					this.giveBuilding(settlement);
 					node.setBuilding(city);
 					for (ResourceType type : list) {

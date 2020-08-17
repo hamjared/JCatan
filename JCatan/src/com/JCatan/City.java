@@ -8,9 +8,9 @@ public class City extends Building
     
     private static final int CITY_VICTORY_POINTS = 2;
 
-    public City(Player player)
+    public City(Player player, Node node)
     {
-        super(player, CITY_VICTORY_POINTS);
+        super(player, CITY_VICTORY_POINTS, node);
 
     }
 

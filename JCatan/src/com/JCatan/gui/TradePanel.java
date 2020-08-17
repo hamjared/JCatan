@@ -30,6 +30,7 @@ import com.JCatan.Trade;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -101,11 +102,20 @@ public class TradePanel extends JPanel {
 	
 	private void setTraders() {
 		JCheckBox maritimeTrade = new JCheckBox("Maritime");
+		maritimeTrade.addActionListener(e ->{
+			clearSelectedPlayerResources();
+			setPlayersResources(null);
+			offerButton.setEnabled(true);
+		});
 		maritimeTrade.setSelected(false);
 		buttonToggleGroup.add(maritimeTrade);
 		traders.add(maritimeTrade);
 		
 		JCheckBox specialTrade = new JCheckBox("Special Trade");
+		specialTrade.addActionListener(e ->{
+			clearSelectedPlayerResources();
+			offerButton.setEnabled(false);
+		});
 		maritimeTrade.setSelected(false);
 		buttonToggleGroup.add(specialTrade);
 		traders.add(specialTrade);
@@ -126,6 +136,7 @@ public class TradePanel extends JPanel {
 
 				clearSelectedPlayerResources();
 				setPlayersResources(selectedPlayer);
+				offerButton.setEnabled(true);
 			});
 			traders.add(temp);
 			buttonToggleGroup.add(temp);
@@ -139,6 +150,7 @@ public class TradePanel extends JPanel {
 			if(isVisible() && isEnabled()) {
 				clearAllPlayerResources();
 				setTraders();
+				offerButton.setEnabled(!(buttonToggleGroup.getSelection() == null));
 				setPlayersResources(currentPlayer);
 			}
 		} finally {
@@ -252,8 +264,18 @@ public class TradePanel extends JPanel {
 	
 	private void setPlayersResources(Player player) {
 		int j=0;
-		Map<ResourceType, Integer> resources = player.getUniqueResourcesCount();
-		boolean isCurrentPlayer = player == currentPlayer;
+		Map<ResourceType, Integer> resources = null;
+		if(player != null) {
+			resources = player.getUniqueResourcesCount();
+		} else {
+			resources = GameGUI.controller.getBank().getResourceMap()
+											.entrySet().stream().collect(
+													Collectors.toMap(Map.Entry::getKey, e->e.getValue().size())
+											);
+		}
+		
+		
+		boolean isCurrentPlayer = player != null && player == currentPlayer;
 		
 		for(Map.Entry<ResourceType, Integer> entry: resources.entrySet()) {
 			
@@ -266,7 +288,7 @@ public class TradePanel extends JPanel {
 			} else {
 				requestingResourceTypeAndAmount.put(cardName, Integer.parseInt(total));
 			}
-			String labelName = (player == currentPlayer) ? "" : selectedPlayerlabel;
+			String labelName = (player != null && player == currentPlayer) ? "" : selectedPlayerlabel;
 			createTradeIcons(cardName, labelName, total, i, j);
 			j++;
 		}
@@ -371,7 +393,7 @@ public class TradePanel extends JPanel {
 					
 					//Maritime Trade
 					if(name == "Maritime") {
-						MaritimeTrade trade = new MaritimeTrade(currentPlayer, offering, requesting);
+						MaritimeTrade trade = new MaritimeTrade(currentPlayer, GameGUI.controller.getBank(), offering, requesting);
 						GameGUI.controller.initiateTrade(trade);
 					}
 					

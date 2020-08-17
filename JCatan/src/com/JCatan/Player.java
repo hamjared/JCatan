@@ -132,11 +132,11 @@ public abstract class Player {
 
 	public void initializeBuildingsAndRoads() {
 		for (int i = 0; i < 5; i++) {
-			Settlement settlement = new Settlement(this);
+			Settlement settlement = new Settlement(this, null);
 			this.giveBuilding(settlement);
 		}
 		for (int i = 0; i < 4; i++) {
-			City city = new City(this);
+			City city = new City(this, null);
 			this.giveBuilding(city);
 		}
 		for (int i = 0; i < 15; i++) {
@@ -238,6 +238,10 @@ public abstract class Player {
 	 * 
 	 */
 	public abstract void tradePhase();
+	
+	public boolean hasEnoughResource(ResourceType resource, int amount) {
+		return amount > resources.stream().filter(re -> re.getResourceType() == resource).count();
+	}
 
 	public boolean isHasLongestRoad() {
 		return hasLongestRoad;
