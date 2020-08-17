@@ -7,6 +7,7 @@ public class Settlement extends Building
 {
 
     private static final int SETTLEMENT_VICTORY_POINTS = 1;
+    private int id;
 
     public Settlement(Player player, Node node)
     {
@@ -44,4 +45,14 @@ public class Settlement extends Building
             e.printStackTrace();
         }
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	
 }

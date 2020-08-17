@@ -35,11 +35,10 @@ public class BuildableRoad {
 	}
 
 	public void onclick() {
-		List<ResourceCard> res = new ArrayList<>();
-		GameGUI.controller.getCurPlayer().setResources(res);
 		try {
 			GameGUI.controller.getCurPlayer().buildRoad(GameGUI.controller.getGamePhase(), road.getNode1(),
 					road.getNode2(), GameGUI.controller);
+			GameGUI.ResourcePanel.repaint();
 		} catch (InsufficientResourceCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

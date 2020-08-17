@@ -66,6 +66,8 @@ public class BoardPanel extends JPanel {
 				for (BuildableNode circle : buildableNodes) {
 					if (circle.getCircle().contains(x, y)) {
 						circle.onclick();
+						drawSettlements = false;
+						GameGUI.endButton.setEnabled(true);
 						repaint();
 						break;
 					}
@@ -75,6 +77,8 @@ public class BoardPanel extends JPanel {
 				for (BuildableRoad circle : buildableRoads) {
 					if (circle.getCircle().contains(x, y)) {
 						circle.onclick();
+						drawRoads = false;
+						GameGUI.endButton.setEnabled(true);
 						repaint();
 						break;
 					}
@@ -84,6 +88,8 @@ public class BoardPanel extends JPanel {
 				for (BuildableCity circle : buildableCities) {
 					if (circle.getCircle().contains(x, y)) {
 						circle.onclick();
+						drawCities = false;
+						GameGUI.endButton.setEnabled(true);
 						repaint();
 						break;
 					}
@@ -523,7 +529,7 @@ public class BoardPanel extends JPanel {
 		if (GameGUI.controller.getCurPlayer() == null) {
 			return;
 		}
-		roads = GameGUI.controller.getBoard().getBuildableRoads(GameGUI.controller.getCurPlayer());
+		roads = GameGUI.controller.getBoard().getBuildableRoads(GameGUI.controller.getCurPlayer(), GameGUI.controller.getGamePhase());
 		drawCities = false;
 		drawRoads = true;
 		drawSettlements = false;
@@ -531,5 +537,19 @@ public class BoardPanel extends JPanel {
 		revalidate();
 
 	}
+
+	public void setDrawRoads(boolean drawRoads) {
+		this.drawRoads = drawRoads;
+	}
+
+	public void setDrawSettlements(boolean drawSettlements) {
+		this.drawSettlements = drawSettlements;
+	}
+
+	public void setDrawCities(boolean drawCities) {
+		this.drawCities = drawCities;
+	}
+	
+	
 
 }
