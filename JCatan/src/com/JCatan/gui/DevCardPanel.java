@@ -41,6 +41,8 @@ public class DevCardPanel extends JPanel{
 				DevelopmentCard card = (DevelopmentCard) comboBox.getSelectedItem();
 				try {
 					GameGUI.controller.getCurPlayer().playDevelopmentCard(card);
+					GameGUI.controller.getChat().addToChat(GameGUI.controller.getCurPlayer().getName() + " played " + card);
+					getParent().repaint();
 					updateComboBox();
 				} catch (InvalidDevCardUseException e1) {
 					// TODO Auto-generated catch block
@@ -69,7 +71,10 @@ public class DevCardPanel extends JPanel{
 	private void updateComboBox() {
 		comboBox.removeAllItems();
 		for(DevelopmentCard card: GameGUI.controller.getCurPlayer().getDevCards()) {
-			comboBox.addItem(card);
+			if(! card.isHasBeenPlayed()) {
+				comboBox.addItem(card);
+			}
+			
 		}
 	}
 
