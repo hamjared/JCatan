@@ -44,6 +44,10 @@ public class Hexagon extends Polygon
         this(new Point(x, y), radius, tile);
         
     }
+	
+	public Point getCenter() {
+		return center;
+	}
 
     public int getRadius()
     {
