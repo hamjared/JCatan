@@ -14,5 +14,17 @@ public class ResourceCard {
 	public ResourceType getResourceType() {
 		return resourceType;
 	}
+	
+	public boolean equals(Object obj) {
+		if(!(obj instanceof ResourceCard)) {
+			return false;
+		}
+		
+		ResourceCard rc = (ResourceCard) obj;
+		if(rc.getResourceType() == this.resourceType) {
+			return true;
+		}
+		return false;
+	}
 
 }
