@@ -41,10 +41,9 @@ public class BuildableNode {
 
 	public void onclick() {
 
-		List<ResourceCard> res = new ArrayList<>();
-		GameGUI.controller.getCurPlayer().setResources(res);
 		try {
 			GameGUI.controller.getCurPlayer().buildSettlement(GameGUI.controller.getGamePhase(), node, GameGUI.controller);
+			GameGUI.ResourcePanel.repaint();
 		} catch (InsufficientResourceCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -43,6 +43,8 @@ public class GameGUI extends JFrame {
 	private JLabel wheatLabel;
 	private JLabel sheepLabel;
 	private JLabel oreLabel;
+	public static JButton endButton;
+	public static JPanel ResourcePanel;
 
 	ImageIcon one = new ImageIcon("images/one.png");
 	ImageIcon two = new ImageIcon("images/two.png");
@@ -73,7 +75,7 @@ public class GameGUI extends JFrame {
 	int die2;
 	int j = 0;
 	int setupNum = 0;
-	boolean setupReverse = false;
+	public static boolean setupReverse = false;
 
 	@Override
 	public void paint(Graphics g) {
@@ -197,8 +199,8 @@ public class GameGUI extends JFrame {
 		JPanel EndTurnPanel = new EndTurnPanel();
 		contentPane.add(EndTurnPanel);
 		EndTurnPanel.setLayout(new GridLayout(1, 0, 0, 0));
+		endButton = new JButton("Start Setup");
 
-		JButton endButton = new JButton("Start Setup");
 		Consumer<JButton> turnOnEndButton = b -> endButton.setEnabled(true);
 		tradePanel.setDelegate(turnOnEndButton);
 		controller.setAction(t -> tradePanel.close());
@@ -223,9 +225,11 @@ public class GameGUI extends JFrame {
 				case SETUP:
 					if (endButton.getText().equals("Build Settlement") || endButton.getText().equals("Start Setup")) {
 						BoardPanel.buildSettlement();
+						endButton.setEnabled(false);
 						endButton.setText("Build Road");
 					} else if (endButton.getText().equals("Build Road")) {
 						BoardPanel.buildRoad();
+						endButton.setEnabled(false);
 						endButton.setText("End Turn");
 					} else {
 						if (setupNum == 3 && setupReverse == false) {
@@ -247,6 +251,10 @@ public class GameGUI extends JFrame {
 							endButton.setText("Build Settlement");
 						}
 					}
+					Player1Panel.repaint();
+					Player2Panel.repaint();
+					Player3Panel.repaint();
+					Player4Panel.repaint();
 					break;
 				case GAMEROLL:
 					controller.gamePhaseRoll();
@@ -294,26 +302,21 @@ public class GameGUI extends JFrame {
 					}
 
 					if (die1 + die2 != 7) {
-						endButton.setText("Start Build");
-						controller.setGamePhase(GamePhase.GAMETRADE);
-						controller.gamePhaseTrade();
+					  endButton.setText("End Turn");
+					  controller.setGamePhase(GamePhase.GAMEMAIN);
+					  controller.gamePhaseTrade();
 					} else {
 						endButton.setText("End Robber Move");
 						controller.setGamePhase(GamePhase.ROBBERMOVE);
 					}
-
 					repaint();
 					break;
-				case GAMETRADE:
-					endButton.setText("Start End");
-					controller.setGamePhase(GamePhase.GAMEBUILD);
-					// controller.gamePhaseBuild();
-					repaint();
-					break;
-				case GAMEBUILD:
+				case GAMEMAIN:
+					tradeButton.setEnabled(false);
 					endButton.setText("Roll Dice");
 					controller.setGamePhase(GamePhase.GAMEROLL);
 					controller.gamePhaseEnd();
+					repaint();
 					break;
 				case ROBBERMOVE:
 					controller.setGamePhase(GamePhase.GAMETRADE);
@@ -369,7 +372,7 @@ public class GameGUI extends JFrame {
 			}
 		});
 
-		JPanel ResourcePanel = new ResourcesPanel() {
+		ResourcePanel = new ResourcesPanel() {
 			@Override
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -441,16 +444,20 @@ public class GameGUI extends JFrame {
 
 	protected void clickOnCity() {
 		BoardPanel.buildCity();
+		endButton.setEnabled(false);
+
 
 	}
 
 	protected void clickOnSettlement() {
 		BoardPanel.buildSettlement();
+		endButton.setEnabled(false);
 
 	}
 
 	protected void clickOnRoad() {
 		BoardPanel.buildRoad();
+		endButton.setEnabled(false);
 
 	}
 

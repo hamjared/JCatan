@@ -47,7 +47,7 @@ public class HumanPlayer extends Player {
 			Road road = new Road(node1, node2, this);
 			road.setHasBeenPlayed(true);
 			this.playedRoads.add(road);
-			this.getRoads().remove(road);
+			this.getRoads().remove(0);
 			node1.addRoad(road);
 			node2.addRoad(road);
 		} else {
@@ -138,8 +138,19 @@ public class HumanPlayer extends Player {
 			// SetUp Phase Build
 			Settlement settlement = this.getNextSettlement();
 			settlement.setHasBeenPlayed(true);
-//			this.getBuildings().remove(settlement); 
+			this.getBuildings().remove(settlement); 
 			node.setBuilding(settlement);
+			
+			if (this.getBuildings().size() == 7) {
+				for(Tile t: controller.getBoard().getTiles()) {
+					if(t.getBuildings().contains(settlement)) {
+						settlement.gatherResources(controller, t.getResourceType());
+						settlement.setId(1);
+					}
+				}
+			} else {
+				settlement.setId(0);
+			}
 		} else {
 			// Game Phase Build
 			boolean settlementCheck = false; 
@@ -231,6 +242,7 @@ public class HumanPlayer extends Player {
 					settlement.setHasBeenPlayed(true);
 //					this.getBuildings().remove(settlement);
 					node.setBuilding(settlement);
+					settlement.setId(0);
 					for (ResourceType type : list) {
 						this.removeResource(type);
 						ResourceCard card = new ResourceCard(type);

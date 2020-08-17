@@ -11,6 +11,7 @@ public class Board {
 	BoardGraph board;
 	Map<Integer, List<Tile>> diceRollToTiles;
 	List<Tile> tiles;
+	int roadSetupTracker = 0;
 
 	public List<Tile> getTiles() {
 		return tiles;
@@ -133,51 +134,82 @@ public class Board {
 		return playableNodes;
 	}
 
-	public List<Road> getBuildableRoads(Player curPlayer) {
+	public List<Road> getBuildableRoads(Player curPlayer, GamePhase gamePhase) {
+		roadSetupTracker++;
 		List<Road> roads = new ArrayList<>();
 		int curNodeIndex = 0;
 		for (List<Node> nodes : board.getNodes()) {
 			for (Node node : nodes) {
 				Road road = new Road(node, board.getNodeList().get(curNodeIndex), curPlayer);
-
 				boolean playerCanPlayRoad = false;
 				if (road.getNode1().getBuilding() != null) {
-					if (road.getNode1().getBuilding().getPlayer().equals(curPlayer)) {
-						playerCanPlayRoad = true;
-					}
+					if (gamePhase == GamePhase.SETUP) {
+						if (roadSetupTracker <= 4) {
+							if (road.getNode1().getBuilding().getPlayer().equals(curPlayer)){
+								playerCanPlayRoad = true;
+							}
+						} else if (roadSetupTracker > 4) {
+							if (road.getNode1().getBuilding().getPlayer().equals(curPlayer) && road.getNode1().getBuilding().getId() == 1) {
+								playerCanPlayRoad = true;
+							}
+						} 
+					} else {
+						if (road.getNode1().getBuilding().getPlayer().equals(curPlayer)) {
+							playerCanPlayRoad = true;
+						}
 
-					if (road.getNode1().getBuilding().getPlayer().equals(curPlayer)) {
-						for (Road r : road.getNode1().getRoads()) {
-							if (r != null) {
-								if (r.getPlayer().equals(curPlayer)) {
-									playerCanPlayRoad = true;
+						if (road.getNode1().getBuilding().getPlayer().equals(curPlayer)) {
+							for (Road r : road.getNode1().getRoads()) {
+								if (r != null) {
+									if (r.getPlayer().equals(curPlayer)) {
+										playerCanPlayRoad = true;
+									}
 								}
 							}
 						}
 					}
-
 				}
 				if (road.getNode2().getBuilding() != null) {
-					if (road.getNode2().getBuilding().getPlayer().equals(curPlayer)) {
-						playerCanPlayRoad = true;
-					}
+					if (gamePhase == GamePhase.SETUP) {
+						if (roadSetupTracker < 4) {
+							if (road.getNode2().getBuilding().getPlayer().equals(curPlayer)){
+								playerCanPlayRoad = true;
+							}
+						} else if (roadSetupTracker >= 4) {
+							if (road.getNode2().getBuilding().getPlayer().equals(curPlayer) && road.getNode2().getBuilding().getId() == 1) {
+								playerCanPlayRoad = true;
+							}
+						} 
+					} else {
+						if (road.getNode2().getBuilding().getPlayer().equals(curPlayer)) {
+							playerCanPlayRoad = true;
+						}
 
-					if (road.getNode2().getBuilding().getPlayer().equals(curPlayer)) {
-						for (Road r : road.getNode2().getRoads()) {
-							if (r != null) {
-								if (r.getPlayer().equals(curPlayer)) {
-									playerCanPlayRoad = true;
+						if (road.getNode2().getBuilding().getPlayer().equals(curPlayer)) {
+							for (Road r : road.getNode2().getRoads()) {
+								if (r != null) {
+									if (r.getPlayer().equals(curPlayer)) {
+										playerCanPlayRoad = true;
+									}
 								}
 							}
 						}
 					}
-
 				}
-
-				for (Road r : node.getRoads()) {
-					if (r.getPlayer().equals(curPlayer)) {
-						if (r.getNode1().getBuilding() != null) {
-							if (r.getNode1().getBuilding().getPlayer().equals(curPlayer)) {
+				
+				if (gamePhase != GamePhase.SETUP) {
+					for (Road r : node.getRoads()) {
+						if (r.getPlayer().equals(curPlayer)) {
+							if (r.getNode1().getBuilding() != null) {
+								if (r.getNode1().getBuilding().getPlayer().equals(curPlayer)) {
+									if (r.getNode1().equals(road.getNode1())) {
+										playerCanPlayRoad = true;
+									}
+									if (r.getNode1().equals(road.getNode2())) {
+										playerCanPlayRoad = true;
+									}
+								}
+							} else {
 								if (r.getNode1().equals(road.getNode1())) {
 									playerCanPlayRoad = true;
 								}
@@ -185,16 +217,16 @@ public class Board {
 									playerCanPlayRoad = true;
 								}
 							}
-						} else {
-							if (r.getNode1().equals(road.getNode1())) {
-								playerCanPlayRoad = true;
-							}
-							if (r.getNode1().equals(road.getNode2())) {
-								playerCanPlayRoad = true;
-							}
-						}
-						if (r.getNode2().getBuilding() != null) {
-							if (r.getNode2().getBuilding().getPlayer().equals(curPlayer)) {
+							if (r.getNode2().getBuilding() != null) {
+								if (r.getNode2().getBuilding().getPlayer().equals(curPlayer)) {
+									if (r.getNode2().equals(road.getNode1())) {
+										playerCanPlayRoad = true;
+									}
+									if (r.getNode2().equals(road.getNode2())) {
+										playerCanPlayRoad = true;
+									}
+								}
+							} else {
 								if (r.getNode2().equals(road.getNode1())) {
 									playerCanPlayRoad = true;
 								}
@@ -202,21 +234,21 @@ public class Board {
 									playerCanPlayRoad = true;
 								}
 							}
-						} else {
-							if (r.getNode2().equals(road.getNode1())) {
-								playerCanPlayRoad = true;
-							}
-							if (r.getNode2().equals(road.getNode2())) {
-								playerCanPlayRoad = true;
-							}
 						}
 					}
-				}
 
-				for (Road r : board.getNodeList().get(curNodeIndex).getRoads()) {
-					if (r.getPlayer().equals(curPlayer)) {
-						if (r.getNode1().getBuilding() != null) {
-							if (r.getNode1().getBuilding().getPlayer().equals(curPlayer)) {
+					for (Road r : board.getNodeList().get(curNodeIndex).getRoads()) {
+						if (r.getPlayer().equals(curPlayer)) {
+							if (r.getNode1().getBuilding() != null) {
+								if (r.getNode1().getBuilding().getPlayer().equals(curPlayer)) {
+									if (r.getNode1().equals(road.getNode1())) {
+										playerCanPlayRoad = true;
+									}
+									if (r.getNode1().equals(road.getNode2())) {
+										playerCanPlayRoad = true;
+									}
+								}
+							} else {
 								if (r.getNode1().equals(road.getNode1())) {
 									playerCanPlayRoad = true;
 								}
@@ -224,16 +256,16 @@ public class Board {
 									playerCanPlayRoad = true;
 								}
 							}
-						} else {
-							if (r.getNode1().equals(road.getNode1())) {
-								playerCanPlayRoad = true;
-							}
-							if (r.getNode1().equals(road.getNode2())) {
-								playerCanPlayRoad = true;
-							}
-						}
-						if (r.getNode2().getBuilding() != null) {
-							if (r.getNode2().getBuilding().getPlayer().equals(curPlayer)) {
+							if (r.getNode2().getBuilding() != null) {
+								if (r.getNode2().getBuilding().getPlayer().equals(curPlayer)) {
+									if (r.getNode2().equals(road.getNode1())) {
+										playerCanPlayRoad = true;
+									}
+									if (r.getNode2().equals(road.getNode2())) {
+										playerCanPlayRoad = true;
+									}
+								}
+							} else {
 								if (r.getNode2().equals(road.getNode1())) {
 									playerCanPlayRoad = true;
 								}
@@ -241,16 +273,11 @@ public class Board {
 									playerCanPlayRoad = true;
 								}
 							}
-						} else {
-							if (r.getNode2().equals(road.getNode1())) {
-								playerCanPlayRoad = true;
-							}
-							if (r.getNode2().equals(road.getNode2())) {
-								playerCanPlayRoad = true;
-							}
 						}
 					}
 				}
+
+				
 
 				if (!roads.contains(road) && playerCanPlayRoad) {
 					roads.add(road);
