@@ -331,4 +331,10 @@ public abstract class Player {
 	public void setHasLargestArmy(boolean hasLargestArmy) {
 		this.hasLargestArmy = hasLargestArmy;
 	}
+
+	public List<Building> getPlayedBuildings() {
+		return playedBuildings;
+	}
+	
+	
 }

@@ -45,6 +45,11 @@ public class GameGUI extends JFrame {
 	private JLabel oreLabel;
 	public static JButton endButton;
 	public static JPanel ResourcePanel;
+	public static JPanel Player1Panel;
+	public static JPanel Player2Panel;
+	public static JPanel Player3Panel;
+	public static JPanel Player4Panel;
+	
 
 	ImageIcon one = new ImageIcon("images/one.png");
 	ImageIcon two = new ImageIcon("images/two.png");
@@ -159,22 +164,22 @@ public class GameGUI extends JFrame {
 		BankPanel.add(oreLabel);
 
 		controller.getPlayer(0).setColor(Color.BLUE);
-		JPanel Player1Panel = new PlayerPanel(1441, 490, 463, 126, controller.getPlayer(0));
+		Player1Panel = new PlayerPanel(1441, 490, 463, 126, controller.getPlayer(0));
 		Player1Panel.setBackground(Color.ORANGE);
 		contentPane.add(Player1Panel);
 
 		controller.getPlayer(1).setColor(Color.RED);
-		JPanel Player2Panel = new PlayerPanel(1441, 615, 463, 126, controller.getPlayer(1));
+		Player2Panel = new PlayerPanel(1441, 615, 463, 126, controller.getPlayer(1));
 		Player2Panel.setBackground(Color.PINK);
 		contentPane.add(Player2Panel);
 
 		controller.getPlayer(2).setColor(Color.decode("#FFA500"));
-		JPanel Player3Panel = new PlayerPanel(1441, 741, 463, 126, controller.getPlayer(2));
+		Player3Panel = new PlayerPanel(1441, 741, 463, 126, controller.getPlayer(2));
 		Player3Panel.setBackground(Color.ORANGE);
 		contentPane.add(Player3Panel);
 
 		controller.getPlayer(3).setColor(Color.WHITE);
-		JPanel Player4Panel = new PlayerPanel(1441, 867, 463, 134, controller.getPlayer(3));
+		Player4Panel = new PlayerPanel(1441, 867, 463, 134, controller.getPlayer(3));
 		Player4Panel.setBackground(Color.PINK);
 		contentPane.add(Player4Panel);
 
@@ -225,10 +230,18 @@ public class GameGUI extends JFrame {
 				case SETUP:
 					if (endButton.getText().equals("Build Settlement") || endButton.getText().equals("Start Setup")) {
 						BoardPanel.buildSettlement();
+						Player1Panel.repaint();
+						Player2Panel.repaint();
+						Player3Panel.repaint();
+						Player4Panel.repaint();
 						endButton.setEnabled(false);
 						endButton.setText("Build Road");
 					} else if (endButton.getText().equals("Build Road")) {
 						BoardPanel.buildRoad();
+						Player1Panel.repaint();
+						Player2Panel.repaint();
+						Player3Panel.repaint();
+						Player4Panel.repaint();
 						endButton.setEnabled(false);
 						endButton.setText("End Turn");
 					} else {
@@ -251,10 +264,6 @@ public class GameGUI extends JFrame {
 							endButton.setText("Build Settlement");
 						}
 					}
-					Player1Panel.repaint();
-					Player2Panel.repaint();
-					Player3Panel.repaint();
-					Player4Panel.repaint();
 					break;
 				case GAMEROLL:
 					controller.gamePhaseRoll();
@@ -309,6 +318,7 @@ public class GameGUI extends JFrame {
 						endButton.setText("End Robber Move");
 						controller.setGamePhase(GamePhase.ROBBERMOVE);
 					}
+					tradeButton.setEnabled(true);
 					repaint();
 					break;
 				case GAMEMAIN:
@@ -319,6 +329,7 @@ public class GameGUI extends JFrame {
 					repaint();
 					break;
 				case ROBBERMOVE:
+					endButton.setText("End Turn");
 					controller.setGamePhase(GamePhase.GAMEMAIN);
 					controller.robberMovePhase();
 					repaint();
@@ -361,9 +372,6 @@ public class GameGUI extends JFrame {
 
 					clickOnCity();
 				} else if ((x >= 220 && x <= 290) && (y >= 37 && y <= 65)) {
-
-					clickOnCity();
-				} else if ((x >= 30 && x <= 37) && (y >= 18 && y <= 110)) {
 
 					clickOnCity();
 				}
