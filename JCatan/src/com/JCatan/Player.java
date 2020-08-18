@@ -223,11 +223,11 @@ public abstract class Player {
 	 * @param card
 	 * @throws InvalidDevCardUseException
 	 */
-	public void playDevelopmentCard(DevelopmentCard card) throws InvalidDevCardUseException{
+	public void playDevelopmentCard(DevelopmentCard card, DevCardAction devCardAction) throws InvalidDevCardUseException{
 		if(! card.isCanBePlayed()) {
 			throw new InvalidDevCardUseException();
 		}
-		card.performAction();
+		card.performAction(devCardAction);
 		card.setHasBeenPlayed(true);
 	}
 
@@ -247,7 +247,7 @@ public abstract class Player {
 	public abstract int rollDice();
 
 	/**
-	 * 
+	 *  
 	 */
 	public abstract void setup(Node node1, Node node2, GameController controller);
 
