@@ -23,13 +23,13 @@ public class HumanPlayerTest extends TestCase
         assertEquals(1, hp.getDevCards().size());
         boolean threwException = false;
         try {
-            hp.playDevelopmentCard(doesntHave);
+            hp.playDevelopmentCard(doesntHave, null);
             
         }catch(InvalidDevCardUseException e) {
             threwException = true;
         }
         assertTrue("Should have thrown exception since player does not have the dev card", threwException);
-        hp.playDevelopmentCard(devCard);
+        hp.playDevelopmentCard(devCard, null);
         assertEquals(0, hp.getDevCards().size());
         
         
