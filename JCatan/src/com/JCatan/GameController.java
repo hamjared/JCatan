@@ -119,67 +119,6 @@ public class GameController {
 		curPlayer = players.get(playerTurnIndex);
 	}
 	
-	public void setupPhase() {
-		
-		chat.addToChat("Beginning setup phase");
-		
-		curPlayer = players.get(playerTurnIndex);
-
-		int playerNum = 0;
-		Node node1 = null;
-		Node node2 = null;
-		for (Player player : players) {
-			chat.addToChat(player.getName() + "Click on a settlement from the building panel and place it on the board.");
-			
-			switch (playerNum) {
-			case 0:
-				node1 = board.getTiles().get(0).getNodes().get(0);
-				node2 = board.getTiles().get(0).getNodes().get(1);
-				break;
-			case 1:
-				node1 = board.getTiles().get(1).getNodes().get(0);
-				node2 = board.getTiles().get(1).getNodes().get(1);
-				break;
-			case 2:
-				node1 = board.getTiles().get(2).getNodes().get(0);
-				node2 = board.getTiles().get(2).getNodes().get(1);
-				break;
-			case 3:
-				node1 = board.getTiles().get(3).getNodes().get(0);
-				node2 = board.getTiles().get(3).getNodes().get(1);
-				break;
-			}
-			playerNum++;
-			player.setup(node1, node2, this);
-		}
-		playerNum = 3;
-		for (int i = players.size() - 1; i >= 0; i--) {
-			switch (playerNum) {
-			case 0:
-				node1 = board.getTiles().get(7).getNodes().get(0);
-				node2 = board.getTiles().get(7).getNodes().get(1);
-				break;
-			case 1:
-				node1 = board.getTiles().get(8).getNodes().get(0);
-				node2 = board.getTiles().get(8).getNodes().get(1);
-				break;
-			case 2:
-				node1 = board.getTiles().get(9).getNodes().get(0);
-				node2 = board.getTiles().get(9).getNodes().get(1);
-				break;
-			case 3:
-				node1 = board.getTiles().get(10).getNodes().get(0);
-				node2 = board.getTiles().get(10).getNodes().get(1);
-				break;
-			}
-			playerNum--;
-			players.get(i).setup(node1, node2, this);
-		}
-		
-		gamePhase = GamePhase.GAMEROLL;
-
-	}
-	
 	public void gamePhaseRoll() {
 			curPlayer = players.get(playerTurnIndex);
 			chat.addToChat(curPlayer.getName() + "'s turn");
@@ -188,7 +127,9 @@ public class GameController {
 			int diceRoll = curPlayer.rollDice();
 
 			if (diceRoll == 7) {
-				players.forEach(p -> p.sevenRolled(curPlayer));
+				for(Player p: players) {
+					p.sevenRolled(p);
+				}
 				boolean cardStolen = false;
 //				while (cardStolen == false) {
 //					cardStolen = curPlayer.sevenRolledSteal(players.get(playerTurnIndex + 1)); // Pass in a player to
@@ -210,6 +151,10 @@ public class GameController {
 		if(trade instanceof MaritimeTrade) {
 			MaritimeTrade mt = (MaritimeTrade)trade;
 			mt.accept();
+		}
+		if(trade instanceof SpecialTrade) {
+			SpecialTrade st = (SpecialTrade)trade;
+			st.accept();
 		}
 	}
 	

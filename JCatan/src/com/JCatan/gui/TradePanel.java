@@ -26,6 +26,7 @@ import com.JCatan.MaritimeTrade;
 import com.JCatan.Player;
 import com.JCatan.ResourceCard;
 import com.JCatan.ResourceType;
+import com.JCatan.SpecialTrade;
 import com.JCatan.Trade;
 
 import javax.swing.border.BevelBorder;
@@ -114,7 +115,8 @@ public class TradePanel extends JPanel {
 		JCheckBox specialTrade = new JCheckBox("Special Trade");
 		specialTrade.addActionListener(e -> {
 			clearSelectedPlayerResources();
-			offerButton.setEnabled(false);
+			setPlayersResources(null);
+			offerButton.setEnabled(true);
 		});
 		maritimeTrade.setSelected(false);
 		buttonToggleGroup.add(specialTrade);
@@ -270,7 +272,7 @@ public class TradePanel extends JPanel {
 			resources = player.getUniqueResourcesCount();
 		} else {
 			resources = GameGUI.controller.getBank().getResourceMap().entrySet().stream()
-					.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().size()));
+					.collect(Collectors.toMap(Map.Entry::getKey, e -> 0));
 		}
 
 		boolean isCurrentPlayer = player != null && player == currentPlayer;
@@ -403,6 +405,9 @@ public class TradePanel extends JPanel {
 
 					// Special Trade
 					if (name == "Special Trade") {
+						SpecialTrade trade = new SpecialTrade(currentPlayer, GameGUI.controller.getBank(), offering, requesting);
+						GameGUI.controller.initiateTrade(trade);
+						GameGUI.ResourcePanel.repaint();
 					}
 				}
 			}

@@ -15,8 +15,6 @@ public class MaritimeTrade extends Trade {
 	
 	private Bank banker;
 	private final int defaultMultiple = 4;
-	private final int generalPortMultiple = 3;
-	private final int specialPortMultiple = 2;
 	
 	//NOTE: Always available 4:1 trade with banks.
 	public MaritimeTrade(Player offeringPlayer, Bank banker, List<ResourceCard> offeringCards, List<ResourceCard> requestingCards) {
@@ -118,10 +116,6 @@ public class MaritimeTrade extends Trade {
         
         if(!hasSpecialPort && !hasGeneralPort) {
         	isRatioCorrect = (R,O) -> R.getValue() * defaultMultiple == O.getValue();
-        } else if(hasSpecialPort && !hasGeneralPort) {
-        	isRatioCorrect = (R,O) -> R.getValue() * specialPortMultiple == O.getValue();
-        } else if(hasSpecialPort && hasGeneralPort) {
-        	isRatioCorrect = (R,O) -> R.getValue() * specialPortMultiple == O.getValue() || R.getValue() * generalPortMultiple == O.getValue();
         }
         
         if(!isTradeValid(offeringMap, requestingMap, isRatioCorrect)) {

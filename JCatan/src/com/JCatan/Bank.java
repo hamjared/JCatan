@@ -49,8 +49,9 @@ public class Bank
 			resourceTypeToResourceCards.get(card.resourceType).pop();
 		}
 		
-		for(ResourceCard card : playerOffering) {
-			giveResourceCard(card); 
+		for (int i = 0; i < playerOffering.size(); i++) {
+			ResourceCard card = playerOffering.get(i);
+			giveResourceCard(card);
 		}
     }
     

@@ -8,6 +8,7 @@ public class Settlement extends Building
 
     private static final int SETTLEMENT_VICTORY_POINTS = 1;
     private int id;
+    Node node;
 
     public Settlement(Player player, Node node)
     {
@@ -53,6 +54,13 @@ public class Settlement extends Building
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
+	public Node getNode() {
+		return node;
+	}
+
+	public void setNode(Node node) {
+		this.node = node;
+	}
 	
 }

@@ -15,6 +15,7 @@ public abstract class Player {
 	List<DevelopmentCard> devCards;
 	List<Road> roads;
 	List<Building> buildings;
+	List<Building> playedBuildings;
 	List<Road> playedRoads;
 	int victoryPoints;
 	int diceRoll;
@@ -45,6 +46,7 @@ public abstract class Player {
 		devCards = new ArrayList<DevelopmentCard>();
 		victoryPoints = 0;
 		buildings = new ArrayList<Building>();
+		playedBuildings = new ArrayList<>();
 		playedRoads = new ArrayList<Road>();
 		this.roads = new ArrayList<>();
 		this.name = name;
@@ -329,4 +331,10 @@ public abstract class Player {
 	public void setHasLargestArmy(boolean hasLargestArmy) {
 		this.hasLargestArmy = hasLargestArmy;
 	}
+
+	public List<Building> getPlayedBuildings() {
+		return playedBuildings;
+	}
+	
+	
 }

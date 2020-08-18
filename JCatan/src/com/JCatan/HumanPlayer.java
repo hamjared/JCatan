@@ -119,7 +119,7 @@ public class HumanPlayer extends Player {
 				if (resourceCheck == 2) {
 					road.setHasBeenPlayed(true);
 					this.playedRoads.add(road);
-					this.getRoads().remove(road);
+					this.getRoads().remove(0);
 					node1.addRoad(road);
 					node2.addRoad(road);
 					for (ResourceType type : list) {
@@ -138,14 +138,18 @@ public class HumanPlayer extends Player {
 			// SetUp Phase Build
 			Settlement settlement = this.getNextSettlement();
 			settlement.setHasBeenPlayed(true);
+			this.playedBuildings.add(settlement);
 			this.getBuildings().remove(settlement); 
 			node.setBuilding(settlement);
+			settlement.setNode(node);
 			
 			if (this.getBuildings().size() == 7) {
 				for(Tile t: controller.getBoard().getTiles()) {
 					if(t.getBuildings().contains(settlement)) {
-						settlement.gatherResources(controller, t.getResourceType());
-						settlement.setId(1);
+						if(t.getResourceType() != ResourceType.DESERT) {
+							settlement.gatherResources(controller, t.getResourceType());
+							settlement.setId(1);
+						}	
 					}
 				}
 			} else {
@@ -242,6 +246,7 @@ public class HumanPlayer extends Player {
 					settlement.setHasBeenPlayed(true);
 //					this.getBuildings().remove(settlement);
 					node.setBuilding(settlement);
+					settlement.setNode(node);
 					settlement.setId(0);
 					for (ResourceType type : list) {
 						this.removeResource(type);
@@ -278,8 +283,8 @@ public class HumanPlayer extends Player {
 			 offering = trade.getRequestingCards();
 		}
 		
-		for(ResourceCard card : offering) {
-			resources.removeIf(c -> c.resourceType.equals(card.resourceType));
+		for (int i = 0; i < offering.size(); i++) {
+			resources.remove(offering.get(i));
 		}
 		
 		for(ResourceCard card : requesting) {
@@ -390,6 +395,7 @@ public class HumanPlayer extends Player {
 					Settlement settlement = new Settlement(this, node);
 					this.giveBuilding(settlement);
 					node.setBuilding(city);
+					city.setNode(node);
 					for (ResourceType type : list) {
 						this.removeResource(type);
 						ResourceCard card = new ResourceCard(type);
@@ -452,6 +458,9 @@ public class HumanPlayer extends Player {
 				//Player rounds down and drops half their cards
 				cardsToDrop = (handSize - 1) / 2;
 			}
+		}
+		for(int i = 0; i < cardsToDrop; i++) {
+			activePlayer.getResources().remove(i);
 		}
 
 	}
