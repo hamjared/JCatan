@@ -35,7 +35,7 @@ public abstract class DevelopmentCard implements ICost {
 	/**
 	 * @throws InvalidDevCardUseException
 	 */
-	public abstract void performAction() throws InvalidDevCardUseException;
+	public abstract void performAction(DevCardAction devCardAction) throws InvalidDevCardUseException;
 	
 	public int getVictoryPoints() {
 	    return 0;

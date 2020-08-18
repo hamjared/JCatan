@@ -3,12 +3,7 @@ package com.JCatan;
 public class VictoryPointDevelopmentCard extends DevelopmentCard {
 	String name;
 
-    @Override
-    public void performAction() throws InvalidDevCardUseException
-    {
-        // TODO DevelopmentCard: performAction
-        
-    }
+
     
     @Override
     public int getVictoryPoints() {
@@ -18,6 +13,12 @@ public class VictoryPointDevelopmentCard extends DevelopmentCard {
     public String toString() {
     	return "VictoryPoint";
     }
+
+	@Override
+	public void performAction(DevCardAction devCardAction) throws InvalidDevCardUseException {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 

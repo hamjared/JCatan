@@ -409,14 +409,6 @@ public class HumanPlayer extends Player {
 		// TODO Player: endTurn
 	}
 
-	@Override
-	public void playDevelopmentCard(DevelopmentCard card) throws InvalidDevCardUseException {
-		if (!devCards.contains(card)) {
-			throw new InvalidDevCardUseException();
-		}
-		card.performAction();
-		this.devCards.remove(card);
-	}
 
 	@Override
 	public int rollDice() {
