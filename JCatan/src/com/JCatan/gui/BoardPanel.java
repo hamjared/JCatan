@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.swing.JPanel;
 
@@ -50,6 +51,7 @@ public class BoardPanel extends JPanel {
 	private Map<Tile, Hexagon> tileToHexagon;
 	private List<SelectableRobberTile> robberTiles;
 	private RobberShape robber;
+	private boolean initialized = false;
 
 	public BoardPanel() {
 		super();
@@ -136,6 +138,11 @@ public class BoardPanel extends JPanel {
 
 		long start = System.nanoTime();
 		drawHexGridAdvanced(g2d, 5, 85);
+		if(!initialized) {
+			Hexagon hex = hexagons.stream().filter(h -> h.getTile().getResourceType() == ResourceType.DESERT).findFirst().get();
+			robber.setPoint(hex.getCenter().x - 15, hex.getCenter().y - 20);
+			initialized = true;
+		}
 		long end = System.nanoTime();
 		System.out.println("Time to draw hex grid: " + (end - start) / (10e9));
 
@@ -283,7 +290,6 @@ public class BoardPanel extends JPanel {
 				g2d.setColor(prevColor);
 			}
 		}
-
 	}
 
 	private void drawBuildableCities(Graphics2D g2) {
@@ -468,9 +474,7 @@ public class BoardPanel extends JPanel {
 
 				tileIndex++;
 			}
-
 		}
-
 	}
 
 	private void drawHex(Graphics g, int posX, int posY, int x, int y, int r, Tile tile, String text) {
@@ -576,7 +580,7 @@ public class BoardPanel extends JPanel {
 		}
 		revalidate();
 	}
-	
+
 	public void setDrawRoads(boolean drawRoads) {
 		this.drawRoads = drawRoads;
 	}
