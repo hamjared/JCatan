@@ -8,11 +8,13 @@ import java.util.Set;
 public class LongestRoadCalculator {
 
 	private List<Road> roads;
+	private Player player;
 
 
-	public LongestRoadCalculator(List<Road> roads) {
+	public LongestRoadCalculator(List<Road> roads, Player player) {
 
 		this.roads = roads;
+		this.player = player;
 	}
 
 	public int calcLongestRoad() {
@@ -20,7 +22,7 @@ public class LongestRoadCalculator {
 		int curLength = 0;
 		for (Road road : roads) {
 
-			curLength = followRoad(road);
+			curLength = followRoad(road); 
 			if (curLength > longestLength) {
 				longestLength = curLength;
 
@@ -46,6 +48,7 @@ public class LongestRoadCalculator {
 
 		List<Road> roads = new ArrayList<>(node.getRoads());
 		roads.removeIf(r -> traveledRoads.contains(r));
+		roads.removeIf(r-> r.getPlayer() != player);
 		if (roads.isEmpty()) {
 			return length;
 		} else if (roads.size() == 1) {

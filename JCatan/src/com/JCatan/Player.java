@@ -15,6 +15,7 @@ public abstract class Player {
 	List<DevelopmentCard> devCards;
 	List<Road> roads;
 	List<Building> buildings;
+	List<Building> playedBuildings;
 	List<Road> playedRoads;
 	int victoryPoints;
 	int diceRoll;
@@ -45,6 +46,7 @@ public abstract class Player {
 		devCards = new ArrayList<DevelopmentCard>();
 		victoryPoints = 0;
 		buildings = new ArrayList<Building>();
+		playedBuildings = new ArrayList<>();
 		playedRoads = new ArrayList<Road>();
 		this.roads = new ArrayList<>();
 		this.name = name;
@@ -139,7 +141,7 @@ public abstract class Player {
 	public int calcVictoryPoints()
     {
         victoryPoints = 0;
-        victoryPoints += buildings.stream()
+        victoryPoints += playedBuildings.stream()
                 .filter(b -> b.hasBeenPlayed())
                 .reduce(0, (subtotal, b) -> subtotal + b.getVictoryPoints(),
                         Integer::sum);
@@ -271,7 +273,7 @@ public abstract class Player {
 
 	}
 
-	public List<DevelopmentCard> getDevCards() {
+	public List<DevelopmentCard> getDevCards() { 
 		return devCards;
 	}
 
@@ -318,7 +320,7 @@ public abstract class Player {
 	}
 
 	public int calcLongestRoad() {
-    	return new LongestRoadCalculator(playedRoads).calcLongestRoad();
+    	return new LongestRoadCalculator(playedRoads, this).calcLongestRoad();
     }
     
 
