@@ -565,17 +565,15 @@ public class BoardPanel extends JPanel {
 		if (GameGUI.controller.getCurPlayer() == null) {
 			return;
 		}
-
-		if (!robberTiles.isEmpty() && GameGUI.controller.getBoard().isRobberMoving()) {
-			robberTiles.forEach(t -> {
-				t.drawRobberPosition(g);
-			});
-		} else {
+		
+		robberTiles.clear();
+		
+		if (GameGUI.controller.getBoard().isRobberMoving()) {
 			for (Hexagon hex : hexagons) {
 				Point center = hex.getCenter();
-				SelectableRobberTile tile = new SelectableRobberTile(center.getX() - (diameter / 2),
-						center.getY() - (diameter / 2), diameter);
+				SelectableRobberTile tile = new SelectableRobberTile(center.getX() - (diameter / 2), center.getY() - (diameter / 2), diameter);
 				robberTiles.add(tile);
+				tile.drawRobberPosition(g);
 			}
 		}
 		revalidate();
