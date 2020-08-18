@@ -51,7 +51,7 @@ public class DomesticTrade extends Trade {
     private boolean checkResources(Map<ResourceType, Integer> tradingCards, Map<ResourceType, Integer> actualResource){
     	for(Map.Entry<ResourceType, Integer> e : actualResource.entrySet()) {
     		Integer val = tradingCards.getOrDefault(e.getKey(), 0);
-    		if(val > e.getValue() || val <= 0) {
+    		if(val > e.getValue()) {
     			return false;
     		}
     	}

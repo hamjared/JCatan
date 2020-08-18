@@ -319,7 +319,7 @@ public class GameGUI extends JFrame {
 					repaint();
 					break;
 				case ROBBERMOVE:
-					controller.setGamePhase(GamePhase.GAMETRADE);
+					controller.setGamePhase(GamePhase.GAMEMAIN);
 					controller.robberMovePhase();
 					repaint();
 					break;
