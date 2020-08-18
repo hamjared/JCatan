@@ -15,6 +15,7 @@ public class GameController {
 	GamePhase gamePhase;
 	Consumer action;
 	Consumer<String> notify;
+	Robber robber;
 
 	public List<Player> getPlayers(){
 		return players;
@@ -36,7 +37,7 @@ public class GameController {
 		playerTurnIndex = 0;
 		bank = new Bank();
 		this.chat = new Chat();
-
+		robber = new Robber();
 	}
 	
 	public void setNotifyPlayer(Consumer<String> c) {
@@ -115,8 +116,13 @@ public class GameController {
 		action.accept(this);
 	}
 	
+	public Robber getRobber() {
+		return robber;
+	}
+	
 	public void robberMovePhase() {
 		curPlayer = players.get(playerTurnIndex);
+		robber.rob(curPlayer);
 	}
 	
 	public void setupPhase() {

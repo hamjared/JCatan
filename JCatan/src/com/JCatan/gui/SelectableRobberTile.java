@@ -5,12 +5,16 @@ import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
+import com.JCatan.Tile;
+
 public class SelectableRobberTile {
 	Shape circle;
 	Point p;
-	public SelectableRobberTile(double x, double y, double size) {
+	Tile tile;
+	public SelectableRobberTile(double x, double y, double size, Tile tile) {
 		this.circle = new Ellipse2D.Double(x,y,size,size);
 		p = new Point((int)x,(int)y);
+		this.tile = tile;
 	}
 	
 	public void drawRobberPosition(Graphics2D g2) {
@@ -23,5 +27,6 @@ public class SelectableRobberTile {
 	
 	public void onClick(RobberShape robber) {
 		robber.setPoint(p);
+		GameGUI.controller.getRobber().move(tile);
 	}
 }

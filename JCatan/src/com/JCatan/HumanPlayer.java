@@ -281,7 +281,7 @@ public class HumanPlayer extends Player {
 		}
 		
 		for(ResourceCard card : offering) {
-			resources.removeIf(c -> c.resourceType.equals(card.resourceType));
+			resources.remove(card);
 		}
 		
 		for(ResourceCard card : requesting) {
