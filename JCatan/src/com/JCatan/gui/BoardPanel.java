@@ -571,7 +571,7 @@ public class BoardPanel extends JPanel {
 		if (GameGUI.controller.getBoard().isRobberMoving()) {
 			for (Hexagon hex : hexagons) {
 				Point center = hex.getCenter();
-				SelectableRobberTile tile = new SelectableRobberTile(center.getX() - (diameter / 2), center.getY() - (diameter / 2), diameter);
+				SelectableRobberTile tile = new SelectableRobberTile(center.getX() - (diameter / 2), center.getY() - (diameter / 2), diameter, hex.getTile());
 				robberTiles.add(tile);
 				tile.drawRobberPosition(g);
 			}
