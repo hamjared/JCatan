@@ -141,7 +141,7 @@ public abstract class Player {
 	public int calcVictoryPoints()
     {
         victoryPoints = 0;
-        victoryPoints += buildings.stream()
+        victoryPoints += playedBuildings.stream()
                 .filter(b -> b.hasBeenPlayed())
                 .reduce(0, (subtotal, b) -> subtotal + b.getVictoryPoints(),
                         Integer::sum);
@@ -223,11 +223,11 @@ public abstract class Player {
 	 * @param card
 	 * @throws InvalidDevCardUseException
 	 */
-	public void playDevelopmentCard(DevelopmentCard card) throws InvalidDevCardUseException{
+	public void playDevelopmentCard(DevelopmentCard card, DevCardAction devCardAction) throws InvalidDevCardUseException{
 		if(! card.isCanBePlayed()) {
 			throw new InvalidDevCardUseException();
 		}
-		card.performAction();
+		card.performAction(devCardAction);
 		card.setHasBeenPlayed(true);
 	}
 
@@ -247,7 +247,7 @@ public abstract class Player {
 	public abstract int rollDice();
 
 	/**
-	 * 
+	 *  
 	 */
 	public abstract void setup(Node node1, Node node2, GameController controller);
 
@@ -273,7 +273,7 @@ public abstract class Player {
 
 	}
 
-	public List<DevelopmentCard> getDevCards() {
+	public List<DevelopmentCard> getDevCards() { 
 		return devCards;
 	}
 
@@ -320,7 +320,7 @@ public abstract class Player {
 	}
 
 	public int calcLongestRoad() {
-    	return new LongestRoadCalculator(playedRoads).calcLongestRoad();
+    	return new LongestRoadCalculator(playedRoads, this).calcLongestRoad();
     }
     
 

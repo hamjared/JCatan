@@ -89,7 +89,7 @@ public class HumanPlayer extends Player {
 				Map<ResourceType, Integer> mp = road.getCost();
 				List<ResourceType> list = new ArrayList<>();
 				Iterator it = mp.entrySet().iterator(); 
-				while (it.hasNext()) {
+				while (it.hasNext()) { 
 					Map.Entry pair = (Map.Entry) it.next();
 					ResourceType typeCheck = (ResourceType) pair.getKey();
 					switch (typeCheck) {
@@ -244,7 +244,8 @@ public class HumanPlayer extends Player {
 				}
 				if (resourceCheck == 4) {
 					settlement.setHasBeenPlayed(true);
-//					this.getBuildings().remove(settlement);
+					this.playedBuildings.add(settlement);
+					this.getBuildings().remove(settlement);
 					node.setBuilding(settlement);
 					settlement.setNode(node);
 					settlement.setId(0);
@@ -391,8 +392,9 @@ public class HumanPlayer extends Player {
 				
 				if (resourceCheck == 5) {
 					city.setHasBeenPlayed(true);
+					this.playedBuildings.add(city);
 					this.getBuildings().remove(city);
-					Settlement settlement = new Settlement(this, node);
+					Settlement settlement = (Settlement) node.getBuilding();
 					this.giveBuilding(settlement);
 					node.setBuilding(city);
 					city.setNode(node);
@@ -412,14 +414,6 @@ public class HumanPlayer extends Player {
 		// TODO Player: endTurn
 	}
 
-	@Override
-	public void playDevelopmentCard(DevelopmentCard card) throws InvalidDevCardUseException {
-		if (!devCards.contains(card)) {
-			throw new InvalidDevCardUseException();
-		}
-		card.performAction();
-		this.devCards.remove(card);
-	}
 
 	@Override
 	public int rollDice() {
