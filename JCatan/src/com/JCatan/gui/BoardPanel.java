@@ -109,7 +109,7 @@ public class BoardPanel extends JPanel {
 						if (circle.getCircle().contains(x, y)) {
 							circle.onClick(robber);
 							GameGUI.controller.setGamePhase(GamePhase.GAMEMAIN);
-							getParent().repaint();
+							getParent().getParent().repaint();
 							break;
 						}
 					}
