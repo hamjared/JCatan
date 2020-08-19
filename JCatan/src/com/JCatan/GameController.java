@@ -177,6 +177,9 @@ public class GameController {
 		for(DevelopmentCard card: curPlayer.getDevCards()) {
 			card.setCanBePlayed(true);
 		}
+		
+		setLargestArmy();
+		setLongestRoad();
 		if (curPlayer.calcVictoryPoints() > POINTS_TO_WIN) {
 			gameWinnerIndex = playerTurnIndex;
 			gameEnded = true;
