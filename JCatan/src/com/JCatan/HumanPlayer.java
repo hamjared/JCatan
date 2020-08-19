@@ -50,7 +50,17 @@ public class HumanPlayer extends Player {
 			this.getRoads().remove(0);
 			node1.addRoad(road);
 			node2.addRoad(road);
-		} else {
+		} 
+		else if (this.getRoadBuilderRoads() > 0){
+			Road road = new Road(node1, node2, this);
+			road.setHasBeenPlayed(true);
+			this.playedRoads.add(road);
+			this.getRoads().remove(0);
+			node1.addRoad(road);
+			node2.addRoad(road);
+			roadBuilderRoads--;
+		}
+		else {
 			// Game Phase Build
 			if (this.getRoads().isEmpty() == false) {
 
