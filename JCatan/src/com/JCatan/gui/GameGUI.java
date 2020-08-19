@@ -9,7 +9,9 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import com.JCatan.BoardFactory;
 import com.JCatan.Consumer;
@@ -113,13 +115,18 @@ public class GameGUI extends JFrame {
 		master.setLocation(0, 0);
 		master.setSize(1441, 867);
 		contentPane.add(master);
+		
+		Border border = new LineBorder(Color.BLACK, 2, true);
 
 		JPanel ChatPanel = new ChatPanel(controller.getChat());
 		contentPane.add(ChatPanel);
+		ChatPanel.setBackground(Color.decode("#D3D3D3"));
+		ChatPanel.setBorder(border);
 
 		BoardPanel = new BoardPanel();
 		BoardPanel.setBounds(0, 0, 1441, 867);
 		master.add(BoardPanel, new Integer(0), 0);
+		
 
 		JPanel BankPanel = new BankPanel() {
 			@Override
@@ -135,6 +142,8 @@ public class GameGUI extends JFrame {
 			}
 		};
 		contentPane.add(BankPanel);
+		BankPanel.setBackground(Color.decode("#87ceeb"));
+		BankPanel.setBorder(border);
 		BankPanel.setLayout(null);
 
 		brickLabel = new JLabel("");
@@ -162,25 +171,32 @@ public class GameGUI extends JFrame {
 		oreLabel.setBounds(385, 92, 46, 14);
 		oreLabel.setHorizontalAlignment(oreLabel.CENTER);
 		BankPanel.add(oreLabel);
-
+		
+		
+		
 		controller.getPlayer(0).setColor(Color.BLUE);
 		Player1Panel = new PlayerPanel(1441, 490, 463, 126, controller.getPlayer(0));
-		Player1Panel.setBackground(Color.ORANGE);
+		Player1Panel.setBackground(Color.decode("#87ceeb"));
+		Player1Panel.setBorder(border);
 		contentPane.add(Player1Panel);
 
 		controller.getPlayer(1).setColor(Color.RED);
 		Player2Panel = new PlayerPanel(1441, 615, 463, 126, controller.getPlayer(1));
-		Player2Panel.setBackground(Color.PINK);
+		Player2Panel.setBackground(Color.decode("#87ceeb"));
+		Player2Panel.setBorder(border);
 		contentPane.add(Player2Panel);
 
-		controller.getPlayer(2).setColor(Color.decode("#FFA500"));
+		//controller.getPlayer(2).setColor(Color.decode("#FFA500"));
+		controller.getPlayer(2).setColor(Color.ORANGE);
 		Player3Panel = new PlayerPanel(1441, 741, 463, 126, controller.getPlayer(2));
-		Player3Panel.setBackground(Color.ORANGE);
+		Player3Panel.setBackground(Color.decode("#87ceeb"));
+		Player3Panel.setBorder(border);
 		contentPane.add(Player3Panel);
 
 		controller.getPlayer(3).setColor(Color.WHITE);
 		Player4Panel = new PlayerPanel(1441, 867, 463, 134, controller.getPlayer(3));
-		Player4Panel.setBackground(Color.PINK);
+		Player4Panel.setBackground(Color.decode("#87ceeb"));
+		Player4Panel.setBorder(border);
 		contentPane.add(Player4Panel);
 
 		JPanel devCardPanel = new DevCardPanel(1125, 675, 300, 100, this.BoardPanel);
@@ -205,6 +221,7 @@ public class GameGUI extends JFrame {
 		contentPane.add(EndTurnPanel);
 		EndTurnPanel.setLayout(new GridLayout(1, 0, 0, 0));
 		endButton = new JButton("Start Setup");
+		endButton.setBorder(border);
 
 		Consumer<JButton> turnOnEndButton = b -> endButton.setEnabled(true);
 		tradePanel.setDelegate(turnOnEndButton);
@@ -222,6 +239,7 @@ public class GameGUI extends JFrame {
 			endButton.setEnabled(false);
 		});
 		contentPane.add(tradeButton);
+		tradeButton.setBorder(border);
 
 		endButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -229,6 +247,7 @@ public class GameGUI extends JFrame {
 				switch (controller.getGamePhase()) {
 				case SETUP:
 					if (endButton.getText().equals("Build Settlement") || endButton.getText().equals("Start Setup")) {
+						setTurnColor();
 						BoardPanel.buildSettlement();
 						Player1Panel.repaint();
 						Player2Panel.repaint();
@@ -265,7 +284,7 @@ public class GameGUI extends JFrame {
 						}
 					}
 					break;
-				case GAMEROLL:
+				case GAMEROLL:				
 					controller.gamePhaseRoll();
 					die1 = Dice.getDie1();
 					die2 = Dice.getDie2();
@@ -326,9 +345,10 @@ public class GameGUI extends JFrame {
 					endButton.setText("Roll Dice");
 					controller.setGamePhase(GamePhase.GAMEROLL);
 					controller.gamePhaseEnd();
+					setTurnColor();
 					repaint();
 					break;
-				case ROBBERMOVE:
+				case ROBBERMOVEEND:
 					endButton.setText("End Turn");
 					controller.setGamePhase(GamePhase.GAMEMAIN);
 					controller.robberMovePhase();
@@ -344,6 +364,8 @@ public class GameGUI extends JFrame {
 
 		BuildingPanel BuildingPanel = new BuildingPanel(controller);
 		contentPane.add(BuildingPanel);
+		BuildingPanel.setBackground(Color.decode("#CC9966"));
+		BuildingPanel.setBorder(border);
 		BuildingPanel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -416,6 +438,8 @@ public class GameGUI extends JFrame {
 			}
 		};
 		ResourcePanel.setBounds(0, 867, 750, 134);
+		ResourcePanel.setBackground(Color.decode("#CC9966"));
+		ResourcePanel.setBorder(border);
 		contentPane.add(ResourcePanel);
 		repaint();
 
@@ -475,5 +499,29 @@ public class GameGUI extends JFrame {
 		wheatLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.WHEAT));
 		sheepLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.SHEEP));
 		oreLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.ORE));
+	}
+	
+	private void setTurnColor() {
+		if (controller.getCurPlayer().getColor() == Color.BLUE) {
+			Player1Panel.setBorder(new LineBorder(Color.BLUE, 3, true));
+			Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+		} else if (controller.getCurPlayer().getColor() == Color.RED) {
+			Player2Panel.setBorder(new LineBorder(Color.RED, 3, true));
+			Player1Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+		} else if (controller.getCurPlayer().getColor() == Color.ORANGE) {
+			Player3Panel.setBorder(new LineBorder(Color.decode("#FFA500"), 3, true));
+			Player1Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+		} else {
+			Player4Panel.setBorder(new LineBorder(Color.WHITE, 3, true));
+			Player1Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+		}
 	}
 }

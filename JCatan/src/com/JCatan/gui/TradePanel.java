@@ -388,11 +388,13 @@ public class TradePanel extends JPanel {
 
 					List<ResourceCard> offering = setTradeCards(offeringResourceTypeAndAmount);
 					List<ResourceCard> requesting = setTradeCards(requestingResourceTypeAndAmount);
+					
 
 					// Player Trade
 					if (name != "Maritime" && name != "Special Trade") {
 						DomesticTrade trade = new DomesticTrade(currentPlayer, selectedPlayer, offering, requesting);
 						GameGUI.controller.initiateTrade(trade);
+						GameGUI.ResourcePanel.repaint();
 					}
 
 					// Maritime Trade

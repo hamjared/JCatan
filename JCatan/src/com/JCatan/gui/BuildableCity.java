@@ -38,6 +38,10 @@ public class BuildableCity {
 		try {
 			GameGUI.controller.getCurPlayer().buildCity(node, GameGUI.controller);
 			GameGUI.ResourcePanel.repaint();
+			GameGUI.Player1Panel.repaint();
+			GameGUI.Player2Panel.repaint();
+			GameGUI.Player3Panel.repaint();
+			GameGUI.Player4Panel.repaint();
 		} catch (InsufficientResourceCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

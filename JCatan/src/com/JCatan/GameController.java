@@ -3,6 +3,8 @@ package com.JCatan;
 import java.util.Comparator;
 import java.util.List;
 
+import com.JCatan.gui.GameGUI;
+
 public class GameController {
 	private static final int POINTS_TO_WIN = 10;
 
@@ -16,6 +18,7 @@ public class GameController {
 	Consumer action;
 	Consumer<String> notify;
 	Robber robber;
+	boolean setUpChatCheck = false;
 
 	public List<Player> getPlayers(){
 		return players;
@@ -127,14 +130,18 @@ public class GameController {
 	
 	public void gamePhaseRoll() {
 			curPlayer = players.get(playerTurnIndex);
-			chat.addToChat(curPlayer.getName() + "'s turn");
+			if (setUpChatCheck == false) {
+				chat.addToChat(curPlayer.getName() + "'s turn");
+				setUpChatCheck = true;
+			}
+			
 			
 
 			int diceRoll = curPlayer.rollDice();
 
 			if (diceRoll == 7) {
 				for(Player p: players) {
-					p.sevenRolled(p);
+					p.sevenRolled(p, this.getBank());
 				}
 				boolean cardStolen = false;
 //				while (cardStolen == false) {
@@ -187,6 +194,8 @@ public class GameController {
 		if (playerTurnIndex >= players.size()) {
 			playerTurnIndex = 0;
 		}
+		curPlayer = players.get(playerTurnIndex);
+		chat.addToChat(curPlayer.getName() + "'s turn");
 	}
   
 	private void setLargestArmy() {
