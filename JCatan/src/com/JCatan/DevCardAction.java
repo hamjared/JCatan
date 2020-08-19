@@ -4,8 +4,21 @@ public class DevCardAction {
 	
 	private Player curPlayer;
 	private Player stealFromPlayer;
-	private ResourceType stealResourceType;
+	private ResourceType stealResourceType1;
+	private ResourceType stealResourceType2;
 	private Bank bank;
+	public ResourceType getStealResourceType1() {
+		return stealResourceType1;
+	}
+	public void setStealResourceType1(ResourceType stealResourceType1) {
+		this.stealResourceType1 = stealResourceType1;
+	}
+	public ResourceType getStealResourceType2() {
+		return stealResourceType2;
+	}
+	public void setStealResourceType2(ResourceType stealResourceType2) {
+		this.stealResourceType2 = stealResourceType2;
+	}
 	public Bank getBank() {
 		return bank;
 	}
@@ -25,10 +38,10 @@ public class DevCardAction {
 		this.stealFromPlayer = stealFromPlayer;
 	}
 	public ResourceType getStealResourceType() {
-		return stealResourceType;
+		return stealResourceType1;
 	}
 	public void setStealResourceType(ResourceType stealResourceType) {
-		this.stealResourceType = stealResourceType;
+		this.stealResourceType1 = stealResourceType;
 	}
 	
 	

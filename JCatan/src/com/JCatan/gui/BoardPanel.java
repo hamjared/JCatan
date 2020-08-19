@@ -82,6 +82,10 @@ public class BoardPanel extends JPanel {
 					if (circle.getCircle().contains(x, y)) {
 						circle.onclick();
 						drawRoads = false;
+						if(GameGUI.controller.getCurPlayer().getRoadBuilderRoads() > 0) {
+							buildRoad();
+						}
+						
 						GameGUI.endButton.setEnabled(true);
 						repaint();
 						break;

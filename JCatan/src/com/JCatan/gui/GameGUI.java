@@ -183,7 +183,7 @@ public class GameGUI extends JFrame {
 		Player4Panel.setBackground(Color.PINK);
 		contentPane.add(Player4Panel);
 
-		JPanel devCardPanel = new DevCardPanel(1125, 675, 300, 100);
+		JPanel devCardPanel = new DevCardPanel(1125, 675, 300, 100, this.BoardPanel);
 		devCardPanel.setVisible(false);
 		devCardPanel.setEnabled(false);
 		master.add(devCardPanel, new Integer(1), 0);
