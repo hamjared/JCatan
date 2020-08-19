@@ -19,7 +19,7 @@ public class MonopolyDevelopmentCardTest extends TestCase {
 		
 		DevCardAction dcAction = new DevCardActionBuilder().curPlayer(curPlayer)
 				.stealPlayer(stealPlayer)
-				.stealResourceType(ResourceType.WHEAT)
+				.stealResourceType1(ResourceType.WHEAT)
 				.build();
 		
 		mdc.setCanBePlayed(true);
