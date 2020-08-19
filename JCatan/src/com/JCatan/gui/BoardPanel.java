@@ -86,7 +86,6 @@ public class BoardPanel extends JPanel {
 						if(GameGUI.controller.getCurPlayer().getRoadBuilderRoads() > 0) {
 							buildRoad();
 						}
-						
 						GameGUI.endButton.setEnabled(true);
 						repaint();
 						break;
@@ -108,7 +107,7 @@ public class BoardPanel extends JPanel {
 					for (SelectableRobberTile circle : robberTiles) {
 						if (circle.getCircle().contains(x, y)) {
 							circle.onClick(robber);
-							GameGUI.controller.setGamePhase(GamePhase.GAMEMAIN);
+							GameGUI.controller.setGamePhase(GamePhase.ROBBERMOVEEND);
 							getParent().repaint();
 							break;
 						}
