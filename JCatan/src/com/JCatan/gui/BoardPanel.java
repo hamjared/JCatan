@@ -108,8 +108,8 @@ public class BoardPanel extends JPanel {
 					for (SelectableRobberTile circle : robberTiles) {
 						if (circle.getCircle().contains(x, y)) {
 							circle.onClick(robber);
-							GameGUI.controller.setGamePhase(GamePhase.ROBBERMOVEEND);
-							repaint();
+							GameGUI.controller.setGamePhase(GamePhase.GAMEMAIN);
+							getParent().repaint();
 							break;
 						}
 					}

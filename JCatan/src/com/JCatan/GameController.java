@@ -184,6 +184,9 @@ public class GameController {
 		for(DevelopmentCard card: curPlayer.getDevCards()) {
 			card.setCanBePlayed(true);
 		}
+		
+		setLargestArmy();
+		setLongestRoad();
 		if (curPlayer.calcVictoryPoints() > POINTS_TO_WIN) {
 			gameWinnerIndex = playerTurnIndex;
 			gameEnded = true;
@@ -203,7 +206,7 @@ public class GameController {
 		for(Player player: players) {
 			player.setHasLargestArmy(false);
 			int playersArmy = player.getNumberOfKnightsPlayed();
-			if (playersArmy > largestArmy && playersArmy >= 5) {
+			if (playersArmy > largestArmy && playersArmy >= 3) {
 				largestArmy = playersArmy;
 				player.setHasLargestArmy(true);
 			}

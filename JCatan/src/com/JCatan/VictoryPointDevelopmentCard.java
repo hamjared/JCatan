@@ -3,7 +3,10 @@ package com.JCatan;
 public class VictoryPointDevelopmentCard extends DevelopmentCard {
 	String name;
 
-
+	public VictoryPointDevelopmentCard() {
+		super();
+		this.setCanBePlayed(true);
+	}
     
     @Override
     public int getVictoryPoints() {

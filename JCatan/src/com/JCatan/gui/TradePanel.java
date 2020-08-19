@@ -159,8 +159,9 @@ public class TradePanel extends JPanel {
 		} finally {
 		}
 	}
-
+	
 	private void clearSelectedPlayerResources() {
+		requestingResourceTypeAndAmount.clear();
 		Component[] components = playerOffer.getComponents();
 		for (Component comp : components) {
 			if (comp.getName() == selectedPlayerlabel)
@@ -288,7 +289,7 @@ public class TradePanel extends JPanel {
 			} else {
 				requestingResourceTypeAndAmount.put(cardName, Integer.parseInt(total));
 			}
-			String labelName = (player != null && player == currentPlayer) ? "" : selectedPlayerlabel;
+			String labelName = (player != null && player == currentPlayer) ? currentPlayer.getName() : selectedPlayerlabel;
 			createTradeIcons(cardName, labelName, total, i, j);
 			j++;
 		}
