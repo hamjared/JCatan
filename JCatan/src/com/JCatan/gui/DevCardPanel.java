@@ -12,6 +12,7 @@ import com.JCatan.MonopolyDevelopmentCard;
 import com.JCatan.Player;
 import com.JCatan.ResourceType;
 import com.JCatan.RoadBuildingDevelopmentCard;
+import com.JCatan.VictoryPointDevelopmentCard;
 import com.JCatan.YearOfPlentyDevelopmentCard;
 
 import javax.swing.JButton;
@@ -73,7 +74,7 @@ public class DevCardPanel extends JPanel{
 					}
 					GameGUI.controller.getCurPlayer().playDevelopmentCard(card, devCardAction);
 					GameGUI.controller.getChat().addToChat(GameGUI.controller.getCurPlayer().getName() + " played " + card);
-					getParent().repaint();
+					getParent().getParent().repaint();
 					updateComboBox();
 				} catch (InvalidDevCardUseException e1) {
 					// TODO Auto-generated catch block 
@@ -183,6 +184,10 @@ public class DevCardPanel extends JPanel{
 			return new DevCardActionBuilder().curPlayer(GameGUI.controller.getCurPlayer())
 					.bank(bank)
 					.build();
+		}
+		
+		if(card instanceof VictoryPointDevelopmentCard) {
+			return new DevCardActionBuilder().build();
 		}
 		
 		

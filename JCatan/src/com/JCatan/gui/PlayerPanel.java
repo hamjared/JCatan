@@ -35,6 +35,8 @@ public class PlayerPanel extends JPanel
 	private JLabel victoryPointsLabel;
 	private JLabel longestRoadLabel;
 	private JLabel R;
+	private JLabel lblNewLabel_1;
+	private JLabel numberOfKnights;
 	
     public PlayerPanel(int x, int y, int width, int height, Player player)
     {
@@ -70,7 +72,7 @@ public class PlayerPanel extends JPanel
         
         JLabel lblNewLabel = new JLabel("VP");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lblNewLabel.setBounds(261, 0, 57, 61);
+        lblNewLabel.setBounds(258, 0, 57, 61);
         add(lblNewLabel);
         
         victoryPointsLabel = new JLabel("16");
@@ -79,11 +81,11 @@ public class PlayerPanel extends JPanel
         
         JLabel LR = new JLabel("LR");
         LR.setFont(new Font("Tahoma", Font.BOLD, 20));
-        LR.setBounds(348, 11, 46, 34);
+        LR.setBounds(335, 13, 46, 34);
         add(LR);
         
         longestRoadLabel = new JLabel("16");
-        longestRoadLabel.setBounds(384, 27, 46, 14);
+        longestRoadLabel.setBounds(372, 27, 20, 14);
         add(longestRoadLabel);
         
         R = new JLabel("R");
@@ -93,6 +95,15 @@ public class PlayerPanel extends JPanel
         R.setHorizontalAlignment(SwingConstants.CENTER);
         R.setBounds(65, 59, 46, 14);
         add(R);
+        
+        lblNewLabel_1 = new JLabel("K");
+        lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblNewLabel_1.setBounds(391, 23, 46, 14);
+        add(lblNewLabel_1);
+        
+        numberOfKnights = new JLabel("0");
+        numberOfKnights.setBounds(417, 27, 46, 14);
+        add(numberOfKnights);
         
         setLabels();
     }
@@ -140,6 +151,8 @@ public class PlayerPanel extends JPanel
 		this.victoryPointsLabel.setText("" + player.calcVictoryPoints());
 		int lr = player.calcLongestRoad();
 		this.longestRoadLabel.setText("" + lr);
+		int knights = player.getNumberOfKnightsPlayed();
+		this.numberOfKnights.setText("" + knights);
 	}
 
 	private void drawShape(Shape shape, int rotateDegrees, int translate_x, int translate_y, int scale, Graphics2D g2, Color color) {
