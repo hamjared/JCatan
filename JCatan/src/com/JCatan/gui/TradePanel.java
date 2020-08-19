@@ -160,10 +160,6 @@ public class TradePanel extends JPanel {
 		}
 	}
 	
-	private void updateMapValues() {
-		//JLabels[] offeringPlayerValues = Arrays.stream(playerOffer.getComponents()).filter(j -> j.getName() == currentPlayer.getName() && j instanceof );
-	}
-
 	private void clearSelectedPlayerResources() {
 		requestingResourceTypeAndAmount.clear();
 		Component[] components = playerOffer.getComponents();
