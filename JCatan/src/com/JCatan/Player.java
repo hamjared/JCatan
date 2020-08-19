@@ -19,6 +19,7 @@ public abstract class Player {
 	List<Road> playedRoads;
 	int victoryPoints;
 	int diceRoll;
+	int roadBuilderRoads;
 	String name;
 	Color color;
 	Random randomGenerator;
@@ -42,6 +43,7 @@ public abstract class Player {
 	}
 
 	Player(String name) {
+		roadBuilderRoads = 0;
 		resources = new ArrayList<ResourceCard>();
 		devCards = new ArrayList<DevelopmentCard>();
 		victoryPoints = 0;
@@ -334,6 +336,14 @@ public abstract class Player {
 
 	public List<Building> getPlayedBuildings() {
 		return playedBuildings;
+	}
+
+	public int getRoadBuilderRoads() {
+		return roadBuilderRoads;
+	}
+	
+	public void setRoadBuilderRoads(int r) {
+		roadBuilderRoads = r;
 	}
 	
 	

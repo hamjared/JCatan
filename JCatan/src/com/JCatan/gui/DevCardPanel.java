@@ -16,20 +16,32 @@ import com.JCatan.YearOfPlentyDevelopmentCard;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class DevCardPanel extends JPanel{
 	
-	private JComboBox comboBox;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8147720823464828336L;
+	private JComboBox resourceComboBox1;
+	private JComboBox playerComboBox;
+	private JComboBox resourceComboBox2;
+	private JLabel resources1Label;
+	private JLabel playerLabel;
+	private BoardPanel boardPanel;
 	
-	public DevCardPanel(int x, int y, int width, int height) {
+	private JComboBox comboBox;
+	private JLabel resource2Label;
+	
+	public DevCardPanel(int x, int y, int width, int height, BoardPanel boardPanel ) {
+		this.boardPanel = boardPanel;
 		
-		setBounds(1125, 675, 300, 100);
+		setBounds(1125, 650, 300, 125);
 		
 		JButton hideButton = new JButton("Hide");
 		hideButton.addActionListener(new ActionListener() {
@@ -38,10 +50,15 @@ public class DevCardPanel extends JPanel{
 				setEnabled(false);
 			}
 		}); 
-		hideButton.setBounds(221, 66, 69, 23);
+		hideButton.setBounds(221, 91, 69, 23);
 		add(hideButton);
 		
 		comboBox = new JComboBox();
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showDevCardOptions();
+			}
+		});
 		comboBox.setBounds(10, 11, 181, 22);
 		add(comboBox);
 		
@@ -72,23 +89,63 @@ public class DevCardPanel extends JPanel{
 		playerComboBox.setBounds(63, 44, 128, 22);
 		add(playerComboBox);
 		
-		JLabel lblNewLabel = new JLabel("Player");
-		lblNewLabel.setBounds(10, 48, 46, 14);
-		add(lblNewLabel);
+		playerLabel = new JLabel("Player");
+		playerLabel.setBounds(10, 48, 46, 14);
+		add(playerLabel);
 		
-		resourceComboBox = new JComboBox();
-		resourceComboBox.setBounds(63, 78, 128, 22);
-		add(resourceComboBox);
+		resource2Label = new JLabel("Resource");
+		resource2Label.setBounds(10, 48, 46, 14);
+		add(resource2Label);
 		
-		JLabel lblNewLabel_1 = new JLabel("Resource");
-		lblNewLabel_1.setBounds(7, 82, 46, 14);
-		add(lblNewLabel_1);
+		resourceComboBox1 = new JComboBox();
+		resourceComboBox1.setBounds(63, 78, 128, 22);
+		add(resourceComboBox1);
+		
+		resourceComboBox2 = new JComboBox();
+		resourceComboBox2.setBounds(63, 44, 128, 22);
+		add(resourceComboBox2);
+		
+		resources1Label = new JLabel("Resource");
+		resources1Label.setBounds(7, 82, 46, 14);
+		add(resources1Label);
+		
+		showDevCardOptions();
+		
+		
 	}
 	
 
 	
+	protected void showDevCardOptions() {
+		DevelopmentCard card = (DevelopmentCard) comboBox.getSelectedItem();
+		
+		if(card instanceof KnightDevelopmentCard) {
+			renderComboBoxes(true, false, false);
+			
+		}
+		else if(card instanceof YearOfPlentyDevelopmentCard) {
+			renderComboBoxes(false, true, true);
+		}
+		
+		else if(card instanceof MonopolyDevelopmentCard) {
+			renderComboBoxes(true, true, false);
+		}
+		else if(card instanceof RoadBuildingDevelopmentCard) {
+			renderComboBoxes(false, false, false);
+		}
+		else {
+			renderComboBoxes(false, false, false);
+		}
+		
+		
+		
+	}
+
+
+
 	protected DevCardAction makeDevCardAction(DevelopmentCard card) {
 		if(card instanceof KnightDevelopmentCard) {
+			renderComboBoxes(true, false, false);
 			Player stealPlayer = (Player) playerComboBox.getSelectedItem();
 			if(stealPlayer == null) {
 				return null;
@@ -99,26 +156,30 @@ public class DevCardPanel extends JPanel{
 		}
 		if(card instanceof YearOfPlentyDevelopmentCard) {
 			Bank bank = GameGUI.controller.getBank();
-			ResourceType rt = (ResourceType) resourceComboBox.getSelectedItem();
+			ResourceType rt = (ResourceType) resourceComboBox1.getSelectedItem();
+			ResourceType rt2 = (ResourceType) resourceComboBox2.getSelectedItem();
 			return new DevCardActionBuilder().curPlayer(GameGUI.controller.getCurPlayer())
-					.stealResourceType(rt)
+					.stealResourceType1(rt)
+					.stealResourceType2(rt2)
 					.bank(bank)
 					.build();
 		}
 		
 		if(card instanceof MonopolyDevelopmentCard) {
 			Player stealPlayer = (Player) playerComboBox.getSelectedItem();
-			ResourceType rt = (ResourceType) resourceComboBox.getSelectedItem();
+			ResourceType rt = (ResourceType) resourceComboBox1.getSelectedItem();
 			if(stealPlayer == null || rt == null) {
 				return null;
 			}
 			return new DevCardActionBuilder().curPlayer(GameGUI.controller.getCurPlayer())
-					.stealResourceType(rt)
+					.stealResourceType1(rt)
 					.stealPlayer(stealPlayer)
 					.build();
 		}
 		if(card instanceof RoadBuildingDevelopmentCard) {
 			Bank bank = GameGUI.controller.getBank();
+			this.boardPanel.buildRoad();
+			
 			return new DevCardActionBuilder().curPlayer(GameGUI.controller.getCurPlayer())
 					.bank(bank)
 					.build();
@@ -132,12 +193,45 @@ public class DevCardPanel extends JPanel{
 
 
 
+	private void renderComboBoxes(boolean showPlayers, boolean showResources1, boolean showResources2) {
+		playerComboBox.setEnabled(false);
+		playerComboBox.setVisible(false);
+		playerLabel.setVisible(false);
+		resourceComboBox1.setEnabled(false);
+		resourceComboBox1.setVisible(false);
+		resources1Label.setVisible(false);
+		resourceComboBox2.setEnabled(false);
+		resourceComboBox2.setVisible(false);
+		resource2Label.setVisible(false);
+		if(showPlayers) {
+			playerComboBox.setEnabled(true);
+			playerComboBox.setVisible(true);
+			playerLabel.setVisible(true);
+		}
+		if(showResources1) {
+			resourceComboBox1.setEnabled(true);
+			resourceComboBox1.setVisible(true);
+			resourceComboBox1.setVisible(true);
+			
+		}
+		
+		if(showResources2) {
+			resourceComboBox2.setEnabled(true);
+			resourceComboBox2.setVisible(true);
+			resource2Label.setVisible(true);
+		}
+		
+	}
+
+
+
 	public void showPanel() {
 		setEnabled(true);
 		setVisible(true);
 		updateComboBox();
 		updateResourceComboBox();
 		updatePlayerComboBox();
+		showDevCardOptions();
 	}
 	
 	public void hidePanel() {
@@ -169,21 +263,23 @@ public class DevCardPanel extends JPanel{
 	
 	@SuppressWarnings("unchecked")
 	private void updateResourceComboBox() {
-		resourceComboBox.removeAllItems();
-		resourceComboBox.addItem(ResourceType.BRICK);
-		resourceComboBox.addItem(ResourceType.WHEAT);
-		resourceComboBox.addItem(ResourceType.WOOD);
-		resourceComboBox.addItem(ResourceType.SHEEP);
-		resourceComboBox.addItem(ResourceType.ORE);
+		resourceComboBox1.removeAllItems();
+		resourceComboBox1.addItem(ResourceType.BRICK);
+		resourceComboBox1.addItem(ResourceType.WHEAT);
+		resourceComboBox1.addItem(ResourceType.WOOD);
+		resourceComboBox1.addItem(ResourceType.SHEEP);
+		resourceComboBox1.addItem(ResourceType.ORE);
+		
+		resourceComboBox2.removeAllItems();
+		resourceComboBox2.addItem(ResourceType.BRICK);
+		resourceComboBox2.addItem(ResourceType.WHEAT);
+		resourceComboBox2.addItem(ResourceType.WOOD);
+		resourceComboBox2.addItem(ResourceType.SHEEP);
+		resourceComboBox2.addItem(ResourceType.ORE);
 			
 			
 		
 	}
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8147720823464828336L;
-	private JComboBox resourceComboBox;
-	private JComboBox playerComboBox;
+
 }

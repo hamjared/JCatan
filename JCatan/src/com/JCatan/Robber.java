@@ -18,19 +18,28 @@ public class Robber {
 	public void rob(Player currentPlayer) {
 		if (targetTile != null && currentPlayer != null) {
 			// Get Neighbor tiles...
-			List<Player> players = targetTile.getNodes().stream()
-					.filter(n -> n.getBuilding() != null).map(n -> n.getBuilding().getPlayer())
-					.filter(p -> p != currentPlayer).distinct().collect(Collectors.toList());
+			List<Player> players = targetTile.getNodes().stream().filter(n -> n.getBuilding() != null)
+					.map(n -> n.getBuilding().getPlayer()).distinct().filter(p -> p != currentPlayer)
+					.collect(Collectors.toList());
+
+			// No one to steal...
+			if (players.isEmpty()) {
+				return;
+			}
+
 			/*
-			List<Tile> tiles = targetTile.getNodes().stream().flatMap(n -> n.getTiles().stream()).distinct()
-					.filter(t -> !t.equals(targetTile)).collect(Collectors.toList());
-			
-			List<Player> players = tiles.stream().flatMap(x -> x.getNodes().stream()).distinct()
-					.filter(n -> n.getBuilding() != null).map(n -> n.getBuilding().getPlayer())
-					.filter(p -> p != currentPlayer).distinct().collect(Collectors.toList());
-			*/
-			
-			//For now just Randomally select a player then randomally select resource there.
+			 * List<Tile> tiles = targetTile.getNodes().stream().flatMap(n ->
+			 * n.getTiles().stream()).distinct() .filter(t ->
+			 * !t.equals(targetTile)).collect(Collectors.toList());
+			 * 
+			 * List<Player> players = tiles.stream().flatMap(x ->
+			 * x.getNodes().stream()).distinct() .filter(n -> n.getBuilding() != null).map(n
+			 * -> n.getBuilding().getPlayer()) .filter(p -> p !=
+			 * currentPlayer).distinct().collect(Collectors.toList());
+			 */
+
+			// For now just Randomally select a player then randomally select resource
+			// there.
 			Random random = new Random();
 			Player victim = players.get(random.nextInt(players.size()));
 			ResourceCard card = victim.getResources().get(random.nextInt(victim.getResources().size()));

@@ -45,19 +45,7 @@ public class BuildingPanel extends JPanel {
 		setLayout(null);
 
 		JPanel panel = new JPanel();
-
-		rect = new Rectangle2D.Double(0, 0, 10, 30);
-		settlement = new SettlementShape(0, 0, 30, 30);
-		city = new CityShape(30, 30);
-
-		shapes = new ArrayList<>();
-		shapes.add(rect);
-		shapes.add(settlement);
-		shapes.add(city);
-
-		// opacityCheck(controller);
-
-		addMouseListener(new MouseAdapter() {
+		panel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 
@@ -74,6 +62,19 @@ public class BuildingPanel extends JPanel {
 				panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); 
 			}
 		});
+
+		rect = new Rectangle2D.Double(0, 0, 10, 30);
+		settlement = new SettlementShape(0, 0, 30, 30);
+		city = new CityShape(30, 30);
+
+		shapes = new ArrayList<>();
+		shapes.add(rect);
+		shapes.add(settlement);
+		shapes.add(city);
+
+		// opacityCheck(controller);
+
+		
 
 		panel.setBounds(339, 11, 93, 112);
 		add(panel);

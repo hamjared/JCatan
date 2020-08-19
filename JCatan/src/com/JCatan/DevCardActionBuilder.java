@@ -18,8 +18,13 @@ public class DevCardActionBuilder {
 		return this;
 	}
 	
-	public DevCardActionBuilder stealResourceType(ResourceType type) {
-		this.devCardAction.setStealResourceType(type);
+	public DevCardActionBuilder stealResourceType1(ResourceType type) {
+		this.devCardAction.setStealResourceType1(type);
+		return this;
+	}
+	
+	public DevCardActionBuilder stealResourceType2(ResourceType type) {
+		this.devCardAction.setStealResourceType2(type);
 		return this;
 	}
 	
