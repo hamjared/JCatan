@@ -42,7 +42,7 @@ public class PlayerPanel extends JPanel
     {
         super();
         setBackground(Color.ORANGE); 
-        setBounds(x, y, 463, 126);
+        setBounds(x, y, width, height);
         setLayout(null);
         this.player = player;
         

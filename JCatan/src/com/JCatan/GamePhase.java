@@ -8,5 +8,6 @@ public enum GamePhase {
 	GAMETRADE,
 	GAMEBUILD,
 	ROBBERMOVE,
+	ROBBERMOVEEND,
 	GAMEMAIN
 }

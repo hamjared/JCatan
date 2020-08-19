@@ -253,7 +253,7 @@ public abstract class Player {
 	 */
 	public abstract void setup(Node node1, Node node2, GameController controller);
 
-	public abstract void sevenRolled(Player activePlayer);
+	public abstract void sevenRolled(Player activePlayer, Bank bank);
 
 	public boolean sevenRolledSteal(Player player) {
 		List<ResourceCard> resources = player.getResources();
