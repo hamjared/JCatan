@@ -331,12 +331,11 @@ public class HumanPlayer extends Player {
 		} else {
 			boolean cityCheck = false;
 			for (Building b : this.getBuildings()) {
-				if (b.getClass().equals(Settlement.class)) {
+				if (b.getClass().equals(City.class)) {
 					cityCheck = true; 
 				}
 			}
 			if (cityCheck == true) {
-
 				City city = new City(this, node);
 				List<ResourceCard> resources = this.getResources();
 				int numWheat = 0;
@@ -402,12 +401,23 @@ public class HumanPlayer extends Player {
 				
 				if (resourceCheck == 5) {
 					city.setHasBeenPlayed(true);
-					this.playedBuildings.add(city);
-					this.getBuildings().remove(city);
 					Settlement settlement = (Settlement) node.getBuilding();
-					this.giveBuilding(settlement);
+					this.playedBuildings.remove(settlement);
+					this.playedBuildings.add(city);
+					for(int i = 0; i < this.getBuildings().size(); i++) {
+						if (this.getBuildings().get(i) instanceof City) {
+							this.getBuildings().remove(i);
+							break;
+						}
+					}
+					this.giveBuilding(settlement);					
 					node.setBuilding(city);
 					city.setNode(node);
+					for(Building b: this.getBuildings()) {
+						if(b instanceof City) {
+							System.out.println("I have a city");
+						}
+					}
 					for (ResourceType type : list) {
 						this.removeResource(type);
 						ResourceCard card = new ResourceCard(type);
@@ -450,7 +460,7 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
-	public void sevenRolled(Player activePlayer) {
+	public void sevenRolled(Player activePlayer, Bank bank) {
 		List<ResourceCard> resources = activePlayer.getResources();
 		int handSize = resources.size();
 		int cardsToDrop = 0;
@@ -464,7 +474,9 @@ public class HumanPlayer extends Player {
 			}
 		}
 		for(int i = 0; i < cardsToDrop; i++) {
+			bank.giveResourceCard(activePlayer.getResources().get(i));
 			activePlayer.getResources().remove(i);
+			
 		}
 
 	}
