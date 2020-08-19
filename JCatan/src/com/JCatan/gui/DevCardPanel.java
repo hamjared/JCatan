@@ -33,11 +33,13 @@ public class DevCardPanel extends JPanel{
 	private JComboBox resourceComboBox2;
 	private JLabel resources1Label;
 	private JLabel playerLabel;
+	private BoardPanel boardPanel;
 	
 	private JComboBox comboBox;
 	private JLabel resource2Label;
 	
-	public DevCardPanel(int x, int y, int width, int height) {
+	public DevCardPanel(int x, int y, int width, int height, BoardPanel boardPanel ) {
+		this.boardPanel = boardPanel;
 		
 		setBounds(1125, 650, 300, 125);
 		
@@ -176,6 +178,8 @@ public class DevCardPanel extends JPanel{
 		}
 		if(card instanceof RoadBuildingDevelopmentCard) {
 			Bank bank = GameGUI.controller.getBank();
+			this.boardPanel.buildRoad();
+			
 			return new DevCardActionBuilder().curPlayer(GameGUI.controller.getCurPlayer())
 					.bank(bank)
 					.build();
