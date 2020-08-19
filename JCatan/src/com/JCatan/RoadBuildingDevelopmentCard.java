@@ -12,16 +12,8 @@ public class RoadBuildingDevelopmentCard extends DevelopmentCard {
 	public void performAction(DevCardAction devCardAction) throws InvalidDevCardUseException {
 		Player curPlayer = devCardAction.getCurPlayer();
 		Bank bank = devCardAction.getBank();
+		curPlayer.setRoadBuilderRoads(2);
 		
-		
-		try {
-			curPlayer.getResources().add(bank.takeResourceCard(ResourceType.BRICK));
-			curPlayer.getResources().add(bank.takeResourceCard(ResourceType.BRICK));
-			curPlayer.getResources().add(bank.takeResourceCard(ResourceType.WOOD));
-			curPlayer.getResources().add(bank.takeResourceCard(ResourceType.WOOD));
-		} catch (InsufficientResourceCardException e) {
-			e.printStackTrace();
-		}
 		
 		
 	}
