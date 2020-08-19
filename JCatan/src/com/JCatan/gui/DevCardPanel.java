@@ -6,6 +6,7 @@ import com.JCatan.Bank;
 import com.JCatan.DevCardAction;
 import com.JCatan.DevCardActionBuilder;
 import com.JCatan.DevelopmentCard;
+import com.JCatan.GamePhase;
 import com.JCatan.InvalidDevCardUseException;
 import com.JCatan.KnightDevelopmentCard;
 import com.JCatan.MonopolyDevelopmentCard;
@@ -121,7 +122,7 @@ public class DevCardPanel extends JPanel{
 		DevelopmentCard card = (DevelopmentCard) comboBox.getSelectedItem();
 		
 		if(card instanceof KnightDevelopmentCard) {
-			renderComboBoxes(true, false, false);
+			renderComboBoxes(false, false, false);
 			
 		}
 		else if(card instanceof YearOfPlentyDevelopmentCard) {
@@ -146,13 +147,8 @@ public class DevCardPanel extends JPanel{
 
 	protected DevCardAction makeDevCardAction(DevelopmentCard card) {
 		if(card instanceof KnightDevelopmentCard) {
-			renderComboBoxes(true, false, false);
-			Player stealPlayer = (Player) playerComboBox.getSelectedItem();
-			if(stealPlayer == null) {
-				return null;
-			}
+			GameGUI.controller.setGamePhase(GamePhase.ROBBERMOVE);
 			return new DevCardActionBuilder().curPlayer(GameGUI.controller.getCurPlayer())
-					.stealPlayer(stealPlayer)
 					.build();
 		}
 		if(card instanceof YearOfPlentyDevelopmentCard) {
