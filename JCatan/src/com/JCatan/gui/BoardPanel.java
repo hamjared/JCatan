@@ -18,6 +18,7 @@ import java.util.Optional;
 import javax.swing.JPanel;
 
 import com.JCatan.City;
+import com.JCatan.GamePhase;
 import com.JCatan.Node;
 import com.JCatan.Player;
 import com.JCatan.PortNode;
@@ -107,7 +108,8 @@ public class BoardPanel extends JPanel {
 					for (SelectableRobberTile circle : robberTiles) {
 						if (circle.getCircle().contains(x, y)) {
 							circle.onClick(robber);
-							repaint();
+							GameGUI.controller.setGamePhase(GamePhase.GAMEMAIN);
+							getParent().repaint();
 							break;
 						}
 					}
