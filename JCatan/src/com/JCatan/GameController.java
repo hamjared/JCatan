@@ -189,6 +189,10 @@ public class GameController {
 		curPlayer = players.get(playerTurnIndex);
 	}
 	
+	public boolean isGameEnded() {
+		return gameEnded;
+	}
+
 	public void gamePhaseEnd() {
 		for(DevelopmentCard card: curPlayer.getDevCards()) {
 			card.setCanBePlayed(true);
@@ -196,9 +200,10 @@ public class GameController {
 		
 		setLargestArmy();
 		setLongestRoad();
-		if (curPlayer.calcVictoryPoints() > POINTS_TO_WIN) {
+		if (curPlayer.calcVictoryPoints() >= POINTS_TO_WIN) {
 			gameWinnerIndex = playerTurnIndex;
 			gameEnded = true;
+			chat.addToChat("Game over: " + curPlayer.getName() + " won!");
 		}
 
 		playerTurnIndex++;

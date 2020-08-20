@@ -247,6 +247,16 @@ public class GameGUI extends JFrame {
 		endButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				((DevCardPanel) devCardPanel).hidePanel();
+				if(controller.isGameEnded()) {
+					JPanel gameOver = new EndGamePanel();
+					gameOver.setBounds(getWidth()/2-225, getHeight()/2-150, 450, 300);
+					gameOver.setEnabled(true);
+					gameOver.setVisible(true);
+					master.add(gameOver, new Integer(1), 0);
+					
+					return;
+					
+				}
 				switch (controller.getGamePhase()) {
 				case SETUP:
 					if (endButton.getText().equals("Build Settlement") || endButton.getText().equals("Start Setup")) {
