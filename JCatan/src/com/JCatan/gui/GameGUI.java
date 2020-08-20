@@ -104,7 +104,13 @@ public class GameGUI extends JFrame {
 		controller = new GameController(players, bf);
 		controller.setNotifyPlayer(
 				s -> JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE));
-		controller.setRefreshScreenDelegate(x -> this.repaint());
+		controller.setRefreshScreenDelegate(x -> {
+			ResourcePanel.repaint();
+			Player1Panel.repaint();
+			Player2Panel.repaint();
+			Player3Panel.repaint();
+			Player4Panel.repaint();
+		});
 		
 		tradePanel = new TradePanel(865, 0, 578, 402);
 		tradePanel.setVisible(false);

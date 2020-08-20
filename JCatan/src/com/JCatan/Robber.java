@@ -12,7 +12,11 @@ public class Robber {
 	}
 
 	public void move(Tile tile) {
+		if(targetTile != null)
+			targetTile.setHasRobber(false);
+		
 		targetTile = tile;
+		targetTile.setHasRobber(true);
 	}
 
 	public void rob(Player currentPlayer) {
