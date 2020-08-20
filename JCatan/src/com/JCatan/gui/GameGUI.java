@@ -364,6 +364,10 @@ public class GameGUI extends JFrame {
 						
 					}
 					setTurnColor();
+					BoardPanel.drawRoads = false;
+					BoardPanel.drawSettlements = false;
+					BoardPanel.drawCities = false;
+					BoardPanel.repaint();
 					repaint();
 					break;
 				default:
@@ -382,34 +386,35 @@ public class GameGUI extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 
-				int x = e.getX();
-				int y = e.getY();
+				if (controller.getGamePhase().equals(GamePhase.GAMEMAIN)) {
+					int x = e.getX();
+					int y = e.getY();
 
-				if ((x >= 30 && x <= 60) && (y >= 20 && y <= 110)) {
+					if ((x >= 30 && x <= 60) && (y >= 20 && y <= 110)) {
 
-					clickOnRoad();
+						clickOnRoad();
+					}
+					if ((x >= 121 && x <= 167) && (y >= 43 && y <= 109)) {
+
+						clickOnSettlement();
+					} else if ((x >= 62 && x <= 188) && (y >= 53 && y <= 64)) {
+
+						clickOnSettlement();
+					} else if ((x >= 135 && x <= 155) && (y >= 20 && y <= 110)) {
+
+						clickOnSettlement();
+					}
+					if ((x >= 243 && x <= 310) && (y >= 89 && y <= 110)) {
+
+						clickOnCity();
+					} else if ((x >= 243 && x <= 266) && (y >= 33 && y <= 110)) {
+
+						clickOnCity();
+					} else if ((x >= 220 && x <= 290) && (y >= 37 && y <= 65)) {
+
+						clickOnCity();
+					}
 				}
-				if ((x >= 121 && x <= 167) && (y >= 43 && y <= 109)) {
-
-					clickOnSettlement();
-				} else if ((x >= 62 && x <= 188) && (y >= 53 && y <= 64)) {
-
-					clickOnSettlement();
-				} else if ((x >= 135 && x <= 155) && (y >= 20 && y <= 110)) {
-
-					clickOnSettlement();
-				}
-				if ((x >= 243 && x <= 310) && (y >= 89 && y <= 110)) {
-
-					clickOnCity();
-				} else if ((x >= 243 && x <= 266) && (y >= 33 && y <= 110)) {
-
-					clickOnCity();
-				} else if ((x >= 220 && x <= 290) && (y >= 37 && y <= 65)) {
-
-					clickOnCity();
-				}
-
 				buyDevCard();
 			}
 		});
@@ -488,19 +493,26 @@ public class GameGUI extends JFrame {
 
 	protected void clickOnCity() {
 		BoardPanel.buildCity();
-		endButton.setEnabled(false);
+		if (controller.getGamePhase().equals(GamePhase.SETUP)) {
+			endButton.setEnabled(false);
+		}
+		
 
 	}
 
 	protected void clickOnSettlement() {
 		BoardPanel.buildSettlement();
-		endButton.setEnabled(false);
+		if (controller.getGamePhase().equals(GamePhase.SETUP)) {
+			endButton.setEnabled(false);
+		}
 
 	}
 
 	protected void clickOnRoad() {
 		BoardPanel.buildRoad();
-		endButton.setEnabled(false);
+		if (controller.getGamePhase().equals(GamePhase.SETUP)) {
+			endButton.setEnabled(false);
+		}
 
 	}
 

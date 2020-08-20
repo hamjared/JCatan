@@ -10,6 +10,7 @@ import java.awt.Shape;
 import javax.swing.JPanel;
 
 import com.JCatan.GameController;
+import com.JCatan.GamePhase;
 import com.JCatan.InsufficientResourceCardException;
 import com.JCatan.Node;
 
@@ -48,8 +49,9 @@ public class BuildingPanel extends JPanel {
 		panel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-
-				buyDevCard();
+				if (GameGUI.controller.getGamePhase().equals(GamePhase.GAMEMAIN)) {
+					buyDevCard();
+				}	
 			}
 
 			@Override

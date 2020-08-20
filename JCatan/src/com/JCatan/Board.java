@@ -295,8 +295,11 @@ public class Board {
 		List<Node> nodes = new ArrayList<>();
 		for (Node node : board.getNodeList()) {
 			if (node.getBuilding() != null) {
-				if (node.getBuilding().getPlayer().equals(curPlayer)) {
-					nodes.add(node);
+				if (node.getBuilding() instanceof City) {
+				} else {
+					if (node.getBuilding().getPlayer().equals(curPlayer)) {
+						nodes.add(node);
+					}
 				}
 			}
 		}
