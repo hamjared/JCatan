@@ -68,19 +68,21 @@ public class DevCardPanel extends JPanel{
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DevelopmentCard card = (DevelopmentCard) comboBox.getSelectedItem();
-				try {
-					DevCardAction devCardAction = makeDevCardAction(card);
-					if(devCardAction == null) {
-						GameGUI.controller.getChat().addToChat("Error playing dev card, please select correct options");
+				if (GameGUI.controller.getGamePhase().equals(GamePhase.GAMEMAIN)) {
+					try {
+						DevCardAction devCardAction = makeDevCardAction(card);
+						if(devCardAction == null) {
+							GameGUI.controller.getChat().addToChat("Error playing dev card, please select correct options");
+						}
+						GameGUI.controller.getCurPlayer().playDevelopmentCard(card, devCardAction);
+						GameGUI.controller.getChat().addToChat(GameGUI.controller.getCurPlayer().getName() + " played " + card);
+						getParent().getParent().repaint();
+						updateComboBox();
+					} catch (InvalidDevCardUseException e1) {
+						// TODO Auto-generated catch block 
+						e1.printStackTrace();
 					}
-					GameGUI.controller.getCurPlayer().playDevelopmentCard(card, devCardAction);
-					GameGUI.controller.getChat().addToChat(GameGUI.controller.getCurPlayer().getName() + " played " + card);
-					getParent().getParent().repaint();
-					updateComboBox();
-				} catch (InvalidDevCardUseException e1) {
-					// TODO Auto-generated catch block 
-					e1.printStackTrace();
-				}
+				}	
 			}
 		});
 		btnNewButton.setBounds(221, 11, 69, 23);

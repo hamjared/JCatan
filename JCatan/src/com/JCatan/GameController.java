@@ -187,7 +187,7 @@ public class GameController {
 		
 		setLargestArmy();
 		setLongestRoad();
-		if (curPlayer.calcVictoryPoints() > POINTS_TO_WIN) {
+		if (curPlayer.calcVictoryPoints() >= POINTS_TO_WIN) {
 			gameWinnerIndex = playerTurnIndex;
 			gameEnded = true;
 		}
