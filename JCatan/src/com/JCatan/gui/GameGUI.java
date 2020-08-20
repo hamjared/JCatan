@@ -349,11 +349,6 @@ public class GameGUI extends JFrame {
 					setTurnColor();
 					repaint();
 					break;
-				case ROBBERMOVEEND:
-					endButton.setText("End Turn");
-					controller.setGamePhase(GamePhase.GAMEMAIN);
-					repaint();
-					break;
 				default:
 					break;
 				}
