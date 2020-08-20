@@ -38,15 +38,18 @@ public class Robber {
 			 * currentPlayer).distinct().collect(Collectors.toList());
 			 */
 
-			// For now just Randomally select a player then randomally select resource
-			// there.
+			// For now just Randomly select a player then randomly select resource
 			Random random = new Random();
-			Player victim = players.get(random.nextInt(players.size()));
-			ResourceCard card = victim.getResources().get(random.nextInt(victim.getResources().size()));
-			victim.removeResource(card.getResourceType());
-			List<ResourceCard> cards = currentPlayer.getResources();
-			cards.add(card);
-			currentPlayer.setResources(cards);
+			for (Player victim : players) {
+				if (!victim.getResources().isEmpty()) {
+					ResourceCard card = victim.getResources().get(random.nextInt(victim.getResources().size()));
+					victim.removeResource(card.getResourceType());
+					List<ResourceCard> cards = currentPlayer.getResources();
+					cards.add(card);
+					currentPlayer.setResources(cards);
+					break;
+				}
+			}
 		}
 	}
 }
