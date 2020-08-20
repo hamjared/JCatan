@@ -13,8 +13,10 @@ import java.io.IOException;
 import javax.swing.JPanel;
 
 import com.JCatan.City;
+import com.JCatan.DevelopmentCard;
 import com.JCatan.Player;
 import com.JCatan.Settlement;
+import com.JCatan.VictoryPointDevelopmentCard;
 
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
@@ -33,6 +35,7 @@ public class PlayerPanel extends JPanel
 	private JLabel numSettlementsLabel;
 	private JLabel numCitiesLabel;
 	private JLabel victoryPointsLabel;
+	private JLabel victoryPointsLabelCard;
 	private JLabel longestRoadLabel;
 	private JLabel R;
 	private JLabel lblNewLabel_1;
@@ -75,9 +78,18 @@ public class PlayerPanel extends JPanel
         lblNewLabel.setBounds(258, 0, 57, 61);
         add(lblNewLabel);
         
+        JLabel lblNewLabel2 = new JLabel("VPC");
+        lblNewLabel2.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblNewLabel2.setBounds(190, 0, 57, 61);
+        add(lblNewLabel2);
+        
         victoryPointsLabel = new JLabel("16");
         victoryPointsLabel.setBounds(302, 27, 46, 14);
         add(victoryPointsLabel);
+        
+        victoryPointsLabelCard = new JLabel("0");
+        victoryPointsLabelCard.setBounds(240, 27, 46, 14);
+        add(victoryPointsLabelCard);
         
         JLabel LR = new JLabel("LR");
         LR.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -153,6 +165,15 @@ public class PlayerPanel extends JPanel
 		this.longestRoadLabel.setText("" + lr);
 		int knights = player.getNumberOfKnightsPlayed();
 		this.numberOfKnights.setText("" + knights);
+		int victoryPointsFromCards = 0;
+		for(DevelopmentCard card : player.getDevCards()) {
+			if(card instanceof VictoryPointDevelopmentCard) {
+				if(card.isHasBeenPlayed()) {
+					victoryPointsFromCards++;
+				}
+			}
+		}
+		this.victoryPointsLabelCard.setText("" + victoryPointsFromCards);
 	}
 
 	private void drawShape(Shape shape, int rotateDegrees, int translate_x, int translate_y, int scale, Graphics2D g2, Color color) {
