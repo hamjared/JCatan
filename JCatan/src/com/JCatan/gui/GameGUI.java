@@ -51,7 +51,6 @@ public class GameGUI extends JFrame {
 	public static JPanel Player2Panel;
 	public static JPanel Player3Panel;
 	public static JPanel Player4Panel;
-	
 
 	ImageIcon one = new ImageIcon("images/one.png");
 	ImageIcon two = new ImageIcon("images/two.png");
@@ -105,7 +104,14 @@ public class GameGUI extends JFrame {
 		controller = new GameController(players, bf);
 		controller.setNotifyPlayer(
 				s -> JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE));
-
+		controller.setRefreshScreenDelegate(x -> {
+			ResourcePanel.repaint();
+			Player1Panel.repaint();
+			Player2Panel.repaint();
+			Player3Panel.repaint();
+			Player4Panel.repaint();
+		});
+		
 		tradePanel = new TradePanel(865, 0, 578, 402);
 		tradePanel.setVisible(false);
 		tradePanel.setEnabled(false);
@@ -115,7 +121,7 @@ public class GameGUI extends JFrame {
 		master.setLocation(0, 0);
 		master.setSize(1441, 867);
 		contentPane.add(master);
-		
+
 		Border border = new LineBorder(Color.BLACK, 2, true);
 
 		JPanel ChatPanel = new ChatPanel(controller.getChat());
@@ -126,7 +132,6 @@ public class GameGUI extends JFrame {
 		BoardPanel = new BoardPanel();
 		BoardPanel.setBounds(0, 0, 1441, 867);
 		master.add(BoardPanel, new Integer(0), 0);
-		
 
 		JPanel BankPanel = new BankPanel() {
 			@Override
@@ -171,9 +176,7 @@ public class GameGUI extends JFrame {
 		oreLabel.setBounds(385, 92, 46, 14);
 		oreLabel.setHorizontalAlignment(oreLabel.CENTER);
 		BankPanel.add(oreLabel);
-		
-		
-		
+
 		controller.getPlayer(0).setColor(Color.BLUE);
 		Player1Panel = new PlayerPanel(1441, 490, 463, 126, controller.getPlayer(0));
 		Player1Panel.setBackground(Color.decode("#87ceeb"));
@@ -186,7 +189,7 @@ public class GameGUI extends JFrame {
 		Player2Panel.setBorder(border);
 		contentPane.add(Player2Panel);
 
-		//controller.getPlayer(2).setColor(Color.decode("#FFA500"));
+		// controller.getPlayer(2).setColor(Color.decode("#FFA500"));
 		controller.getPlayer(2).setColor(Color.ORANGE);
 		Player3Panel = new PlayerPanel(1441, 741, 463, 126, controller.getPlayer(2));
 		Player3Panel.setBackground(Color.decode("#87ceeb"));
@@ -284,7 +287,7 @@ public class GameGUI extends JFrame {
 						}
 					}
 					break;
-				case GAMEROLL:				
+				case GAMEROLL:
 					controller.gamePhaseRoll();
 					die1 = Dice.getDie1();
 					die2 = Dice.getDie2();
@@ -325,19 +328,22 @@ public class GameGUI extends JFrame {
 						dieTwo = five.getImage();
 						break;
 					case 6:
-						dieTwo = five.getImage();
+						dieTwo = six.getImage();
 						break;
 					}
-
-					if (die1 + die2 != 7) {
-					  endButton.setText("End Turn");
-					  controller.setGamePhase(GamePhase.GAMEMAIN);
-					  controller.gamePhaseTrade();
+					
+					int val = die1 + die2;
+					
+					if (val != 7) {
+						endButton.setText("End Turn");
+						controller.setGamePhase(GamePhase.GAMEMAIN);
+						controller.gamePhaseTrade();
 					} else {
 						endButton.setText("End Robber Move");
 						controller.setGamePhase(GamePhase.ROBBERMOVE);
 						controller.robberMovePhase();
 					}
+					
 					tradeButton.setEnabled(true);
 					repaint();
 					break;
@@ -473,7 +479,6 @@ public class GameGUI extends JFrame {
 		BoardPanel.buildCity();
 		endButton.setEnabled(false);
 
-
 	}
 
 	protected void clickOnSettlement() {
@@ -495,7 +500,7 @@ public class GameGUI extends JFrame {
 		sheepLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.SHEEP));
 		oreLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.ORE));
 	}
-	
+
 	private void setTurnColor() {
 		if (controller.getCurPlayer().getColor() == Color.BLUE) {
 			Player1Panel.setBorder(new LineBorder(Color.BLUE, 3, true));
