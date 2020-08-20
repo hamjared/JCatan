@@ -17,6 +17,7 @@ public class GameController {
 	GamePhase gamePhase;
 	Consumer action;
 	Consumer<String> notify;
+	Consumer refresh;
 	Robber robber;
 	boolean setUpChatCheck = false;
 
@@ -108,6 +109,14 @@ public class GameController {
 		
 		this.setGamePhase(GamePhase.SETUP);
 
+	}
+	
+	public void setRefreshScreenDelegate(Consumer c) {
+		this.refresh = c;
+	}
+	
+	public void refreshScreen() {
+		refresh.accept(this);
 	}
 
 	public void setAction(Consumer c) {
