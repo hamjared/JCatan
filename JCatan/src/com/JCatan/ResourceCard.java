@@ -1,7 +1,13 @@
 package com.JCatan;
 
-public class ResourceCard {
+import java.io.Serializable;
 
+public class ResourceCard implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	ResourceType resourceType;
 	
 	/**

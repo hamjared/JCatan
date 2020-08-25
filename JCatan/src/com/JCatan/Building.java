@@ -1,7 +1,13 @@
 package com.JCatan;
 
-public abstract class Building implements ICost {
+import java.io.Serializable;
 
+public abstract class Building implements ICost, Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected int victoryPoints;
 	protected boolean hasBeenPlayed;
 	Player player;

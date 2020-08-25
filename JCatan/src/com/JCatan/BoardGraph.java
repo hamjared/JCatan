@@ -1,8 +1,13 @@
 package com.JCatan;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class BoardGraph {
+public class BoardGraph implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	List<List<Node>> nodes;
 	List<Node> nodeList;
 	

@@ -1,9 +1,14 @@
 package com.JCatan;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class DevelopmentCard implements ICost {
+public abstract class DevelopmentCard implements ICost, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private boolean canBePlayed;
 	public boolean isCanBePlayed() {
 		return canBePlayed;

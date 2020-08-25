@@ -1,6 +1,7 @@
 package com.JCatan;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,7 +11,11 @@ import java.util.Map;
 import java.util.Random;
 
 
-public abstract class Player {
+public abstract class Player implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	List<ResourceCard> resources;
 	List<DevelopmentCard> devCards;
 	List<Road> roads;
