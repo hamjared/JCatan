@@ -61,8 +61,8 @@ public class DomesticTrade extends Trade {
     @Override
     protected void validateTrade() throws InvalidTradeException
     {
-    	if(offeringCards == null || requestingCards == null)
-    		throw new InvalidTradeException("Null trading cards!");
+    	if(offeringCards == null || requestingCards == null || offeringCards.isEmpty() || requestingCards.isEmpty())
+    		throw new InvalidTradeException("Empty trading cards!");
     	
     	if(offeringPlayer.getUniqueResourcesCount().isEmpty() || receivingPlayer.getUniqueResourcesCount().isEmpty())
     		throw new InvalidTradeException("Invalid amount of resources.");

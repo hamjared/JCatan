@@ -17,8 +17,10 @@ public class GameController {
 	GamePhase gamePhase;
 	Consumer action;
 	Consumer<String> notify;
+	Consumer refresh;
 	Robber robber;
 	boolean setUpChatCheck = false;
+	
 
 	public List<Player> getPlayers(){
 		return players;
@@ -109,6 +111,14 @@ public class GameController {
 		this.setGamePhase(GamePhase.SETUP);
 
 	}
+	
+	public void setRefreshScreenDelegate(Consumer c) {
+		this.refresh = c;
+	}
+	
+	public void refreshScreen() {
+		refresh.accept(this);
+	}
 
 	public void setAction(Consumer c) {
 		action = c;
@@ -180,6 +190,10 @@ public class GameController {
 		curPlayer = players.get(playerTurnIndex);
 	}
 	
+	public boolean isGameEnded() {
+		return gameEnded;
+	}
+
 	public void gamePhaseEnd() {
 		for(DevelopmentCard card: curPlayer.getDevCards()) {
 			card.setCanBePlayed(true);
@@ -190,6 +204,7 @@ public class GameController {
 		if (curPlayer.calcVictoryPoints() >= POINTS_TO_WIN) {
 			gameWinnerIndex = playerTurnIndex;
 			gameEnded = true;
+			chat.addToChat("Game over: " + curPlayer.getName() + " won!");
 		}
 
 		playerTurnIndex++;
@@ -203,6 +218,15 @@ public class GameController {
   
 	private void setLargestArmy() {
 		int largestArmy = 0;
+		Player prevLargestArmyPlayer = null;
+		for(Player player: players) {
+			if(player.hasLongestRoad) {
+				prevLargestArmyPlayer = player;
+			}
+		}
+		if(prevLargestArmyPlayer != null) {
+			largestArmy = prevLargestArmyPlayer.getNumberOfKnightsPlayed();
+		}
 		for(Player player: players) {
 			player.setHasLargestArmy(false);
 			int playersArmy = player.getNumberOfKnightsPlayed();
@@ -210,15 +234,32 @@ public class GameController {
 				largestArmy = playersArmy;
 				player.setHasLargestArmy(true);
 			}
+			if(player.equals(prevLargestArmyPlayer) && playersArmy >= largestArmy) {
+				largestArmy = playersArmy;
+				player.setHasLongestRoad(true);
+			}
 		}
 	}
 	
 	private void setLongestRoad() {
 		int longestRoad = 0;
+		Player prevLongestRoadPlayer = null;
+		for(Player player: players) {
+			if(player.hasLongestRoad) {
+				prevLongestRoadPlayer = player;
+			}
+		}
+		if(prevLongestRoadPlayer != null) {
+			longestRoad = prevLongestRoadPlayer.calcLongestRoad();
+		}
 		for(Player player: players) {
 			player.setHasLongestRoad(false);
 			int playersLongestRoad = player.calcLongestRoad();
 			if (playersLongestRoad > longestRoad && playersLongestRoad >= 5) {
+				longestRoad = playersLongestRoad;
+				player.setHasLongestRoad(true);
+			}
+			if(player.equals(prevLongestRoadPlayer) && playersLongestRoad >= longestRoad) {
 				longestRoad = playersLongestRoad;
 				player.setHasLongestRoad(true);
 			}

@@ -1,14 +1,15 @@
 package com.JCatan;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tile
+public class Tile implements Serializable
 {
     Color color;
     ResourceType resourceType;
-    boolean hasRobber;
+    boolean isRobberOnTile = false;
     int number;
     List<Node> nodes;
     
@@ -42,6 +43,13 @@ public class Tile
         this.number = number;
     }
     
+    public boolean hasRobber() {
+    	return isRobberOnTile;
+    }
+    
+    public void setHasRobber(boolean val) {
+    	isRobberOnTile = val;
+    }
     
     public Tile(List<Node> nodes) {
         this.nodes = nodes;

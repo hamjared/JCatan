@@ -4,8 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
-
-import com.JCatan.Robber;
 import com.JCatan.Tile;
 
 public class SelectableRobberTile {
@@ -30,5 +28,6 @@ public class SelectableRobberTile {
 		robber.setPoint(p);
 		GameGUI.controller.getRobber().move(tile);
 		GameGUI.controller.getRobber().rob(GameGUI.controller.getCurPlayer());
+		GameGUI.controller.refreshScreen();
 	}
 }
