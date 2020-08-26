@@ -351,5 +351,19 @@ public abstract class Player implements Serializable{
 		roadBuilderRoads = r;
 	}
 	
+	public boolean equals(Object obj) {
+		if (obj == null || ! (obj instanceof Player)) {
+			return false;
+		}
+		
+		Player player = (Player) obj;
+		if(player.getColor().equals(this.color)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	
 }
