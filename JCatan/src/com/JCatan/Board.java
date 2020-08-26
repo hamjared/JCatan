@@ -1,13 +1,18 @@
 package com.JCatan;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.JCatan.gui.GameGUI;
 
-public class Board {
+public class Board implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	BoardGraph board;
 	Map<Integer, List<Tile>> diceRollToTiles;
 	List<Tile> tiles;
@@ -308,5 +313,20 @@ public class Board {
 	
 	public boolean isRobberMoving() {
 		return GamePhase.ROBBERMOVE == GameGUI.controller.gamePhase;
+	}
+	
+	public String toString() {
+		String s = "";
+		for (Node node : board.getNodeList()) {
+			Building b = node.getBuilding();
+			if(b == null) {
+				s += node.getNodeIndex() + ": " + "None" + "\n";
+			}
+			else {
+				s += node.getNodeIndex() + ": " + node.getBuilding() + "/n";
+			}
+
+		}
+		return s;
 	}
 }

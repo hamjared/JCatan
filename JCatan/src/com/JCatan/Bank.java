@@ -1,15 +1,20 @@
 package com.JCatan;
 
+import java.io.Serializable;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-public class Bank 
+public class Bank implements Serializable
 {
 
-    public static final int NUM_OF_EACH_RESOURCE_CARD = 19;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public static final int NUM_OF_EACH_RESOURCE_CARD = 19;
     final Stack<ResourceCard> brick = new Stack<ResourceCard>();
     final Stack<ResourceCard> wood = new Stack<>();
     final Stack<ResourceCard> wheat = new Stack<>();

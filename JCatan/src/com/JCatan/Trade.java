@@ -1,9 +1,14 @@
 package com.JCatan;
 
+import java.io.Serializable;
 import java.util.List;
 
-public abstract class Trade {
+public abstract class Trade implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Player offeringPlayer;
 	Player receivingPlayer;
 	List<ResourceCard> offeringCards;

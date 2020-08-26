@@ -58,5 +58,9 @@ public abstract class Building implements ICost, Serializable{
 		return player;
 	}
 	
+	public String toString() {
+		return player.getName();
+	}
+	
 	
 }

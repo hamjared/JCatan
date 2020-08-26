@@ -1,7 +1,13 @@
 package com.JCatan;
 
-public class Dice {
+import java.io.Serializable;
+
+public class Dice implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private boolean wasDoubles;
 	private static int die1;
 	private static int die2;
