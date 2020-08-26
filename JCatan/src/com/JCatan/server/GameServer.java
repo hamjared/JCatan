@@ -2,6 +2,7 @@ package com.JCatan.server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -38,6 +39,11 @@ public class GameServer {
 	}
 	
 	
+	public synchronized GameController getController() {
+		return controller;
+	}
+
+
 	public void acceptConnections() {
 		System.out.println("Waiting for connections on: " + connectionListener);
 		while(players.size() < 4) {
@@ -93,7 +99,7 @@ public class GameServer {
 			System.out.println("Player was null");
 			return;
 		}
-		PlayerSocket ps = new PlayerSocket(player.getPlayer(), con);
+		PlayerSocket ps = new PlayerSocket(player.getPlayer(), con, this);
 		this.players.add(ps);
 		this.boardPreferences.add(player.getFactory());
 		
@@ -127,7 +133,42 @@ public class GameServer {
 			System.out.println("Started game with random board");
 			controller = new GameController(p, new RandomBoardFactory());
 		}
+		controller.startGame();
 		
+		for(PlayerSocket ps: players) {
+			Message msg = new Message(Message.Action.StartGame, controller, ps.getPlayer());
+			Socket s = ps.getConnection();
+			ObjectOutputStream oos;
+			try {
+				oos = new ObjectOutputStream(s.getOutputStream());
+				oos.writeObject(msg);
+				System.out.println("Start game mesage sent to " + ps.getPlayer());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+	}
+	
+	public void broadcastMessage(Message msg) {
+		System.out.println("Broadcast message controller: ");
+		System.out.println(msg.getGc());
+		for(PlayerSocket ps: players) {
+			Socket s = ps.getConnection();
+			ObjectOutputStream oos;
+			try {
+				oos = new ObjectOutputStream(s.getOutputStream());
+				oos.writeObject(msg);
+				System.out.println("BroadCast mesage sent to " + ps.getPlayer());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 	}
 	
 

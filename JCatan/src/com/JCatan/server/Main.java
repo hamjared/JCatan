@@ -3,7 +3,7 @@ package com.JCatan.server;
 public class Main {
 
 	public static void main(String[] args) {
-		GameServer gs = new GameServer(5678);
+		GameServer gs = new GameServer(5679);
 
 		gs.acceptConnections();
 		

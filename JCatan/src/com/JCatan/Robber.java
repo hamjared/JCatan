@@ -1,10 +1,15 @@
 package com.JCatan;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class Robber {
+public class Robber implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Tile targetTile;
 
 	public Robber() {

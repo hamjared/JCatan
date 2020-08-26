@@ -21,14 +21,19 @@ import com.JCatan.GamePhase;
 import com.JCatan.Player;
 import com.JCatan.ResourceCard;
 import com.JCatan.ResourceType;
+import com.JCatan.client.GameClient;
+import com.JCatan.server.Message;
+import com.JCatan.server.MessageBuilder;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Font;
 import java.awt.Graphics;
 import javax.swing.JLabel;
@@ -45,12 +50,16 @@ public class GameGUI extends JFrame {
 	private JLabel wheatLabel;
 	private JLabel sheepLabel;
 	private JLabel oreLabel;
+	JLayeredPane master;
+	Player myPlayer;
+	public static GameClient gameClient;
 	public static JButton endButton;
 	public static JPanel ResourcePanel;
 	public static JPanel Player1Panel;
 	public static JPanel Player2Panel;
 	public static JPanel Player3Panel;
 	public static JPanel Player4Panel;
+	private JButton tradeButton;
 
 	ImageIcon one = new ImageIcon("images/one.png");
 	ImageIcon two = new ImageIcon("images/two.png");
@@ -93,15 +102,36 @@ public class GameGUI extends JFrame {
 		}
 	}
 
-	public GameGUI(List<Player> players, BoardFactory bf) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 1920, 1040);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+	public GameGUI() {
 
-		controller = new GameController(players, bf);
+
+	}
+	
+	public void setMyPlayer(Player player) {
+		myPlayer = player;
+	}
+	
+	public void setGameClient(GameClient gc) {
+		gameClient = gc;
+	}
+	
+	public void updateGameController(GameController gc) {
+		controller = gc;
+		System.out.println("Cur Player Color: " + gc.getCurPlayer().getColor());
+		System.out.println(myPlayer.getName() + " Color: " + myPlayer.getColor());
+		if(gc.getCurPlayer().equals(myPlayer)) {
+			enableAll();
+		}
+		else {
+			disableAll();
+		}
+		
+		
+	}
+
+	public void initialize(GameController gc) {
+
+		controller = gc;
 		controller.setNotifyPlayer(
 				s -> JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE));
 		controller.setRefreshScreenDelegate(x -> {
@@ -111,13 +141,19 @@ public class GameGUI extends JFrame {
 			Player3Panel.repaint();
 			Player4Panel.repaint();
 		});
-		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(0, 0, 1920, 1040);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
 		tradePanel = new TradePanel(865, 0, 578, 402);
 		tradePanel.setVisible(false);
 		tradePanel.setEnabled(false);
 		contentPane.add(tradePanel);
 
-		JLayeredPane master = new JLayeredPane();
+		master = new JLayeredPane();
 		master.setLocation(0, 0);
 		master.setSize(1441, 867);
 		contentPane.add(master);
@@ -177,26 +213,26 @@ public class GameGUI extends JFrame {
 		oreLabel.setHorizontalAlignment(oreLabel.CENTER);
 		BankPanel.add(oreLabel);
 
-		controller.getPlayer(0).setColor(Color.BLUE);
+		
 		Player1Panel = new PlayerPanel(1441, 490, 463, 126, controller.getPlayer(0));
 		Player1Panel.setBackground(Color.decode("#87ceeb"));
 		Player1Panel.setBorder(border);
 		contentPane.add(Player1Panel);
 
-		controller.getPlayer(1).setColor(Color.RED);
+		
 		Player2Panel = new PlayerPanel(1441, 615, 463, 126, controller.getPlayer(1));
 		Player2Panel.setBackground(Color.decode("#87ceeb"));
 		Player2Panel.setBorder(border);
 		contentPane.add(Player2Panel);
 
 		// controller.getPlayer(2).setColor(Color.decode("#FFA500"));
-		controller.getPlayer(2).setColor(Color.ORANGE);
+		
 		Player3Panel = new PlayerPanel(1441, 741, 463, 126, controller.getPlayer(2));
 		Player3Panel.setBackground(Color.decode("#87ceeb"));
 		Player3Panel.setBorder(border);
 		contentPane.add(Player3Panel);
 
-		controller.getPlayer(3).setColor(Color.WHITE);
+		
 		Player4Panel = new PlayerPanel(1441, 867, 463, 134, controller.getPlayer(3));
 		Player4Panel.setBackground(Color.decode("#87ceeb"));
 		Player4Panel.setBorder(border);
@@ -230,7 +266,7 @@ public class GameGUI extends JFrame {
 		tradePanel.setDelegate(turnOnEndButton);
 		controller.setAction(t -> tradePanel.close());
 
-		JButton tradeButton = new JButton("Trade");
+		tradeButton = new JButton("Trade");
 		controller.setAction(t -> tradePanel.close());
 
 		tradeButton.setEnabled(true);
@@ -247,7 +283,7 @@ public class GameGUI extends JFrame {
 		endButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				((DevCardPanel) devCardPanel).hidePanel();
-				
+
 				switch (controller.getGamePhase()) {
 				case SETUP:
 					if (endButton.getText().equals("Build Settlement") || endButton.getText().equals("Start Setup")) {
@@ -268,6 +304,8 @@ public class GameGUI extends JFrame {
 						endButton.setEnabled(false);
 						endButton.setText("End Turn");
 					} else {
+						Message msg = new MessageBuilder().action(Message.Action.EndSetupTurn).build();
+						gameClient.sendMessage(msg);
 						if (setupNum == 3 && setupReverse == false) {
 							controller.setCurPlayer(controller.getPlayers().get(setupNum));
 							setupReverse = true;
@@ -289,86 +327,13 @@ public class GameGUI extends JFrame {
 					}
 					break;
 				case GAMEROLL:
-					controller.gamePhaseRoll();
-					die1 = Dice.getDie1();
-					die2 = Dice.getDie2();
-					switch (die1) {
-					case 1:
-						dieOne = one.getImage();
-						break;
-					case 2:
-						dieOne = two.getImage();
-						break;
-					case 3:
-						dieOne = three.getImage();
-						break;
-					case 4:
-						dieOne = four.getImage();
-						break;
-					case 5:
-						dieOne = five.getImage();
-						break;
-					case 6:
-						dieOne = six.getImage();
-						break;
-					}
-					switch (die2) {
-					case 1:
-						dieTwo = one.getImage();
-						break;
-					case 2:
-						dieTwo = two.getImage();
-						break;
-					case 3:
-						dieTwo = three.getImage();
-						break;
-					case 4:
-						dieTwo = four.getImage();
-						break;
-					case 5:
-						dieTwo = five.getImage();
-						break;
-					case 6:
-						dieTwo = six.getImage();
-						break;
-					}
-					
-					int val = die1 + die2;
-					
-					if (val != 7) {
-						endButton.setText("End Turn");
-						controller.setGamePhase(GamePhase.GAMEMAIN);
-						controller.gamePhaseTrade();
-					} else {
-						endButton.setText("End Robber Move");
-						controller.setGamePhase(GamePhase.ROBBERMOVE);
-						controller.robberMovePhase();
-					}
-					
-					tradeButton.setEnabled(true);
-					repaint();
+					Message msg = new MessageBuilder().action(Message.Action.RollDice).build();
+					gameClient.sendMessage(msg);
+
 					break;
 				case GAMEMAIN:
-					tradeButton.setEnabled(false);
-					endButton.setText("Roll Dice");
-					controller.setGamePhase(GamePhase.GAMEROLL);
-					controller.gamePhaseEnd();
-					if(controller.isGameEnded()) {
-						JPanel gameOver = new EndGamePanel();
-						gameOver.setBounds(getWidth()/2-225, getHeight()/2-150, 450, 300);
-						gameOver.setEnabled(true);
-						gameOver.setVisible(true);
-						master.add(gameOver, new Integer(1), 0);
-						
-						return;
-						
-					}
-					setTurnColor();
-					BoardPanel.drawRoads = false;
-					BoardPanel.drawSettlements = false;
-					BoardPanel.drawCities = false;
-					BoardPanel.repaint();
-					repaint();
+					Message m = new MessageBuilder().action(Message.Action.EndTurn).build();
+					gameClient.sendMessage(m);
 					break;
 				default:
 					break;
@@ -424,8 +389,8 @@ public class GameGUI extends JFrame {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				try {
-					for (int i = 0; i < controller.getCurPlayer().getResources().size(); i++) {
-						ResourceCard resource = controller.getCurPlayer().getResources().get(i);
+					for (int i = 0; i < myPlayer.getResources().size(); i++) {
+						ResourceCard resource = myPlayer.getResources().get(i);
 						switch (resource.getResourceType()) {
 						case WOOD:
 							resourceCard = wood.getImage();
@@ -482,7 +447,7 @@ public class GameGUI extends JFrame {
 		diceTwoPanel.setBounds(1379, 798, 56, 58);
 		master.add(diceTwoPanel, new Integer(1), 0);
 
-		controller.startGame();
+		disableAll();
 
 	}
 
@@ -496,7 +461,6 @@ public class GameGUI extends JFrame {
 		if (controller.getGamePhase().equals(GamePhase.SETUP)) {
 			endButton.setEnabled(false);
 		}
-		
 
 	}
 
@@ -547,4 +511,176 @@ public class GameGUI extends JFrame {
 			Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
 		}
 	}
+
+	public void disableAll() {
+
+		for (Component c : contentPane.getComponents()) {
+			c.setEnabled(false);
+			if (c instanceof JPanel) {
+				JPanel p = (JPanel) c;
+				for (Component c2 : p.getComponents()) {
+					c2.setEnabled(false);
+				}
+			}
+		}
+
+		for (Component c : master.getComponents()) {
+			c.setEnabled(false);
+		}
+
+	}
+
+	public void enableAll() {
+
+		for (Component c : contentPane.getComponents()) {
+			c.setEnabled(true);
+			if (c instanceof JPanel) {
+				JPanel p = (JPanel) c;
+				for (Component c2 : p.getComponents()) {
+					c2.setEnabled(true);
+				}
+			}
+		}
+
+		for (Component c : master.getComponents()) {
+			c.setEnabled(true);
+		}
+
+	}
+
+	public void updateTurn() {
+		System.out.println("Cur Player Color: " + controller.getCurPlayer().getColor());
+		System.out.println(myPlayer.getName() + " Color: " + myPlayer.getColor());
+		if(controller.getCurPlayer().equals(myPlayer)) {
+			enableAll();
+		}
+		else {
+			System.out.println("Called disable all for " + myPlayer);
+			disableAll();
+		}
+		
+	}
+
+	public void updatePlayer() {
+		for(Player p :controller.getPlayers()) {
+			if(p.equals(myPlayer)) {
+				myPlayer = p;
+			}
+			if(p.equals(((PlayerPanel)Player1Panel).getPlayer())) { 
+				((PlayerPanel)Player1Panel).setPlayer(p);
+			}
+			if(p.equals(((PlayerPanel)Player2Panel).getPlayer())) {
+				((PlayerPanel)Player2Panel).setPlayer(p);
+			}
+			if(p.equals(((PlayerPanel)Player3Panel).getPlayer())) {
+				((PlayerPanel)Player3Panel).setPlayer(p);
+			}
+			if(p.equals(((PlayerPanel)Player4Panel).getPlayer())) {
+				((PlayerPanel)Player4Panel).setPlayer(p);
+			}
+		}
+		
+		
+		
+	}
+	
+	public void diceRolled() {
+		
+		die1 = controller.getCurPlayer().getDice().getDie1();
+		die2 = controller.getCurPlayer().getDice().getDie2();
+		
+		switch (die1) {
+		case 1:
+			dieOne = one.getImage();
+			break;
+		case 2:
+			dieOne = two.getImage();
+			break;
+		case 3:
+			dieOne = three.getImage();
+			break;
+		case 4:
+			dieOne = four.getImage();
+			break;
+		case 5:
+			dieOne = five.getImage();
+			break;
+		case 6:
+			dieOne = six.getImage();
+			break;
+		}
+		switch (die2) {
+		case 1:
+			dieTwo = one.getImage();
+			break;
+		case 2:
+			dieTwo = two.getImage();
+			break;
+		case 3:
+			dieTwo = three.getImage();
+			break;
+		case 4:
+			dieTwo = four.getImage();
+			break;
+		case 5:
+			dieTwo = five.getImage();
+			break;
+		case 6:
+			dieTwo = six.getImage();
+			break;
+		}
+
+		int val = die1 + die2;
+
+		if (val != 7) {
+			endButton.setText("End Turn");
+			controller.setGamePhase(GamePhase.GAMEMAIN);
+			controller.gamePhaseTrade();
+		} else {
+			
+			endButton.setText("End Robber Move");
+			controller.setGamePhase(GamePhase.ROBBERMOVE);
+			controller.robberMovePhase();
+		}
+		
+		if(controller.getCurPlayer().equals(myPlayer)) {
+			tradeButton.setEnabled(true);
+		}
+
+		
+		repaint();
+	}
+	
+	public Player getMyPlayer() {
+		return myPlayer;
+	}
+
+	public void gamePhaseEnd() {
+		tradeButton.setEnabled(false);
+		endButton.setText("Roll Dice");
+		if (controller.isGameEnded()) {
+			JPanel gameOver = new EndGamePanel();
+			gameOver.setBounds(getWidth() / 2 - 225, getHeight() / 2 - 150, 450, 300);
+			gameOver.setEnabled(true);
+			gameOver.setVisible(true);
+			master.add(gameOver, new Integer(1), 0);
+
+			return;
+
+		}
+		setTurnColor();
+		BoardPanel.drawRoads = false;
+		BoardPanel.drawSettlements = false;
+		BoardPanel.drawCities = false;
+		BoardPanel.repaint();
+		updateTurn();
+		repaint();
+		
+	}
+
+	public void robberMoved(Point p) {
+		((BoardPanel)BoardPanel).getRobber().setPoint(p);
+		
+	}
+
 }
