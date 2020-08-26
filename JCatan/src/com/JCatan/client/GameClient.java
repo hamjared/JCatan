@@ -110,6 +110,15 @@ public class GameClient implements Runnable{
 				case UpdateBoard:
 					updateBoard(msg);
 					break;
+				case DiceRolled:
+					diceRolled(msg);
+					break;
+				case EndTurn:
+					turnedEnded(msg);
+					break;
+				case MoveRobber:
+					robberMoved(msg);
+					break;
 				default:
 					break;
 				}
@@ -126,6 +135,28 @@ public class GameClient implements Runnable{
 	}
 	
 	
+	private void robberMoved(Message msg) {
+		GameGUI.controller = msg.getGc();
+		System.out.println("Robber Moved");
+		System.out.println("Is Robber moving: " + GameGUI.controller.getBoard().isRobberMoving());
+		System.out.println("Game Phase: " + GameGUI.controller.getGamePhase());
+		gameGUI.robberMoved(msg.getRobberPoint());
+		gameGUI.repaint();
+		
+	}
+	private void turnedEnded(Message msg) {
+		GameGUI.controller = msg.getGc();
+		System.out.println(GameGUI.controller.getCurPlayer().getName() + "'s turn");
+		gameGUI.gamePhaseEnd();
+		
+	}
+	private void diceRolled(Message msg) {
+		GameGUI.controller = msg.getGc();
+		gameGUI.updatePlayer();
+		System.out.println(gameGUI.getMyPlayer().getName() + " Hand: " + gameGUI.getMyPlayer().getResources());
+		gameGUI.diceRolled();
+		
+	}
 	private void updateBoard(Message msg) {
 		System.out.println("Updating Board ...");
 		GameGUI.controller = msg.getGc();

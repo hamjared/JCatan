@@ -30,6 +30,7 @@ public abstract class Player implements Serializable{
 	Random randomGenerator;
     boolean hasLongestRoad;
     boolean hasLargestArmy;
+    Dice dice;
   
 	public List<Road> getPlayedRoads() {
 		return playedRoads;
@@ -61,6 +62,7 @@ public abstract class Player implements Serializable{
 		hasLongestRoad = false;
 		hasLargestArmy = false;
 		color = Color.BLACK;
+		dice = new Dice();
 	}
 
 	public List<ResourceCard> getResources(){
@@ -363,6 +365,10 @@ public abstract class Player implements Serializable{
 		else {
 			return false;
 		}
+	}
+
+	public Dice getDice() {
+		return dice;
 	}
 	
 	

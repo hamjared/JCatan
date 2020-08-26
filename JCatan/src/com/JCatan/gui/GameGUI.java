@@ -33,6 +33,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Font;
 import java.awt.Graphics;
 import javax.swing.JLabel;
@@ -58,6 +59,7 @@ public class GameGUI extends JFrame {
 	public static JPanel Player2Panel;
 	public static JPanel Player3Panel;
 	public static JPanel Player4Panel;
+	private JButton tradeButton;
 
 	ImageIcon one = new ImageIcon("images/one.png");
 	ImageIcon two = new ImageIcon("images/two.png");
@@ -264,7 +266,7 @@ public class GameGUI extends JFrame {
 		tradePanel.setDelegate(turnOnEndButton);
 		controller.setAction(t -> tradePanel.close());
 
-		JButton tradeButton = new JButton("Trade");
+		tradeButton = new JButton("Trade");
 		controller.setAction(t -> tradePanel.close());
 
 		tradeButton.setEnabled(true);
@@ -302,7 +304,7 @@ public class GameGUI extends JFrame {
 						endButton.setEnabled(false);
 						endButton.setText("End Turn");
 					} else {
-						Message msg = new MessageBuilder().action(Message.Action.EndTurn).build();
+						Message msg = new MessageBuilder().action(Message.Action.EndSetupTurn).build();
 						gameClient.sendMessage(msg);
 						if (setupNum == 3 && setupReverse == false) {
 							controller.setCurPlayer(controller.getPlayers().get(setupNum));
@@ -327,85 +329,11 @@ public class GameGUI extends JFrame {
 				case GAMEROLL:
 					Message msg = new MessageBuilder().action(Message.Action.RollDice).build();
 					gameClient.sendMessage(msg);
-					die1 = Dice.getDie1();
-					die2 = Dice.getDie2();
-					switch (die1) {
-					case 1:
-						dieOne = one.getImage();
-						break;
-					case 2:
-						dieOne = two.getImage();
-						break;
-					case 3:
-						dieOne = three.getImage();
-						break;
-					case 4:
-						dieOne = four.getImage();
-						break;
-					case 5:
-						dieOne = five.getImage();
-						break;
-					case 6:
-						dieOne = six.getImage();
-						break;
-					}
-					switch (die2) {
-					case 1:
-						dieTwo = one.getImage();
-						break;
-					case 2:
-						dieTwo = two.getImage();
-						break;
-					case 3:
-						dieTwo = three.getImage();
-						break;
-					case 4:
-						dieTwo = four.getImage();
-						break;
-					case 5:
-						dieTwo = five.getImage();
-						break;
-					case 6:
-						dieTwo = six.getImage();
-						break;
-					}
 
-					int val = die1 + die2;
-
-					if (val != 7) {
-						endButton.setText("End Turn");
-						controller.setGamePhase(GamePhase.GAMEMAIN);
-						controller.gamePhaseTrade();
-					} else {
-						endButton.setText("End Robber Move");
-						controller.setGamePhase(GamePhase.ROBBERMOVE);
-						controller.robberMovePhase();
-					}
-
-					tradeButton.setEnabled(true);
-					repaint();
 					break;
 				case GAMEMAIN:
-					tradeButton.setEnabled(false);
-					endButton.setText("Roll Dice");
-					controller.setGamePhase(GamePhase.GAMEROLL);
-					controller.gamePhaseEnd();
-					if (controller.isGameEnded()) {
-						JPanel gameOver = new EndGamePanel();
-						gameOver.setBounds(getWidth() / 2 - 225, getHeight() / 2 - 150, 450, 300);
-						gameOver.setEnabled(true);
-						gameOver.setVisible(true);
-						master.add(gameOver, new Integer(1), 0);
-
-						return;
-
-					}
-					setTurnColor();
-					BoardPanel.drawRoads = false;
-					BoardPanel.drawSettlements = false;
-					BoardPanel.drawCities = false;
-					BoardPanel.repaint();
-					repaint();
+					Message m = new MessageBuilder().action(Message.Action.EndTurn).build();
+					gameClient.sendMessage(m);
 					break;
 				default:
 					break;
@@ -461,8 +389,8 @@ public class GameGUI extends JFrame {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				try {
-					for (int i = 0; i < controller.getCurPlayer().getResources().size(); i++) {
-						ResourceCard resource = controller.getCurPlayer().getResources().get(i);
+					for (int i = 0; i < myPlayer.getResources().size(); i++) {
+						ResourceCard resource = myPlayer.getResources().get(i);
 						switch (resource.getResourceType()) {
 						case WOOD:
 							resourceCard = wood.getImage();
@@ -653,6 +581,105 @@ public class GameGUI extends JFrame {
 		}
 		
 		
+		
+	}
+	
+	public void diceRolled() {
+		
+		die1 = controller.getCurPlayer().getDice().getDie1();
+		die2 = controller.getCurPlayer().getDice().getDie2();
+		
+		switch (die1) {
+		case 1:
+			dieOne = one.getImage();
+			break;
+		case 2:
+			dieOne = two.getImage();
+			break;
+		case 3:
+			dieOne = three.getImage();
+			break;
+		case 4:
+			dieOne = four.getImage();
+			break;
+		case 5:
+			dieOne = five.getImage();
+			break;
+		case 6:
+			dieOne = six.getImage();
+			break;
+		}
+		switch (die2) {
+		case 1:
+			dieTwo = one.getImage();
+			break;
+		case 2:
+			dieTwo = two.getImage();
+			break;
+		case 3:
+			dieTwo = three.getImage();
+			break;
+		case 4:
+			dieTwo = four.getImage();
+			break;
+		case 5:
+			dieTwo = five.getImage();
+			break;
+		case 6:
+			dieTwo = six.getImage();
+			break;
+		}
+
+		int val = die1 + die2;
+
+		if (val != 7) {
+			endButton.setText("End Turn");
+			controller.setGamePhase(GamePhase.GAMEMAIN);
+			controller.gamePhaseTrade();
+		} else {
+			
+			endButton.setText("End Robber Move");
+			controller.setGamePhase(GamePhase.ROBBERMOVE);
+			controller.robberMovePhase();
+		}
+		
+		if(controller.getCurPlayer().equals(myPlayer)) {
+			tradeButton.setEnabled(true);
+		}
+
+		
+		repaint();
+	}
+	
+	public Player getMyPlayer() {
+		return myPlayer;
+	}
+
+	public void gamePhaseEnd() {
+		tradeButton.setEnabled(false);
+		endButton.setText("Roll Dice");
+		if (controller.isGameEnded()) {
+			JPanel gameOver = new EndGamePanel();
+			gameOver.setBounds(getWidth() / 2 - 225, getHeight() / 2 - 150, 450, 300);
+			gameOver.setEnabled(true);
+			gameOver.setVisible(true);
+			master.add(gameOver, new Integer(1), 0);
+
+			return;
+
+		}
+		setTurnColor();
+		BoardPanel.drawRoads = false;
+		BoardPanel.drawSettlements = false;
+		BoardPanel.drawCities = false;
+		BoardPanel.repaint();
+		updateTurn();
+		repaint();
+		
+	}
+
+	public void robberMoved(Point p) {
+		((BoardPanel)BoardPanel).getRobber().setPoint(p);
 		
 	}
 

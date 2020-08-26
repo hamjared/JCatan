@@ -52,6 +52,10 @@ public class BoardPanel extends JPanel {
 	private Map<Tile, Hexagon> tileToHexagon;
 	private List<SelectableRobberTile> robberTiles;
 	private RobberShape robber;
+	public RobberShape getRobber() {
+		return robber;
+	}
+
 	private boolean initialized = false;
 
 	public BoardPanel() {

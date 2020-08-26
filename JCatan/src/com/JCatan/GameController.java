@@ -158,7 +158,7 @@ public class GameController implements Serializable{
 			
 			
 
-			int diceRoll = curPlayer.rollDice();
+			int diceRoll = curPlayer.getDiceRoll();
 
 			if (diceRoll == 7) {
 				for(Player p: players) {

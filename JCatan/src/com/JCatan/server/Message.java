@@ -1,5 +1,6 @@
 package com.JCatan.server;
 
+import java.awt.Point;
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import com.JCatan.GameController;
 import com.JCatan.Node;
 import com.JCatan.Player;
 import com.JCatan.Road;
+import com.JCatan.Tile;
 
 public class Message implements Serializable {
 
@@ -40,14 +42,36 @@ public class Message implements Serializable {
 		BuyDevelopment, 
 		PlayDevelopmentCard,
 		MoveRobber, 
-		RollDice, UpdateBoard, EndTurn
+		RollDice, UpdateBoard, EndTurn, DiceRolled, EndSetupTurn
 	}
 	GameController gc;
 	Player myPlayer;
 	Node node;
 	Road road;
+	Tile robberTile;
+	Point RobberPoint;
 	
 	
+	public Point getRobberPoint() {
+		return RobberPoint;
+	}
+
+
+	public void setRobberPoint(Point robberPoint) {
+		RobberPoint = robberPoint;
+	}
+
+
+	public Tile getRobberTile() {
+		return robberTile;
+	}
+
+
+	public void setRobberTile(Tile robberTile) {
+		this.robberTile = robberTile;
+	}
+
+
 	public Node getNode() {
 		return node;
 	}

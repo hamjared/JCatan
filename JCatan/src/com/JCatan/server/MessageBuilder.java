@@ -1,9 +1,12 @@
 package com.JCatan.server;
 
+import java.awt.Point;
+
 import com.JCatan.GameController;
 import com.JCatan.Node;
 import com.JCatan.Player;
 import com.JCatan.Road;
+import com.JCatan.Tile;
 
 public class MessageBuilder {
 	
@@ -40,6 +43,16 @@ public class MessageBuilder {
 	
 	public Message build() {
 		return message;
+	}
+	
+	public MessageBuilder robberPoint(Point p) {
+		message.setRobberPoint(p);
+		return this;
+	}
+
+	public MessageBuilder robberTile(Tile tile) {
+		message.robberTile = tile;
+		return this;
 	}
 	
 

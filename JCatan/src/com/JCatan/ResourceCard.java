@@ -32,5 +32,10 @@ public class ResourceCard implements Serializable {
 		}
 		return false;
 	}
+	
+	public String toString() {
+		
+		return "" + this.resourceType;
+	}
 
 }

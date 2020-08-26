@@ -9,7 +9,7 @@ import com.JCatan.GamePhase;
 import com.JCatan.InsufficientResourceCardException;
 import com.JCatan.Node;
 import com.JCatan.Player;
-
+import com.JCatan.gui.GameGUI;
 
 public class PlayerSocket implements Runnable {
 	Player player;
@@ -43,19 +43,37 @@ public class PlayerSocket implements Runnable {
 				case BuildRoad:
 					buildRoad(msg);
 					break;
+				case EndSetupTurn:
+					endSetupTurn(msg);
+					break;
 				case EndTurn:
 					endTurn(msg);
-					break;
+					Message m = new MessageBuilder().action(Message.Action.EndTurn)
+							.gameController(server.getController()).build();
+					server.broadcastMessage(m);
+					continue;
+				case MoveRobber:
+					moveRobber(msg);
+					Message msg2 = new MessageBuilder().action(Message.Action.MoveRobber)
+							.gameController(server.getController()).robberPoint(msg.getRobberPoint()).build();
+					server.broadcastMessage(msg2);
+					continue;
+				case RollDice:
+					rollDice();
+					Message message = new MessageBuilder().action(Message.Action.DiceRolled)
+							.gameController(server.getController()).build();
+					server.broadcastMessage(message);
+					continue;
+
 				default:
 					break;
 				}
 
 				Message returnMessage = new MessageBuilder().action(Message.Action.UpdateBoard)
 						.gameController(server.getController()).build();
-				
+
 				System.out.println("Game board: ");
 				System.out.println(server.getController().getBoard());
-
 
 				server.broadcastMessage(returnMessage);
 			} catch (IOException e) {
@@ -70,14 +88,39 @@ public class PlayerSocket implements Runnable {
 
 	}
 
+	private void moveRobber(Message msg) {
+		System.out.println("Moving robber to tile " + msg.getRobberTile().getNumber());
+		server.getController().setGamePhase(GamePhase.GAMEMAIN);
+		server.getController().getRobber().move(msg.getRobberTile());
+		server.getController().getRobber().rob(server.getController().getCurPlayer());
+
+	}
+
 	private void endTurn(Message msg) {
+		server.getController().setGamePhase(GamePhase.GAMEROLL);
+		server.getController().gamePhaseEnd();
+		System.out.println("Turn ended, " + server.getController().getCurPlayer().getName() + "'s Turn now");
+
+	}
+
+	private void rollDice() {
+		server.getController().getCurPlayer().rollDice();
+		server.getController().gamePhaseRoll();
+		for(Player p : server.getController().getPlayers()) {
+			System.out.println(p.getName() + " Hand: " + p.getResources());
+		}
+
+	}
+
+	private void endSetupTurn(Message msg) {
 		GameController controller = server.getController();
 		controller.endSetupTurn();
-		
+
 	}
 
 	private void buildRoad(Message msg) {
-		System.out.println("Building a road for : " + msg.getMyPlayer() + " from " + msg.getRoad().getNode1().getNodeIndex() + "to " + msg.getRoad().getNode2().getNodeIndex());
+		System.out.println("Building a road for : " + msg.getMyPlayer() + " from "
+				+ msg.getRoad().getNode1().getNodeIndex() + "to " + msg.getRoad().getNode2().getNodeIndex());
 		GameController controller = server.getController();
 		try {
 			Node node1 = controller.getBoard().getBoard().getNodeList().get(msg.getRoad().getNode1().getNodeIndex());
@@ -87,7 +130,7 @@ public class PlayerSocket implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void buildSettlement(Message msg) {
