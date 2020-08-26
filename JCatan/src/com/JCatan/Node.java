@@ -72,5 +72,13 @@ public abstract class Node implements Serializable{
 		return roads;
 	}
 	
+	public boolean equals(Object obj) {
+		if(obj == null || !(obj instanceof Node)) {
+			return false;
+		}
+		Node node = (Node) obj;
+		return node.getNodeIndex() == this.getNodeIndex();
+	}
+	
 
 }

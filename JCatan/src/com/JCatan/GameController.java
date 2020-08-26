@@ -1,11 +1,19 @@
 package com.JCatan;
 
+import java.awt.Color;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Stack;
 
 import com.JCatan.gui.GameGUI;
 
-public class GameController {
+public class GameController implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static final int POINTS_TO_WIN = 10;
 
 	List<Player> players;
@@ -20,6 +28,9 @@ public class GameController {
 	Consumer refresh;
 	Robber robber;
 	boolean setUpChatCheck = false;
+	int setupNum = 0;
+	boolean setupReverse;
+	
 	
 
 	public List<Player> getPlayers(){
@@ -269,6 +280,39 @@ public class GameController {
 
 	public void startGame() {
 		chat.addToChat("Game started");
+		Stack<Color> colors = new Stack<>();
+		colors.push(Color.WHITE);
+		colors.push(Color.BLUE);
+		colors.push(Color.ORANGE);
+		colors.push(Color.RED);
+		for (Player player: players) {
+			player.setColor(colors.pop());
+		}
 		diceRollPhase();
+	}
+	
+	public void endSetupTurn() {
+		if (setupNum == 3 && setupReverse == false) {
+			setCurPlayer(getPlayers().get(setupNum));
+			setupReverse = true;
+		} else if (setupNum <= 3 && setupReverse == true) {
+			if (setupNum == 0) {
+				setGamePhase(GamePhase.GAMEROLL);
+				
+			} else {
+				setCurPlayer(getPlayers().get(setupNum - 1));
+				setupNum--;
+			}
+		} else {
+			setCurPlayer(getPlayers().get(setupNum + 1));
+			setupNum++;
+		}
+	}
+	
+	public String toString() {
+		String s = "";
+		s += "Cur Player: " + this.curPlayer.getName() + "\n";
+		s += "Game Phase: " + this.gamePhase + "\n";
+		return s;
 	}
 }

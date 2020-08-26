@@ -9,6 +9,8 @@ import com.JCatan.HumanPlayer;
 import com.JCatan.Player;
 import com.JCatan.RandomBoardFactory;
 import com.JCatan.TraditionalBoardFactory;
+import com.JCatan.client.GameClient;
+import com.JCatan.client.InitiatePlayer;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -29,6 +31,7 @@ public class StartMenuFrame extends JFrame
 	private JPanel contentPane;
     private JTextField redPlayerName;
     private JComboBox<String> boardType;
+    private JLabel gameStartLabel;
 
     public StartMenuFrame()
     {
@@ -67,11 +70,18 @@ public class StartMenuFrame extends JFrame
         JButton btnNewButton = new JButton("Start Game");
         btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	btnNewButton.setEnabled(false);
+            	redPlayerName.setEnabled(false);
                 startGame();
             }
         });
         btnNewButton.setBounds(302, 398, 89, 23);
         contentPane.add(btnNewButton);
+        
+        gameStartLabel = new JLabel("Waiting for Game to Start");
+        gameStartLabel.setBounds(284, 297, 221, 14);
+        contentPane.add(gameStartLabel);
+        gameStartLabel.setVisible(false);
     }
 
     protected void startGame()
@@ -84,15 +94,27 @@ public class StartMenuFrame extends JFrame
         else {
         	bf = new RandomBoardFactory();
         }
-        
+        gameStartLabel.setVisible(true);
         SwingUtilities.invokeLater(new Runnable() {
     		public void run() {
-    			GameGUI game = new GameGUI(players, bf);
+    			
+    			GameGUI game = new GameGUI();
+    			GameClient gameClient = new GameClient("127.0.0.1", 5679);
+    			game.setGameClient(gameClient);
+    			gameClient.setGameGUI(game);
+    			Player player = new HumanPlayer(redPlayerName.getText());
+    			gameClient.sendPlayer(new InitiatePlayer(player, bf));
+    			gameClient.waitForGame();
+    			new Thread(gameClient).start();
+    			
+    			
     	        game.setVisible(true);
+    	        setVisible(false);
+    	        dispose();
     		}
     	});
-        setVisible(false);
-        dispose();
+        
+        
     }
     
     protected List<Player> getPlayers(){

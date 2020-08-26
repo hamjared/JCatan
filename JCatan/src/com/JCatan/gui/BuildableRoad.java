@@ -10,6 +10,8 @@ import com.JCatan.InsufficientResourceCardException;
 import com.JCatan.ResourceCard;
 import com.JCatan.ResourceType;
 import com.JCatan.Road;
+import com.JCatan.server.Message;
+import com.JCatan.server.MessageBuilder;
 
 public class BuildableRoad {
 
@@ -38,6 +40,11 @@ public class BuildableRoad {
 		try {
 			GameGUI.controller.getCurPlayer().buildRoad(GameGUI.controller.getGamePhase(), road.getNode1(),
 					road.getNode2(), GameGUI.controller);
+			
+			
+			Message msg = new MessageBuilder().action(Message.Action.BuildRoad)
+					.player(GameGUI.controller.getCurPlayer()).road(road).build();
+			GameGUI.gameClient.sendMessage(msg);
 			GameGUI.ResourcePanel.repaint();
 			GameGUI.Player1Panel.repaint();
 			GameGUI.Player2Panel.repaint();
