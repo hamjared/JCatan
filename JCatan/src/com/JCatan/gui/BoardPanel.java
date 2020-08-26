@@ -46,9 +46,9 @@ public class BoardPanel extends JPanel {
 	private List<BuildableRoad> buildableRoads;
 	private List<Node> cities;
 	private List<BuildableCity> buildableCities;
-	private boolean drawRoads = false;
-	private boolean drawSettlements = false;
-	private boolean drawCities = false;
+	public static boolean drawRoads = false;
+	public static boolean drawSettlements = false;
+	public static boolean drawCities = false;
 	private Map<Tile, Hexagon> tileToHexagon;
 	private List<SelectableRobberTile> robberTiles;
 	private RobberShape robber;

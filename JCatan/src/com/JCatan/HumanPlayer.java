@@ -402,6 +402,7 @@ public class HumanPlayer extends Player {
 				if (resourceCheck == 5) {
 					city.setHasBeenPlayed(true);
 					Settlement settlement = (Settlement) node.getBuilding();
+					settlement.setHasBeenPlayed(false);
 					this.playedBuildings.remove(settlement);
 					this.playedBuildings.add(city);
 					for(int i = 0; i < this.getBuildings().size(); i++) {
