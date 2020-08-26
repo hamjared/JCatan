@@ -28,9 +28,6 @@ public class StartMenuFrame extends JFrame
 	private static final long serialVersionUID = 7807675421410822657L;
 	private JPanel contentPane;
     private JTextField redPlayerName;
-    private JTextField whitePlayerName;
-    private JTextField bluePlayerName;
-    private JTextField orangePlayerName;
     private JComboBox<String> boardType;
 
     public StartMenuFrame()
@@ -48,53 +45,23 @@ public class StartMenuFrame extends JFrame
         lblNewLabel.setBounds(302, 11, 147, 45);
         contentPane.add(lblNewLabel);
         
-        JLabel lblNewLabel_1 = new JLabel("Red Player");
-        lblNewLabel_1.setBounds(213, 114, 80, 14);
+        JLabel lblNewLabel_1 = new JLabel("Player Name");
+        lblNewLabel_1.setBounds(213, 173, 80, 14);
         contentPane.add(lblNewLabel_1);
         
         redPlayerName = new JTextField();
         redPlayerName.setText("Joe");
-        redPlayerName.setBounds(336, 111, 113, 20);
+        redPlayerName.setBounds(336, 170, 113, 20);
         contentPane.add(redPlayerName);
         redPlayerName.setColumns(10);
         
-        JLabel lblNewLabel_2 = new JLabel("White Player");
-        lblNewLabel_2.setBounds(213, 162, 80, 14);
-        contentPane.add(lblNewLabel_2);
-        
-        whitePlayerName = new JTextField();
-        whitePlayerName.setText("Bob");
-        whitePlayerName.setBounds(336, 159, 113, 20);
-        contentPane.add(whitePlayerName);
-        whitePlayerName.setColumns(10);
-        
-        JLabel lblNewLabel_3 = new JLabel("Blue Player");
-        lblNewLabel_3.setBounds(213, 211, 67, 14);
-        contentPane.add(lblNewLabel_3);
-        
-        JLabel lblNewLabel_4 = new JLabel("Orange Player");
-        lblNewLabel_4.setBounds(213, 265, 80, 14);
-        contentPane.add(lblNewLabel_4);
-        
-        bluePlayerName = new JTextField();
-        bluePlayerName.setText("Tim");
-        bluePlayerName.setBounds(336, 208, 113, 20);
-        contentPane.add(bluePlayerName);
-        bluePlayerName.setColumns(10);
-        
-        orangePlayerName = new JTextField();
-        orangePlayerName.setText("Will");
-        orangePlayerName.setBounds(336, 262, 113, 20);
-        contentPane.add(orangePlayerName);
-        orangePlayerName.setColumns(10);
-        
         boardType = new JComboBox<String>();
         boardType.setModel(new DefaultComboBoxModel<String>(new String[] {"Traditional Board", "Random Board"}));
-        boardType.setBounds(336, 317, 113, 22);
+        boardType.setBounds(336, 241, 113, 22);
         contentPane.add(boardType);
         
         JLabel lblNewLabel_5 = new JLabel("BoardLayout");
-        lblNewLabel_5.setBounds(213, 321, 80, 14);
+        lblNewLabel_5.setBounds(213, 245, 80, 14);
         contentPane.add(lblNewLabel_5);
         
         JButton btnNewButton = new JButton("Start Game");
@@ -132,15 +99,6 @@ public class StartMenuFrame extends JFrame
         List<Player> players = new ArrayList<>();
         if(!redPlayerName.getText().isEmpty()) {
             players.add(new HumanPlayer(redPlayerName.getText()));
-        }
-        if(!bluePlayerName.getText().isEmpty()) {
-            players.add(new HumanPlayer(bluePlayerName.getText()));
-        }
-        if(!whitePlayerName.getText().isEmpty()) {
-            players.add(new HumanPlayer(whitePlayerName.getText()));
-        }
-        if(!orangePlayerName.getText().isEmpty()) {
-            players.add(new HumanPlayer(orangePlayerName.getText()));
         }
         return players;
     }
