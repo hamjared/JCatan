@@ -54,6 +54,9 @@ public class PlayerSocket implements Runnable {
 				case BuildRoad:
 					buildRoad(msg);
 					break;
+				case BuildCity:
+					buildCity(msg);
+					break;
 				case EndSetupTurn:
 					endSetupTurn(msg);
 					break;
@@ -104,6 +107,15 @@ public class PlayerSocket implements Runnable {
 
 	}
 
+	private void buildCity(Message msg) {
+		System.out.println("Building a city for : " + msg.getMyPlayer() + "on node " + msg.getNode());
+		GameController controller = server.getController();
+		try {
+			Node node = controller.getBoard().getBoard().getNodeList().get(msg.getNode().getNodeIndex());
+			controller.getCurPlayer().buildCity(node, controller);
+			if (controller.getGamePhase().equals(GamePhase.GAMEROLL)) {
+				controller.setGamePhase(GamePhase.GAMEMAIN);
+			}
 	private void buyDevCard(Message msg) {
 		
 		try {
@@ -114,6 +126,7 @@ public class PlayerSocket implements Runnable {
 		}
 		
 	}
+
 
 	private void playDevelopmentCard(Message msg) {
 		
@@ -202,6 +215,9 @@ public class PlayerSocket implements Runnable {
 			Node node1 = controller.getBoard().getBoard().getNodeList().get(msg.getRoad().getNode1().getNodeIndex());
 			Node node2 = controller.getBoard().getBoard().getNodeList().get(msg.getRoad().getNode2().getNodeIndex());
 			controller.getCurPlayer().buildRoad(controller.getGamePhase(), node1, node2, controller);
+			if (controller.getGamePhase().equals(GamePhase.GAMEROLL)) {
+				controller.setGamePhase(GamePhase.GAMEMAIN);
+			}
 		} catch (InsufficientResourceCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -215,6 +231,9 @@ public class PlayerSocket implements Runnable {
 		try {
 			Node node = controller.getBoard().getBoard().getNodeList().get(msg.getNode().getNodeIndex());
 			controller.getCurPlayer().buildSettlement(controller.getGamePhase(), node, controller);
+			if (controller.getGamePhase().equals(GamePhase.GAMEROLL)) {
+				controller.setGamePhase(GamePhase.GAMEMAIN);
+			}
 		} catch (InsufficientResourceCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
