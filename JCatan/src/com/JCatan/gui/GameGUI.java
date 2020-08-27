@@ -59,6 +59,7 @@ public class GameGUI extends JFrame {
 	public static JPanel Player2Panel;
 	public static JPanel Player3Panel;
 	public static JPanel Player4Panel;
+	JPanel devCardPanel;
 	private JButton tradeButton;
 
 	ImageIcon one = new ImageIcon("images/one.png");
@@ -238,7 +239,7 @@ public class GameGUI extends JFrame {
 		Player4Panel.setBorder(border);
 		contentPane.add(Player4Panel);
 
-		JPanel devCardPanel = new DevCardPanel(1125, 675, 300, 100, this.BoardPanel);
+		devCardPanel = new DevCardPanel(1125, 675, 300, 100, this.BoardPanel);
 		devCardPanel.setVisible(false);
 		devCardPanel.setEnabled(false);
 		master.add(devCardPanel, new Integer(1), 0);
@@ -649,6 +650,10 @@ public class GameGUI extends JFrame {
 
 		
 		repaint();
+	}
+	
+	public void updateDevCardPanel() {
+		((DevCardPanel)devCardPanel).updateComboBox();
 	}
 	
 	public Player getMyPlayer() {
