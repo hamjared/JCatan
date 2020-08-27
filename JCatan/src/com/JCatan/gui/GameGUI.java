@@ -306,19 +306,9 @@ public class GameGUI extends JFrame {
 					} else {
 						Message msg = new MessageBuilder().action(Message.Action.EndSetupTurn).build();
 						gameClient.sendMessage(msg);
-						if (setupNum == 3 && setupReverse == false) {
-							controller.setCurPlayer(controller.getPlayers().get(setupNum));
-							setupReverse = true;
-							endButton.setText("Build Settlement");
-						} else if (setupNum <= 3 && setupReverse == true) {
-							if (setupNum == 0) {
-								controller.setGamePhase(GamePhase.GAMEROLL);
-								endButton.setText("Roll Dice");
-							} else {
-								controller.setCurPlayer(controller.getPlayers().get(setupNum - 1));
-								setupNum--;
-								endButton.setText("Build Settlement");
-							}
+						if (setupNum == 1) {
+							endButton.setText("Roll Dice");
+							controller.setGamePhase(GamePhase.GAMEROLL);
 						} else {
 							controller.setCurPlayer(controller.getPlayers().get(setupNum + 1));
 							setupNum++;
@@ -329,11 +319,12 @@ public class GameGUI extends JFrame {
 				case GAMEROLL:
 					Message msg = new MessageBuilder().action(Message.Action.RollDice).build();
 					gameClient.sendMessage(msg);
-
+					setTurnColor();
 					break;
 				case GAMEMAIN:
 					Message m = new MessageBuilder().action(Message.Action.EndTurn).build();
 					gameClient.sendMessage(m);
+					setTurnColor();
 					break;
 				default:
 					break;
@@ -488,30 +479,6 @@ public class GameGUI extends JFrame {
 		oreLabel.setText("" + controller.getBank().getNumberOfResourceCardsRemaining(ResourceType.ORE));
 	}
 
-	private void setTurnColor() {
-		if (controller.getCurPlayer().getColor() == Color.BLUE) {
-			Player1Panel.setBorder(new LineBorder(Color.BLUE, 3, true));
-			Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
-			Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
-			Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
-		} else if (controller.getCurPlayer().getColor() == Color.RED) {
-			Player2Panel.setBorder(new LineBorder(Color.RED, 3, true));
-			Player1Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
-			Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
-			Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
-		} else if (controller.getCurPlayer().getColor() == Color.ORANGE) {
-			Player3Panel.setBorder(new LineBorder(Color.decode("#FFA500"), 3, true));
-			Player1Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
-			Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
-			Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
-		} else {
-			Player4Panel.setBorder(new LineBorder(Color.WHITE, 3, true));
-			Player1Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
-			Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
-			Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
-		}
-	}
-
 	public void disableAll() {
 
 		for (Component c : contentPane.getComponents()) {
@@ -556,6 +523,7 @@ public class GameGUI extends JFrame {
 		}
 		else {
 			System.out.println("Called disable all for " + myPlayer);
+			setTurnColor();
 			disableAll();
 		}
 		
@@ -637,7 +605,6 @@ public class GameGUI extends JFrame {
 			controller.setGamePhase(GamePhase.GAMEMAIN);
 			controller.gamePhaseTrade();
 		} else {
-			
 			endButton.setText("End Robber Move");
 			controller.setGamePhase(GamePhase.ROBBERMOVE);
 			controller.robberMovePhase();
@@ -668,11 +635,11 @@ public class GameGUI extends JFrame {
 			return;
 
 		}
-		setTurnColor();
 		BoardPanel.drawRoads = false;
 		BoardPanel.drawSettlements = false;
 		BoardPanel.drawCities = false;
 		BoardPanel.repaint();
+		System.out.println("This is the cur player: " + controller.getCurPlayer());
 		updateTurn();
 		repaint();
 		
@@ -681,6 +648,99 @@ public class GameGUI extends JFrame {
 	public void robberMoved(Point p) {
 		((BoardPanel)BoardPanel).getRobber().setPoint(p);
 		
+	}
+	
+	private void setTurnColor() {
+		if(controller.getCurPlayer().equals(controller.getPlayers().get(0))) {
+			if(controller.getCurPlayer().getColor().equals(Color.BLUE)) {
+				Player1Panel.setBorder(new LineBorder(Color.BLUE, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			} else if (controller.getCurPlayer().getColor().equals(Color.RED)) {
+				Player1Panel.setBorder(new LineBorder(Color.RED, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			} else if (controller.getCurPlayer().getColor().equals(Color.WHITE)) {
+				Player1Panel.setBorder(new LineBorder(Color.WHITE, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			} else {
+				Player1Panel.setBorder(new LineBorder(Color.decode("#FFA500"), 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			}
+		} else if (controller.getCurPlayer().equals(controller.getPlayers().get(1))) {
+			if(controller.getCurPlayer().getColor().equals(Color.BLUE)) {
+				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLUE, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			} else if (controller.getCurPlayer().getColor().equals(Color.RED)) {
+				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.RED, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			} else if (controller.getCurPlayer().getColor().equals(Color.WHITE)) {
+				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.WHITE, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			} else {
+				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.decode("#FFA500"), 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			}
+		} else if (controller.getCurPlayer().equals(controller.getPlayers().get(2))) {
+			if(controller.getCurPlayer().getColor().equals(Color.BLUE)) {
+				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLUE, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			} else if (controller.getCurPlayer().getColor().equals(Color.RED)) {
+				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.RED, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			} else if (controller.getCurPlayer().getColor().equals(Color.WHITE)) {
+				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.WHITE, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			} else {
+				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.decode("#FFA500"), 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+			}
+		} else {
+			if(controller.getCurPlayer().getColor().equals(Color.BLUE)) {
+				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.BLUE, 2, true));
+			} else if (controller.getCurPlayer().getColor().equals(Color.RED)) {
+				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.RED, 2, true));
+			} else if (controller.getCurPlayer().getColor().equals(Color.WHITE)) {
+				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.WHITE, 2, true));
+			} else {
+				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
+				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
+				Player4Panel.setBorder(new LineBorder(Color.decode("#FFA500"), 2, true));
+			}
+		}
+			
 	}
 
 }
