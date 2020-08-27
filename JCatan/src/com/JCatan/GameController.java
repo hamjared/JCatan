@@ -128,7 +128,8 @@ public class GameController implements Serializable{
 	}
 	
 	public void refreshScreen() {
-		refresh.accept(this);
+		if(refresh != null)
+			refresh.accept(this);
 	}
 
 	public void setAction(Consumer c) {
@@ -137,7 +138,8 @@ public class GameController implements Serializable{
 	
 	public void endTrade() {
 		//Could display message player accepted the trade...
-		action.accept(this);
+		if(action != null)
+			action.accept(this);
 	}
 	
 	public Robber getRobber() {

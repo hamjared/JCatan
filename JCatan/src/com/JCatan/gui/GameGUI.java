@@ -618,7 +618,10 @@ public class GameGUI extends JFrame {
 		
 		repaint();
 	}
-	
+
+	public TradePanel getTradePanel() {
+		return tradePanel;
+  }
 	public void updateDevCardPanel() {
 		((DevCardPanel)devCardPanel).updateComboBox();
 	}

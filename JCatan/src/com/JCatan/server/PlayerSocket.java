@@ -10,6 +10,7 @@ import com.JCatan.DevCardActionBuilder;
 import com.JCatan.DevelopmentCard;
 import com.JCatan.GameController;
 import com.JCatan.GamePhase;
+import com.JCatan.HumanPlayer;
 import com.JCatan.InsufficientResourceCardException;
 import com.JCatan.InvalidDevCardUseException;
 import com.JCatan.KnightDevelopmentCard;
@@ -77,6 +78,15 @@ public class PlayerSocket implements Runnable {
 					Message message = new MessageBuilder().action(Message.Action.DiceRolled)
 							.gameController(server.getController()).build();
 					server.broadcastMessage(message);
+					continue;					
+				case Trade:
+					if(msg.getTrade() instanceof com.JCatan.DomesticTrade)
+						server.broadcastMessage(msg);
+					else
+						trade(msg);
+					continue;
+				case FinalizeTrade:
+					finalizeTrade(msg);
 					continue;
 				case PlayDevelopmentCard:
 					playDevelopmentCard(msg);
@@ -107,6 +117,25 @@ public class PlayerSocket implements Runnable {
 
 	}
 
+
+	private void trade(Message msg) {
+		System.out.println("Player is initiating Maritime Trade");
+		server.getController().initiateTrade(msg.getTrade());
+	}
+	
+	private void finalizeTrade(Message msg) {
+		com.JCatan.Trade trade = msg.getTrade();
+		if(trade != null) {
+			server.getController().initiateTrade(trade);
+			Player offerer = server.getController().getPlayers().stream().filter(p->p.getName().equals(trade.getOfferingPlayer().getName())).findFirst().get();
+			Player receiver = server.getController().getPlayers().stream().filter(p->p.getName().equals(trade.getReceivingPlayer().getName())).findFirst().get();
+			offerer.receiveTrade(trade);
+			receiver.receiveTrade(trade);
+			msg.setGc(server.getController());
+			server.broadcastMessage(msg);
+		}
+	}
+	
 	private void buildCity(Message msg) {
         System.out.println("Building a city for : " + msg.getMyPlayer() + "on node " + msg.getNode());
         GameController controller = server.getController();

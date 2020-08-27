@@ -9,6 +9,7 @@ import com.JCatan.Node;
 import com.JCatan.Player;
 import com.JCatan.Road;
 import com.JCatan.Tile;
+import com.JCatan.Trade;
 
 public class MessageBuilder {
 	
@@ -45,6 +46,11 @@ public class MessageBuilder {
 	
 	public Message build() {
 		return message;
+	}
+	
+	public MessageBuilder trade(Trade trade) {
+		message.setTrade(trade);
+		return this;
 	}
 	
 	public MessageBuilder robberPoint(Point p) {

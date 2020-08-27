@@ -13,15 +13,16 @@ import com.JCatan.gui.GameGUI;
 import com.JCatan.server.Message;
 import com.JCatan.server.MessageBuilder;
 
-public class GameClient implements Runnable{
-	
+public class GameClient implements Runnable {
+
 	Socket serverConnection;
 	GameGUI gameGUI;
 	GameController controller;
-	
+
 	public void setGameGUI(GameGUI gg) {
 		gameGUI = gg;
 	}
+
 	public Socket getServerConnection() {
 		return serverConnection;
 	}
@@ -34,19 +35,16 @@ public class GameClient implements Runnable{
 		return controller;
 	}
 
-
-
-
 	public GameClient(String ip, int port) {
 		try {
 			serverConnection = new Socket(ip, port);
 			System.out.println("Connected to server: " + serverConnection);
-		} catch(IOException e) {
+		} catch (IOException e) {
 			System.out.println("Unable to connect to server on " + ip + " Port: " + port);
 		}
 	}
-	
-	public void sendPlayer(InitiatePlayer player)  {
+
+	public void sendPlayer(InitiatePlayer player) {
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(serverConnection.getOutputStream());
 			oos.writeObject(player);
@@ -55,14 +53,14 @@ public class GameClient implements Runnable{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void waitForGame() {
 		System.out.println("Waiting for game to start ... ");
-		while(true) {
+		while (true) {
 			try {
 				ObjectInputStream oos = new ObjectInputStream(serverConnection.getInputStream());
 				Object obj = oos.readObject();
-				if(obj == null) {
+				if (obj == null) {
 					continue;
 				}
 				Message msg = (Message) obj;
@@ -79,10 +77,9 @@ public class GameClient implements Runnable{
 				e.printStackTrace();
 			}
 		}
-		
 
 	}
-	
+
 	public void sendMessage(Message msg) {
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(serverConnection.getOutputStream());
@@ -96,14 +93,14 @@ public class GameClient implements Runnable{
 	@Override
 	public void run() {
 		System.out.println("Waiting for messages from server");
-		while(true) {
+		while (true) {
 			try {
 				ObjectInputStream ois = new ObjectInputStream(serverConnection.getInputStream());
 				Object obj = ois.readObject();
 				if (obj == null || !(obj instanceof Message)) {
 					continue;
 				}
-				
+
 				Message msg = (Message) obj;
 				System.out.println("Message from server received: " + msg.getAction());
 				switch (msg.getAction()) {
@@ -119,6 +116,12 @@ public class GameClient implements Runnable{
 				case MoveRobber:
 					robberMoved(msg);
 					break;
+				case Trade:
+					trade(msg);
+					break;
+				case FinalizeTrade:
+					finalizeTrade(msg);
+					break;
 				default:
 					break;
 				}
@@ -131,10 +134,9 @@ public class GameClient implements Runnable{
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
-	
-	
+
 	private void robberMoved(Message msg) {
 		GameGUI.controller = msg.getGc();
 		this.controller = msg.getGc();
@@ -143,23 +145,25 @@ public class GameClient implements Runnable{
 		System.out.println("Game Phase: " + GameGUI.controller.getGamePhase());
 		gameGUI.robberMoved(msg.getRobberPoint());
 		gameGUI.repaint();
-		
+
 	}
+
 	private void turnedEnded(Message msg) {
 		GameGUI.controller = msg.getGc();
 		this.controller = msg.getGc();
 		System.out.println(GameGUI.controller.getCurPlayer().getName() + "'s turn");
 		gameGUI.gamePhaseEnd();
-		
+
 	}
+
 	private void diceRolled(Message msg) {
 		GameGUI.controller = msg.getGc();
 		this.controller = msg.getGc();
 		gameGUI.updatePlayer();
 		System.out.println(gameGUI.getMyPlayer().getName() + " Hand: " + gameGUI.getMyPlayer().getResources());
 		gameGUI.diceRolled();
-		
 	}
+
 	private void updateBoard(Message msg) {
 		System.out.println("Updating Board ...");
 		GameGUI.controller = msg.getGc();
@@ -173,15 +177,40 @@ public class GameClient implements Runnable{
 		gameGUI.updateTurn();
 		gameGUI.updatePlayer();
 		gameGUI.repaint();
-		
+
 	}
+
+	private void trade(Message msg) {
+		System.out.println("Player is wanting to trade with another player...");
+		System.out.println("Receiving Player is: " + msg.getTrade().getReceivingPlayer().getName());
+		System.out.println("My player is: " + gameGUI.getMyPlayer().getName());
+		if (msg.getTrade().getReceivingPlayer().getName().equals(gameGUI.getMyPlayer().getName())) {
+			System.out.println("Trying to enable and start trade panel");
+			gameGUI.getTradePanel().setTradeInfo(msg.getTrade());
+		}
+	}
+	
+	private void finalizeTrade(Message msg) {
+		System.out.println("Finalizing Trade");
+		GameGUI.controller = msg.getGc();
+		gameGUI.updatePlayer();
+		String myPlayerName = gameGUI.getMyPlayer().getName();
+		String offeringPlayer = msg.getTrade().getOfferingPlayer().getName();
+		String receivingPlayer = msg.getTrade().getReceivingPlayer().getName();
+		boolean isPlayerTrading = myPlayerName.equals(offeringPlayer) || myPlayerName.equals(receivingPlayer);
+		if(isPlayerTrading) {
+			gameGUI.getTradePanel().close();
+		}
+		gameGUI.repaint();
+	}
+
 	public static void main(String[] args) throws InterruptedException {
 		GameClient gc = new GameClient("127.0.0.1", 5678);
 		gc.sendPlayer(new InitiatePlayer(new HumanPlayer("Tim"), new TraditionalBoardFactory()));
-		
+
 		Thread thread = new Thread(gc);
 		thread.start();
 		thread.join();
 	}
-	
+
 }
