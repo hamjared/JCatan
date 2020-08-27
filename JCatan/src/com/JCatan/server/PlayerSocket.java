@@ -108,14 +108,20 @@ public class PlayerSocket implements Runnable {
 	}
 
 	private void buildCity(Message msg) {
-		System.out.println("Building a city for : " + msg.getMyPlayer() + "on node " + msg.getNode());
-		GameController controller = server.getController();
-		try {
-			Node node = controller.getBoard().getBoard().getNodeList().get(msg.getNode().getNodeIndex());
-			controller.getCurPlayer().buildCity(node, controller);
-			if (controller.getGamePhase().equals(GamePhase.GAMEROLL)) {
-				controller.setGamePhase(GamePhase.GAMEMAIN);
-			}
+        System.out.println("Building a city for : " + msg.getMyPlayer() + "on node " + msg.getNode());
+        GameController controller = server.getController();
+        try {
+            Node node = controller.getBoard().getBoard().getNodeList().get(msg.getNode().getNodeIndex());
+            controller.getCurPlayer().buildCity(node, controller);
+            if (controller.getGamePhase().equals(GamePhase.GAMEROLL)) {
+                controller.setGamePhase(GamePhase.GAMEMAIN);
+            }
+        } catch (InsufficientResourceCardException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
 	private void buyDevCard(Message msg) {
 		
 		try {
