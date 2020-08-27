@@ -6,6 +6,7 @@ import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.JCatan.GamePhase;
 import com.JCatan.InsufficientResourceCardException;
 import com.JCatan.ResourceCard;
 import com.JCatan.ResourceType;
@@ -41,10 +42,10 @@ public class BuildableRoad {
 			GameGUI.controller.getCurPlayer().buildRoad(GameGUI.controller.getGamePhase(), road.getNode1(),
 					road.getNode2(), GameGUI.controller);
 			
-			
 			Message msg = new MessageBuilder().action(Message.Action.BuildRoad)
 					.player(GameGUI.controller.getCurPlayer()).road(road).build();
 			GameGUI.gameClient.sendMessage(msg);
+			
 			GameGUI.ResourcePanel.repaint();
 			GameGUI.Player1Panel.repaint();
 			GameGUI.Player2Panel.repaint();

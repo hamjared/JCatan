@@ -29,7 +29,7 @@ public class GameController implements Serializable{
 	Robber robber;
 	boolean setUpChatCheck = false;
 	int setupNum = 0;
-	boolean setupReverse;
+	boolean setupReverse = false;
 	
 	
 
@@ -300,7 +300,6 @@ public class GameController implements Serializable{
 		} else if (setupNum <= 3 && setupReverse == true) {
 			if (setupNum == 0) {
 				setGamePhase(GamePhase.GAMEROLL);
-				
 			} else {
 				setCurPlayer(getPlayers().get(setupNum - 1));
 				setupNum--;

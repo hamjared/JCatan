@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.JCatan.Board;
+import com.JCatan.DevCardAction;
+import com.JCatan.DevelopmentCard;
 import com.JCatan.GameController;
 import com.JCatan.Node;
 import com.JCatan.Player;
@@ -40,7 +42,7 @@ public class Message implements Serializable {
 		BuildSettlement, 
 		BuildRoad,
 		BuildCity, 
-		BuyDevelopment, 
+		BuyDevelopmentCard, 
 		PlayDevelopmentCard,
 		MoveRobber, 
 		RollDice, UpdateBoard, EndTurn, DiceRolled, EndSetupTurn, Trade, FinalizeTrade
@@ -51,8 +53,31 @@ public class Message implements Serializable {
 	Road road;
 	Tile robberTile;
 	Point RobberPoint;
+
 	Trade trade;
 	
+	DevCardAction devCardAction;
+	DevelopmentCard devCard;
+	
+	public DevelopmentCard getDevCard() {
+		return devCard;
+	}
+
+
+	public void setDevCard(DevelopmentCard devCard) {
+		this.devCard = devCard;
+	}
+
+
+	public DevCardAction getDevCardAction() {
+		return devCardAction;
+	}
+
+
+	public void setDevCardAction(DevCardAction devCardAction) {
+		this.devCardAction = devCardAction;
+	}
+
 	public Point getRobberPoint() {
 		return RobberPoint;
 	}

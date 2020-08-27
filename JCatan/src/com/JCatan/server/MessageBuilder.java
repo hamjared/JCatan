@@ -2,6 +2,8 @@ package com.JCatan.server;
 
 import java.awt.Point;
 
+import com.JCatan.DevCardAction;
+import com.JCatan.DevelopmentCard;
 import com.JCatan.GameController;
 import com.JCatan.Node;
 import com.JCatan.Player;
@@ -53,6 +55,16 @@ public class MessageBuilder {
 	
 	public MessageBuilder robberPoint(Point p) {
 		message.setRobberPoint(p);
+		return this;
+	}
+	
+	public MessageBuilder devCardAction(DevCardAction devCardAction) {
+		message.setDevCardAction(devCardAction);
+		return this;
+	}
+	
+	public MessageBuilder devCard(DevelopmentCard devCard) {
+		message.setDevCard(devCard);
 		return this;
 	}
 

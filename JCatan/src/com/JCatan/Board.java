@@ -140,7 +140,6 @@ public class Board implements Serializable{
 	}
 
 	public List<Road> getBuildableRoads(Player curPlayer, GamePhase gamePhase) {
-		roadSetupTracker++;
 		List<Road> roads = new ArrayList<>();
 		int curNodeIndex = 0;
 		for (List<Node> nodes : board.getNodes()) {
@@ -149,11 +148,11 @@ public class Board implements Serializable{
 				boolean playerCanPlayRoad = false;
 				if (road.getNode1().getBuilding() != null) {
 					if (gamePhase == GamePhase.SETUP) {
-						if (roadSetupTracker <= 4) {
+						if (curPlayer.getPlayedRoads().isEmpty()) {
 							if (road.getNode1().getBuilding().getPlayer().equals(curPlayer)){
 								playerCanPlayRoad = true;
 							}
-						} else if (roadSetupTracker > 4) {
+						} else if (curPlayer.getPlayedRoads().isEmpty() == false) {
 							if (road.getNode1().getBuilding().getPlayer().equals(curPlayer) && road.getNode1().getBuilding().getId() == 1) {
 								playerCanPlayRoad = true;
 							}
@@ -176,11 +175,11 @@ public class Board implements Serializable{
 				}
 				if (road.getNode2().getBuilding() != null) {
 					if (gamePhase == GamePhase.SETUP) {
-						if (roadSetupTracker < 4) {
+						if (curPlayer.getPlayedRoads().isEmpty()) {
 							if (road.getNode2().getBuilding().getPlayer().equals(curPlayer)){
 								playerCanPlayRoad = true;
 							}
-						} else if (roadSetupTracker >= 4) {
+						} else if (curPlayer.getPlayedRoads().isEmpty() == false) {
 							if (road.getNode2().getBuilding().getPlayer().equals(curPlayer) && road.getNode2().getBuilding().getId() == 1) {
 								playerCanPlayRoad = true;
 							}
