@@ -6,6 +6,7 @@ import java.net.Socket;
 
 import com.JCatan.GameController;
 import com.JCatan.GamePhase;
+import com.JCatan.HumanPlayer;
 import com.JCatan.InsufficientResourceCardException;
 import com.JCatan.Node;
 import com.JCatan.Player;
@@ -64,7 +65,16 @@ public class PlayerSocket implements Runnable {
 							.gameController(server.getController()).build();
 					server.broadcastMessage(message);
 					continue;
-
+					
+				case Trade:
+					if(msg.getTrade() instanceof com.JCatan.DomesticTrade)
+						server.broadcastMessage(msg);
+					else
+						trade(msg);
+					continue;
+				case FinalizeTrade:
+					finalizeTrade(msg);
+					continue;
 				default:
 					break;
 				}
@@ -88,6 +98,24 @@ public class PlayerSocket implements Runnable {
 
 	}
 
+	private void trade(Message msg) {
+		System.out.println("Player is initiating Maritime Trade");
+		server.getController().initiateTrade(msg.getTrade());
+	}
+	
+	private void finalizeTrade(Message msg) {
+		com.JCatan.Trade trade = msg.getTrade();
+		if(trade != null) {
+			server.getController().initiateTrade(trade);
+			Player offerer = server.getController().getPlayers().stream().filter(p->p.getName().equals(trade.getOfferingPlayer().getName())).findFirst().get();
+			Player receiver = server.getController().getPlayers().stream().filter(p->p.getName().equals(trade.getReceivingPlayer().getName())).findFirst().get();
+			offerer.receiveTrade(trade);
+			receiver.receiveTrade(trade);
+			msg.setGc(server.getController());
+			server.broadcastMessage(msg);
+		}
+	}
+	
 	private void moveRobber(Message msg) {
 		System.out.println("Moving robber to tile " + msg.getRobberTile().getNumber());
 		server.getController().setGamePhase(GamePhase.GAMEMAIN);

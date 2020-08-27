@@ -651,6 +651,10 @@ public class GameGUI extends JFrame {
 		repaint();
 	}
 	
+	public TradePanel getTradePanel() {
+		return tradePanel;
+	}
+	
 	public Player getMyPlayer() {
 		return myPlayer;
 	}

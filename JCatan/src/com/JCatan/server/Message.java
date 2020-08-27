@@ -10,6 +10,7 @@ import com.JCatan.Node;
 import com.JCatan.Player;
 import com.JCatan.Road;
 import com.JCatan.Tile;
+import com.JCatan.Trade;
 
 public class Message implements Serializable {
 
@@ -42,7 +43,7 @@ public class Message implements Serializable {
 		BuyDevelopment, 
 		PlayDevelopmentCard,
 		MoveRobber, 
-		RollDice, UpdateBoard, EndTurn, DiceRolled, EndSetupTurn
+		RollDice, UpdateBoard, EndTurn, DiceRolled, EndSetupTurn, Trade, FinalizeTrade
 	}
 	GameController gc;
 	Player myPlayer;
@@ -50,7 +51,7 @@ public class Message implements Serializable {
 	Road road;
 	Tile robberTile;
 	Point RobberPoint;
-	
+	Trade trade;
 	
 	public Point getRobberPoint() {
 		return RobberPoint;
@@ -120,8 +121,15 @@ public class Message implements Serializable {
 		this.gc = controller;
 		this.myPlayer = player;
 	}
-
-
+	
+	public void setTrade(Trade trade) {
+		this.trade = trade;
+	}
+	
+	public Trade getTrade() {
+		return this.trade;
+	}
+	
 	public Message() {
 		// TODO Auto-generated constructor stub
 	}
