@@ -137,6 +137,7 @@ public class GameClient implements Runnable{
 	
 	private void robberMoved(Message msg) {
 		GameGUI.controller = msg.getGc();
+		this.controller = msg.getGc();
 		System.out.println("Robber Moved");
 		System.out.println("Is Robber moving: " + GameGUI.controller.getBoard().isRobberMoving());
 		System.out.println("Game Phase: " + GameGUI.controller.getGamePhase());
@@ -146,12 +147,14 @@ public class GameClient implements Runnable{
 	}
 	private void turnedEnded(Message msg) {
 		GameGUI.controller = msg.getGc();
+		this.controller = msg.getGc();
 		System.out.println(GameGUI.controller.getCurPlayer().getName() + "'s turn");
 		gameGUI.gamePhaseEnd();
 		
 	}
 	private void diceRolled(Message msg) {
 		GameGUI.controller = msg.getGc();
+		this.controller = msg.getGc();
 		gameGUI.updatePlayer();
 		System.out.println(gameGUI.getMyPlayer().getName() + " Hand: " + gameGUI.getMyPlayer().getResources());
 		gameGUI.diceRolled();
@@ -160,9 +163,13 @@ public class GameClient implements Runnable{
 	private void updateBoard(Message msg) {
 		System.out.println("Updating Board ...");
 		GameGUI.controller = msg.getGc();
+		this.controller = msg.getGc();
 		System.out.println("Board from Server: ");
 		System.out.println(GameGUI.controller.getBoard());
 		System.out.println("------------------");
+		System.out.println("Game Phase in GameCLient: " + this.getController().getGamePhase());
+		System.out.println("Game Phase in GameGUI: " + GameGUI.controller.getGamePhase());
+		gameGUI.updateDevCardPanel();
 		gameGUI.updateTurn();
 		gameGUI.updatePlayer();
 		gameGUI.repaint();
