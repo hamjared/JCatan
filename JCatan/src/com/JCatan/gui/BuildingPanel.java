@@ -13,6 +13,8 @@ import com.JCatan.GameController;
 import com.JCatan.GamePhase;
 import com.JCatan.InsufficientResourceCardException;
 import com.JCatan.Node;
+import com.JCatan.server.Message;
+import com.JCatan.server.MessageBuilder;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -51,7 +53,7 @@ public class BuildingPanel extends JPanel {
 			public void mousePressed(MouseEvent e) {
 				if (GameGUI.controller.getGamePhase().equals(GamePhase.GAMEMAIN)) {
 					buyDevCard();
-				}	
+				}
 			}
 
 			@Override
@@ -61,7 +63,7 @@ public class BuildingPanel extends JPanel {
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); 
+				panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		});
 
@@ -75,8 +77,6 @@ public class BuildingPanel extends JPanel {
 		shapes.add(city);
 
 		// opacityCheck(controller);
-
-		
 
 		panel.setBounds(339, 11, 93, 112);
 		add(panel);
@@ -119,15 +119,8 @@ public class BuildingPanel extends JPanel {
 	}
 
 	protected void buyDevCard() {
-		try {
-			GameGUI.controller.getCurPlayer().buyDevelopmentCard(GameGUI.controller);
-			GameGUI.controller.getChat().addToChat(GameGUI.controller.getCurPlayer().getName() + " Bought a dev card");
-			this.getParent().repaint();
-		} catch (InsufficientResourceCardException e) {
-			// TODO Auto-generated catch block
-			GameGUI.controller.getChat().addToChat("Cannot buy development card - insufficient resources");
-			this.getParent().repaint();
-		}
+		Message msg = new MessageBuilder().action(Message.Action.BuyDevelopmentCard).build();
+		GameGUI.gameClient.sendMessage(msg);
 
 	}
 
