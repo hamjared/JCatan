@@ -4,11 +4,22 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
+import com.JCatan.Bank;
+import com.JCatan.DevCardAction;
+import com.JCatan.DevCardActionBuilder;
+import com.JCatan.DevelopmentCard;
 import com.JCatan.GameController;
 import com.JCatan.GamePhase;
 import com.JCatan.InsufficientResourceCardException;
+import com.JCatan.InvalidDevCardUseException;
+import com.JCatan.KnightDevelopmentCard;
+import com.JCatan.MonopolyDevelopmentCard;
 import com.JCatan.Node;
 import com.JCatan.Player;
+import com.JCatan.ResourceType;
+import com.JCatan.RoadBuildingDevelopmentCard;
+import com.JCatan.VictoryPointDevelopmentCard;
+import com.JCatan.YearOfPlentyDevelopmentCard;
 import com.JCatan.gui.GameGUI;
 
 public class PlayerSocket implements Runnable {
@@ -64,7 +75,12 @@ public class PlayerSocket implements Runnable {
 							.gameController(server.getController()).build();
 					server.broadcastMessage(message);
 					continue;
-
+				case PlayDevelopmentCard:
+					playDevelopmentCard(msg);
+					break;
+				case BuyDevelopmentCard:
+					buyDevCard(msg);
+					break;
 				default:
 					break;
 				}
@@ -88,6 +104,65 @@ public class PlayerSocket implements Runnable {
 
 	}
 
+	private void buyDevCard(Message msg) {
+		
+		try {
+			server.getController().getCurPlayer().buyDevelopmentCard(server.getController());
+		} catch (InsufficientResourceCardException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void playDevelopmentCard(Message msg) {
+		
+		
+		
+		
+		System.out.println("Playing development card: " + msg.getDevCard() + " for " + server.getController().getCurPlayer());
+		convertDevCardActionToServerObjects(msg.getDevCardAction());
+		DevelopmentCard card = convertDevCardToServerObject(msg.getDevCard());
+		if(msg.getDevCard() instanceof KnightDevelopmentCard) {
+			server.getController().setGamePhase(GamePhase.ROBBERMOVE);
+		}
+		try {
+			server.getController().getCurPlayer().playDevelopmentCard(card, msg.getDevCardAction());
+			System.out.println("Dev cards: " + server.getController().getCurPlayer().getDevCards());
+		} catch (InvalidDevCardUseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+
+	
+	private DevelopmentCard convertDevCardToServerObject(DevelopmentCard devCard) {
+		for (DevelopmentCard dc : server.getController().getCurPlayer().getDevCards()) {
+			if(dc.equals(devCard)) {
+				return dc;
+			}
+		}
+		
+		return null;
+		
+	}
+
+	private void convertDevCardActionToServerObjects(DevCardAction devCardAction) {
+		if(devCardAction.getBank() != null) {
+			devCardAction.setBank(server.getController().getBank());
+		}
+		if(devCardAction.getCurPlayer() != null) {
+			devCardAction.setCurPlayer(server.getController().getCurPlayer());
+		}
+		if(devCardAction.getStealFromPlayer() != null) {
+			int stealPlayerIndex = server.getController().getPlayers().indexOf(devCardAction.getStealFromPlayer());
+			devCardAction.setStealFromPlayer(server.getController().getPlayers().get(stealPlayerIndex));
+		}
+		
+	}
+
 	private void moveRobber(Message msg) {
 		System.out.println("Moving robber to tile " + msg.getRobberTile().getNumber());
 		server.getController().setGamePhase(GamePhase.GAMEMAIN);
@@ -106,6 +181,7 @@ public class PlayerSocket implements Runnable {
 	private void rollDice() {
 		server.getController().getCurPlayer().rollDice();
 		server.getController().gamePhaseRoll();
+		server.getController().setGamePhase(GamePhase.GAMEMAIN);
 		for(Player p : server.getController().getPlayers()) {
 			System.out.println(p.getName() + " Hand: " + p.getResources());
 		}
