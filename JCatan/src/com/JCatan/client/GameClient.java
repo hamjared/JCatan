@@ -128,6 +128,9 @@ public class GameClient implements Runnable {
 				case FinalizeTrade:
 					finalizeTrade(msg);
 					break;
+				case DeclineTrade:
+					playerDeclinedTrade(msg);
+					break;
 				default:
 					break;
 				}
@@ -141,6 +144,13 @@ public class GameClient implements Runnable {
 			}
 		}
 
+	}
+	
+	private void playerDeclinedTrade(Message msg) {
+		boolean isPlayerOfferer = gameGUI.getMyPlayer().equals(msg.getMyPlayer());
+		if(isPlayerOfferer) {
+			gameGUI.notifyPlayerBadTrade(msg.getCustomMessage());
+		}
 	}
 	
 	private void bankAcceptedTrade(Message msg) {

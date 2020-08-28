@@ -51,7 +51,7 @@ public class Message implements Serializable {
 		EndSetupTurn, 
 		Trade,
 		BadTrade,
-		FinalizeTrade, BankAcceptedTrade
+		FinalizeTrade, BankAcceptedTrade, DeclineTrade
 	}
 	
 	GameController gc;

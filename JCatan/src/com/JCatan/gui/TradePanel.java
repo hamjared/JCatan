@@ -56,6 +56,7 @@ public class TradePanel extends JPanel {
 	private Map<String, Integer> offeringResourceTypeAndAmount;
 	private Map<String, Integer> requestingResourceTypeAndAmount;
 	private boolean recievingOffer = false;
+	private JPanel bottomButtonPanel;
 
 	public void setTradeInfo(Trade trade) {
 
@@ -86,6 +87,42 @@ public class TradePanel extends JPanel {
 
 		confirmButton.setEnabled(true);
 		counterOfferButton.setEnabled(true);
+		bottomButtonPanel.remove(cancelButton);
+		
+		
+		JButton decline = new JButton("Decline");
+		decline.addActionListener(e->{
+			//Send a message to server that player declined the trade...
+			String message = "Player declined your trade";
+			Message msg = new MessageBuilder().action(Message.Action.DeclineTrade).setCustomMessage(message).player(selectedPlayer).build();
+			GameGUI.gameClient.sendMessage(msg);
+			
+			//Now close this window and reset it properly.
+			this.setVisible(false);
+			recievingOffer = false;
+			clearAllPlayerResources();
+			counterOfferButton.setEnabled(false);
+			confirmButton.setEnabled(false);
+			bottomButtonPanel.remove(decline);
+			
+			GridBagConstraints gbc_declineButton = new GridBagConstraints();
+			gbc_declineButton.weightx = 1.0;
+			gbc_declineButton.fill = GridBagConstraints.BOTH;
+			gbc_declineButton.gridx = 3;
+			gbc_declineButton.gridy = 0;
+			bottomButtonPanel.add(cancelButton, gbc_declineButton);
+			bottomButtonPanel.revalidate();
+			this.setEnabled(false);
+		});
+		
+		GridBagConstraints gbc_declineButton = new GridBagConstraints();
+		gbc_declineButton.weightx = 1.0;
+		gbc_declineButton.fill = GridBagConstraints.BOTH;
+		gbc_declineButton.gridx = 3;
+		gbc_declineButton.gridy = 0;
+		bottomButtonPanel.add(decline, gbc_declineButton);
+		bottomButtonPanel.revalidate();
+		
 		this.repaint();
 	}
 
@@ -465,20 +502,20 @@ public class TradePanel extends JPanel {
 		theirOffer.setLayout(gbl_theirOffer);
 		add(theirOffer, gbc_theirOffer);
 
-		JPanel panel = new JPanel();
+		bottomButtonPanel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.gridwidth = 2;
 		gbc_panel.weightx = 1.0;
 		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 2;
-		add(panel, gbc_panel);
+		add(bottomButtonPanel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 114, 106, 143, 109, 0 };
 		gbl_panel.rowHeights = new int[] { 0, 0 };
 		gbl_panel.columnWeights = new double[] { 0.0, 1.0, 1.0, 1.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
-		panel.setLayout(gbl_panel);
+		bottomButtonPanel.setLayout(gbl_panel);
 
 		offerButton = new JButton("Offer");
 		offerButton.addActionListener(new ActionListener() {
@@ -540,7 +577,7 @@ public class TradePanel extends JPanel {
 		gbc_offerButton.insets = new Insets(0, 0, 0, 5);
 		gbc_offerButton.gridx = 0;
 		gbc_offerButton.gridy = 0;
-		panel.add(offerButton, gbc_offerButton);
+		bottomButtonPanel.add(offerButton, gbc_offerButton);
 
 		confirmButton = new JButton("Confirm");
 		confirmButton.setEnabled(false);
@@ -551,7 +588,7 @@ public class TradePanel extends JPanel {
 		gbc_confirmButton.insets = new Insets(0, 0, 0, 5);
 		gbc_confirmButton.gridx = 1;
 		gbc_confirmButton.gridy = 0;
-		panel.add(confirmButton, gbc_confirmButton);
+		bottomButtonPanel.add(confirmButton, gbc_confirmButton);
 
 		counterOfferButton = new JButton("Counter Offer");
 		counterOfferButton.setEnabled(false);
@@ -564,7 +601,7 @@ public class TradePanel extends JPanel {
 		counterOfferButton.addActionListener(e -> {
 			counterOfferEvent();
 		});
-		panel.add(counterOfferButton, gbc_counterOfferButton);
+		bottomButtonPanel.add(counterOfferButton, gbc_counterOfferButton);
 
 		cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(e -> {
@@ -584,7 +621,7 @@ public class TradePanel extends JPanel {
 		gbc_cancelButton.fill = GridBagConstraints.BOTH;
 		gbc_cancelButton.gridx = 3;
 		gbc_cancelButton.gridy = 0;
-		panel.add(cancelButton, gbc_cancelButton);
+		bottomButtonPanel.add(cancelButton, gbc_cancelButton);
 		this.setVisible(false);
 		this.setEnabled(false);
 	}

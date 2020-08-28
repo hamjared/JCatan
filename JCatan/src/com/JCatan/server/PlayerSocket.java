@@ -95,6 +95,9 @@ public class PlayerSocket implements Runnable {
 				case BuyDevelopmentCard:
 					buyDevCard(msg);
 					break;
+				case DeclineTrade:
+					playerDeclineTrade(msg);
+					continue;
 				default:
 					break;
 				}
@@ -114,6 +117,10 @@ public class PlayerSocket implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private void playerDeclineTrade(Message msg) {
+		server.broadcastMessage(msg);
 	}
 
 	private void trade(Message msg) {
