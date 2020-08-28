@@ -149,7 +149,7 @@ public class GameClient implements Runnable {
 	private void playerDeclinedTrade(Message msg) {
 		boolean isPlayerOfferer = gameGUI.getMyPlayer().equals(msg.getMyPlayer());
 		if(isPlayerOfferer) {
-			gameGUI.notifyPlayerBadTrade(msg.getCustomMessage());
+			gameGUI.notifyPlayerDeclinedTrade(msg.getCustomMessage());
 		}
 	}
 	

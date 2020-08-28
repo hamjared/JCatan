@@ -135,6 +135,14 @@ public class GameGUI extends JFrame {
 		JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE);
 		tradePanel.resetFromBadTrade();
 	}
+	
+	public void notifyPlayerDeclinedTrade(String s) {
+		JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE);
+		tradePanel.resetFromBadTrade();
+		if(myPlayer != controller.getCurPlayer()) {
+			tradePanel.close();
+		}
+	}
 
 	public void initialize(GameController gc) {
 
