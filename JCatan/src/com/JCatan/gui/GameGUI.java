@@ -264,7 +264,10 @@ public class GameGUI extends JFrame {
 		endButton = new JButton("Start Setup");
 		endButton.setBorder(border);
 
-		Consumer<JButton> turnOnEndButton = b -> endButton.setEnabled(true);
+		Consumer<JButton> turnOnEndButton = b -> {
+			if(myPlayer.equals(controller.getCurPlayer()))
+				endButton.setEnabled(true);
+		};
 		tradePanel.setDelegate(turnOnEndButton);
 		controller.setAction(t -> tradePanel.close());
 
