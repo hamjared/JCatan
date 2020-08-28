@@ -119,6 +119,9 @@ public class GameClient implements Runnable {
 				case Trade:
 					trade(msg);
 					break;
+				case BadTrade:
+					badTradeMessage(msg);
+					break;
 				case FinalizeTrade:
 					finalizeTrade(msg);
 					break;
@@ -135,6 +138,12 @@ public class GameClient implements Runnable {
 			}
 		}
 
+	}
+	
+	private void badTradeMessage(Message msg) {
+		boolean isPlayerOfferer = gameGUI.getMyPlayer().getName().equals(msg.getMyPlayer().getName());
+		if(isPlayerOfferer)
+			gameGUI.notifyPlayerBadTrade(msg.getCustomMessage());
 	}
 
 	private void robberMoved(Message msg) {

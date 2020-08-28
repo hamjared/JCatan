@@ -63,37 +63,36 @@ public class TradePanel extends JPanel {
 		traders.setEnabled(false);
 		clearAllPlayerResources();
 		this.setVisible(true);
-		this.setEnabled(true);		
-		
+		this.setEnabled(true);
+
 		currentPlayer = trade.getReceivingPlayer();
 		selectedPlayer = trade.getOfferingPlayer();
-		
+
 		List<ResourceCard> offering = trade.getOfferingCards();
 		List<ResourceCard> requesting = trade.getRequestingCards();
 		offerButton.setEnabled(false);
-		
-		((javax.swing.border.TitledBorder)playerOffer.getBorder()).setTitle(selectedPlayer.getName() + "'s Offer");
-		((javax.swing.border.TitledBorder)theirOffer.getBorder()).setTitle(selectedPlayer.getName() + "'s Requesting");
-		setOfferResources(offering, true, playerOffer);
-		setOfferResources(requesting, false, theirOffer);
+
+		setOfferResources(offering, true, theirOffer);
+		setOfferResources(requesting, false, playerOffer);
 		playerOffer.revalidate();
 		theirOffer.revalidate();
-		
+
 		JCheckBox temp = new JCheckBox(selectedPlayer.getName());
 		temp.setSelected(true);
 		temp.setEnabled(false);
 		buttonToggleGroup.add(temp);
 		traders.add(temp);
 		traders.revalidate();
-		
+
 		confirmButton.setEnabled(true);
 		counterOfferButton.setEnabled(true);
+		this.repaint();
 	}
-	
+
 	private void counterOfferEvent() {
-		//Set the players whole resources to counter offer...	
+		// Set the players whole resources to counter offer...
 		clearAllPlayerResources();
-		
+
 		JCheckBox temp = new JCheckBox(selectedPlayer.getName());
 		temp.setSelected(true);
 		temp.setEnabled(false);
@@ -101,22 +100,20 @@ public class TradePanel extends JPanel {
 		traders.add(temp);
 		traders.revalidate();
 		traders.repaint();
-		
+
 		confirmButton.setEnabled(false);
 		counterOfferButton.setEnabled(false);
 		offerButton.setEnabled(true);
-		
-		((javax.swing.border.TitledBorder)playerOffer.getBorder()).setTitle(currentPlayer.getName() + "'s Offer");
 		setPlayersResources(currentPlayer, playerOffer);
 		playerOffer.revalidate();
 		playerOffer.repaint();
-		
-		//Now grab the original offering player's resources to counter offer...
+
+		// Now grab the original offering player's resources to counter offer...
 		setPlayersResources(selectedPlayer, theirOffer);
 		theirOffer.revalidate();
 		theirOffer.repaint();
 	}
-	
+
 	private void confirmEvent() {
 		List<ResourceCard> offering = setTradeCards(offeringResourceTypeAndAmount);
 		List<ResourceCard> requesting = setTradeCards(requestingResourceTypeAndAmount);
@@ -131,6 +128,7 @@ public class TradePanel extends JPanel {
 	}
 
 	public void close() {
+		cancelButton.setEnabled(true);
 		cancelButton.doClick();
 	}
 
@@ -165,6 +163,12 @@ public class TradePanel extends JPanel {
 		return cards;
 	}
 
+	public void resetFromBadTrade() {
+		offerButton.setEnabled(true);
+		cancelButton.setEnabled(true);
+		AddandDecButtonsEnabled(true);
+	}
+	
 	private void setTraders() {
 		JCheckBox maritimeTrade = new JCheckBox("Maritime");
 		maritimeTrade.addActionListener(e -> {
@@ -223,7 +227,7 @@ public class TradePanel extends JPanel {
 		} finally {
 		}
 	}
-	
+
 	private void clearSelectedPlayerResources() {
 		requestingResourceTypeAndAmount.clear();
 		theirOffer.removeAll();
@@ -287,7 +291,7 @@ public class TradePanel extends JPanel {
 			if (temp <= 0)
 				return;
 			--temp;
-			boolean isRequestMapping = ((JButton)e.getSource()).getParent().getParent().equals(theirOffer);
+			boolean isRequestMapping = ((JButton) e.getSource()).getParent().getParent().equals(theirOffer);
 			if (isRequestMapping) {
 				updateRequestingMap(resourceName, temp);
 			} else {
@@ -308,7 +312,7 @@ public class TradePanel extends JPanel {
 			Integer temp = Integer.valueOf(val);
 			String resourceName = playerResourceName.getText();
 			++temp;
-			boolean isRequestMapping = ((JButton)e.getSource()).getParent().getParent().equals(theirOffer);
+			boolean isRequestMapping = ((JButton) e.getSource()).getParent().getParent().equals(theirOffer);
 			if (isRequestMapping) {
 				updateRequestingMap(resourceName, temp);
 			} else {
@@ -323,21 +327,22 @@ public class TradePanel extends JPanel {
 		panel_1.add(playerIncResource_1, gbc_playerIncResource_1);
 	}
 
-	private void createTradeIcons(JPanel panel, String resourceName, String value, int i, int j) {
+	private void createTradeIcons(JPanel panel, String resourceName, String value, int i, int j, boolean needsButtons) {
 		JLabel playerResourceName = createLabel(panel, resourceName, i, j);
 		JLabel playerResourceTotal = createLabel(panel, value, ++i, j);
-		createButtonPanel(panel, playerResourceTotal, playerResourceName, ++i, j);
+		if (needsButtons)
+			createButtonPanel(panel, playerResourceTotal, playerResourceName, ++i, j);
 	}
 
 	private void setOfferResources(List<ResourceCard> cards, boolean isOfferingSet, JPanel panel) {
 		int j = 0;
 		Map<ResourceType, Integer> resources = cards.stream().collect(Collectors
-												.toMap(t -> ((ResourceCard) t).getResourceType(), v -> 1, (existing, addition) -> existing + addition));
+				.toMap(t -> ((ResourceCard) t).getResourceType(), v -> 1, (existing, addition) -> existing + addition));
 
 		for (Map.Entry<ResourceType, Integer> entry : resources.entrySet()) {
 
-			//GridBagLayout temp = (GridBagLayout) panel.getLayout();
-			//int i = (isOfferingSet) ? 0 : temp.columnWidths.length / 2 + 1;
+			// GridBagLayout temp = (GridBagLayout) panel.getLayout();
+			// int i = (isOfferingSet) ? 0 : temp.columnWidths.length / 2 + 1;
 			int i = 0;
 			String cardName = entry.getKey().name();
 			String total = entry.getValue().toString();
@@ -346,7 +351,7 @@ public class TradePanel extends JPanel {
 			} else {
 				requestingResourceTypeAndAmount.put(cardName, Integer.parseInt(total));
 			}
-			createTradeIcons(panel, cardName, total, i, j);
+			createTradeIcons(panel, cardName, total, i, j, false);
 			j++;
 		}
 	}
@@ -366,7 +371,7 @@ public class TradePanel extends JPanel {
 		for (Map.Entry<ResourceType, Integer> entry : resources.entrySet()) {
 
 			GridBagLayout temp = (GridBagLayout) panel.getLayout();
-			//int i = (isCurrentPlayer) ? 0 : temp.columnWidths.length / 2 + 1;
+			// int i = (isCurrentPlayer) ? 0 : temp.columnWidths.length / 2 + 1;
 			int i = 0;
 			String cardName = entry.getKey().name();
 			String total = entry.getValue().toString();
@@ -375,10 +380,22 @@ public class TradePanel extends JPanel {
 			} else {
 				requestingResourceTypeAndAmount.put(cardName, Integer.parseInt(total));
 			}
-			
-			createTradeIcons(panel, cardName, total, i, j);
+
+			createTradeIcons(panel, cardName, total, i, j, true);
 			j++;
 		}
+	}
+	
+	private void AddandDecButtonsEnabled(boolean isOn) {
+		List<Component> buttons = Arrays.stream(playerOffer.getComponents()).filter(b -> b instanceof JPanel).collect(Collectors.toList());
+		buttons.stream().forEach(b-> {
+			Arrays.stream(((JPanel)b).getComponents()).forEach(c->c.setEnabled(isOn));
+		});
+		
+		buttons = Arrays.stream(theirOffer.getComponents()).filter(b -> b instanceof JPanel).collect(Collectors.toList());
+		buttons.stream().forEach(b-> {
+			Arrays.stream(((JPanel)b).getComponents()).forEach(c->c.setEnabled(isOn));
+		});
 	}
 
 	/**
@@ -413,8 +430,8 @@ public class TradePanel extends JPanel {
 		add(traders, gbc_traders);
 
 		playerOffer = new JPanel();
-		playerOffer.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null),
-				GameGUI.controller.getCurPlayer().getName() + "'s Offer", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		playerOffer.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "My Offer",
+				TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GridBagConstraints gbc_playerOffer = new GridBagConstraints();
 		gbc_playerOffer.weighty = 1.0;
 		gbc_playerOffer.weightx = 1.0;
@@ -423,7 +440,7 @@ public class TradePanel extends JPanel {
 		gbc_playerOffer.gridx = 0;
 		gbc_playerOffer.gridy = 1;
 		GridBagLayout gbl_playerOffer = new GridBagLayout();
-		gbl_playerOffer.columnWidths = new int[] {0, 0, 0, 10, 0, 0};
+		gbl_playerOffer.columnWidths = new int[] { 0, 0, 0, 10, 0, 0 };
 		gbl_playerOffer.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
 		gbl_playerOffer.columnWeights = new double[] { 1.0, 1.0, 1.0, 0.0, 1.0, 1.0 };
 		gbl_playerOffer.rowWeights = new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
@@ -432,7 +449,7 @@ public class TradePanel extends JPanel {
 
 		theirOffer = new JPanel();
 		theirOffer.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null),
-				GameGUI.controller.getCurPlayer().getName() + "'s Request", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
+				"Their Offer", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GridBagConstraints gbc_theirOffer = new GridBagConstraints();
 		gbc_theirOffer.weighty = 1.0;
 		gbc_theirOffer.weightx = 1.0;
@@ -441,7 +458,7 @@ public class TradePanel extends JPanel {
 		gbc_theirOffer.gridx = 1;
 		gbc_theirOffer.gridy = 1;
 		GridBagLayout gbl_theirOffer = new GridBagLayout();
-		gbl_theirOffer.columnWidths = new int[] {0, 0, 0, 10, 0, 0};
+		gbl_theirOffer.columnWidths = new int[] { 0, 0, 0, 10, 0, 0 };
 		gbl_theirOffer.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
 		gbl_theirOffer.columnWeights = new double[] { 1.0, 1.0, 1.0, 0.0, 1.0, 1.0 };
 		gbl_theirOffer.rowWeights = new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
@@ -471,9 +488,13 @@ public class TradePanel extends JPanel {
 				// Get the player selected and offer the potential goods to selected player...
 				JCheckBox trader = (JCheckBox) Arrays.stream(traders.getComponents())
 						.filter(c -> ((JCheckBox) c).isSelected() == true).findFirst().orElse(null);
-				
+
 				if (trader != null && trader.isSelected()) {
-					((JButton)e.getSource()).setEnabled(false);
+					//Turn off cancelButton and remove the + - buttons on labels
+					cancelButton.setEnabled(false);
+					AddandDecButtonsEnabled(false);
+					
+					((JButton) e.getSource()).setEnabled(false);
 					String name = trader.getText();
 
 					List<ResourceCard> offering = setTradeCards(offeringResourceTypeAndAmount);
@@ -523,7 +544,7 @@ public class TradePanel extends JPanel {
 
 		confirmButton = new JButton("Confirm");
 		confirmButton.setEnabled(false);
-		confirmButton.addActionListener(e->confirmEvent());
+		confirmButton.addActionListener(e -> confirmEvent());
 		GridBagConstraints gbc_confirmButton = new GridBagConstraints();
 		gbc_confirmButton.weightx = 1.0;
 		gbc_confirmButton.fill = GridBagConstraints.BOTH;
@@ -551,6 +572,8 @@ public class TradePanel extends JPanel {
 			this.setEnabled(false);
 			recievingOffer = false;
 			clearAllPlayerResources();
+			counterOfferButton.setEnabled(false);
+			confirmButton.setEnabled(false);
 			if (action != null) {
 				action.accept(cancelButton);
 			}

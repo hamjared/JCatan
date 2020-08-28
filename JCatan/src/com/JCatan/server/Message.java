@@ -36,7 +36,6 @@ public class Message implements Serializable {
 		return serialVersionUID;
 	}
 
-
 	public enum Action {
 		StartGame,
 		BuildSettlement, 
@@ -45,17 +44,24 @@ public class Message implements Serializable {
 		BuyDevelopmentCard, 
 		PlayDevelopmentCard,
 		MoveRobber, 
-		RollDice, UpdateBoard, EndTurn, DiceRolled, EndSetupTurn, Trade, FinalizeTrade
+		RollDice, 
+		UpdateBoard, 
+		EndTurn, 
+		DiceRolled, 
+		EndSetupTurn, 
+		Trade,
+		BadTrade,
+		FinalizeTrade
 	}
+	
 	GameController gc;
 	Player myPlayer;
 	Node node;
 	Road road;
 	Tile robberTile;
 	Point RobberPoint;
-
+	String customMessage;
 	Trade trade;
-	
 	DevCardAction devCardAction;
 	DevelopmentCard devCard;
 	
@@ -63,16 +69,20 @@ public class Message implements Serializable {
 		return devCard;
 	}
 
+	public void setCustomMessage(String val) {
+		customMessage = val;
+	}
+	public String getCustomMessage() {
+		return customMessage;
+	}
 
 	public void setDevCard(DevelopmentCard devCard) {
 		this.devCard = devCard;
 	}
 
-
 	public DevCardAction getDevCardAction() {
 		return devCardAction;
 	}
-
 
 	public void setDevCardAction(DevCardAction devCardAction) {
 		this.devCardAction = devCardAction;

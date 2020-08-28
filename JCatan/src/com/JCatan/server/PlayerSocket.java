@@ -8,11 +8,13 @@ import com.JCatan.Bank;
 import com.JCatan.DevCardAction;
 import com.JCatan.DevCardActionBuilder;
 import com.JCatan.DevelopmentCard;
+import com.JCatan.DomesticTrade;
 import com.JCatan.GameController;
 import com.JCatan.GamePhase;
 import com.JCatan.HumanPlayer;
 import com.JCatan.InsufficientResourceCardException;
 import com.JCatan.InvalidDevCardUseException;
+import com.JCatan.InvalidTradeException;
 import com.JCatan.KnightDevelopmentCard;
 import com.JCatan.MonopolyDevelopmentCard;
 import com.JCatan.Node;
@@ -78,12 +80,11 @@ public class PlayerSocket implements Runnable {
 					Message message = new MessageBuilder().action(Message.Action.DiceRolled)
 							.gameController(server.getController()).build();
 					server.broadcastMessage(message);
-					continue;					
+					continue;
 				case Trade:
-					if(msg.getTrade() instanceof com.JCatan.DomesticTrade)
-						server.broadcastMessage(msg);
-					else
-						trade(msg);
+					trade(msg);
+					continue;
+				case BadTrade:
 					continue;
 				case FinalizeTrade:
 					finalizeTrade(msg);
@@ -117,61 +118,77 @@ public class PlayerSocket implements Runnable {
 
 	}
 
-
 	private void trade(Message msg) {
-		System.out.println("Player is initiating Maritime Trade");
-		server.getController().initiateTrade(msg.getTrade());
-	}
-	
-	private void finalizeTrade(Message msg) {
 		com.JCatan.Trade trade = msg.getTrade();
-		if(trade != null) {
+		try {
 			server.getController().initiateTrade(trade);
-			Player offerer = server.getController().getPlayers().stream().filter(p->p.getName().equals(trade.getOfferingPlayer().getName())).findFirst().get();
-			Player receiver = server.getController().getPlayers().stream().filter(p->p.getName().equals(trade.getReceivingPlayer().getName())).findFirst().get();
-			offerer.receiveTrade(trade);
-			receiver.receiveTrade(trade);
-			msg.setGc(server.getController());
 			server.broadcastMessage(msg);
+		} catch (InvalidTradeException e) {
+			System.out.println("BAD TRADE DETECTED!!!");
+			Message newMsg = new MessageBuilder().action(Message.Action.BadTrade).player(trade.getOfferingPlayer())
+					.setCustomMessage(e.getMessage()).build();
+			server.broadcastMessage(newMsg);
 		}
 	}
-	
-	private void buildCity(Message msg) {
-        System.out.println("Building a city for : " + msg.getMyPlayer() + "on node " + msg.getNode());
-        GameController controller = server.getController();
-        try {
-            Node node = controller.getBoard().getBoard().getNodeList().get(msg.getNode().getNodeIndex());
-            controller.getCurPlayer().buildCity(node, controller);
-            if (controller.getGamePhase().equals(GamePhase.GAMEROLL)) {
-                controller.setGamePhase(GamePhase.GAMEMAIN);
-            }
-        } catch (InsufficientResourceCardException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
-    }
+	private void finalizeTrade(Message msg) {
+		com.JCatan.Trade trade = msg.getTrade();
+		if (trade != null) {
+			try {
+				server.getController().initiateTrade(trade);
+
+				Player offerer = server.getController().getPlayers().stream()
+						.filter(p -> p.getName().equals(trade.getOfferingPlayer().getName())).findFirst().get();
+				Player receiver = server.getController().getPlayers().stream()
+						.filter(p -> p.getName().equals(trade.getReceivingPlayer().getName())).findFirst().get();
+				offerer.receiveTrade(trade);
+				receiver.receiveTrade(trade);
+				msg.setGc(server.getController());
+				server.broadcastMessage(msg);
+
+			} catch (InvalidTradeException e) {
+				System.out.println("BAD TRADE DETECTED!!!");
+				Message newMsg = new MessageBuilder().action(Message.Action.BadTrade).player(trade.getOfferingPlayer())
+						.setCustomMessage(e.getMessage()).build();
+				server.broadcastMessage(newMsg);
+			}
+		}
+	}
+
+	private void buildCity(Message msg) {
+		System.out.println("Building a city for : " + msg.getMyPlayer() + "on node " + msg.getNode());
+		GameController controller = server.getController();
+		try {
+			Node node = controller.getBoard().getBoard().getNodeList().get(msg.getNode().getNodeIndex());
+			controller.getCurPlayer().buildCity(node, controller);
+			if (controller.getGamePhase().equals(GamePhase.GAMEROLL)) {
+				controller.setGamePhase(GamePhase.GAMEMAIN);
+			}
+		} catch (InsufficientResourceCardException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	private void buyDevCard(Message msg) {
-		
+
 		try {
 			server.getController().getCurPlayer().buyDevelopmentCard(server.getController());
 		} catch (InsufficientResourceCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
-
 	private void playDevelopmentCard(Message msg) {
-		
-		
-		
-		
-		System.out.println("Playing development card: " + msg.getDevCard() + " for " + server.getController().getCurPlayer());
+
+		System.out.println(
+				"Playing development card: " + msg.getDevCard() + " for " + server.getController().getCurPlayer());
 		convertDevCardActionToServerObjects(msg.getDevCardAction());
 		DevelopmentCard card = convertDevCardToServerObject(msg.getDevCard());
-		if(msg.getDevCard() instanceof KnightDevelopmentCard) {
+		if (msg.getDevCard() instanceof KnightDevelopmentCard) {
 			server.getController().setGamePhase(GamePhase.ROBBERMOVE);
 		}
 		try {
@@ -181,34 +198,32 @@ public class PlayerSocket implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
-
-	
 	private DevelopmentCard convertDevCardToServerObject(DevelopmentCard devCard) {
 		for (DevelopmentCard dc : server.getController().getCurPlayer().getDevCards()) {
-			if(dc.equals(devCard)) {
+			if (dc.equals(devCard)) {
 				return dc;
 			}
 		}
-		
+
 		return null;
-		
+
 	}
 
 	private void convertDevCardActionToServerObjects(DevCardAction devCardAction) {
-		if(devCardAction.getBank() != null) {
+		if (devCardAction.getBank() != null) {
 			devCardAction.setBank(server.getController().getBank());
 		}
-		if(devCardAction.getCurPlayer() != null) {
+		if (devCardAction.getCurPlayer() != null) {
 			devCardAction.setCurPlayer(server.getController().getCurPlayer());
 		}
-		if(devCardAction.getStealFromPlayer() != null) {
+		if (devCardAction.getStealFromPlayer() != null) {
 			int stealPlayerIndex = server.getController().getPlayers().indexOf(devCardAction.getStealFromPlayer());
 			devCardAction.setStealFromPlayer(server.getController().getPlayers().get(stealPlayerIndex));
 		}
-		
+
 	}
 
 	private void moveRobber(Message msg) {
@@ -230,7 +245,7 @@ public class PlayerSocket implements Runnable {
 		server.getController().getCurPlayer().rollDice();
 		server.getController().gamePhaseRoll();
 		server.getController().setGamePhase(GamePhase.GAMEMAIN);
-		for(Player p : server.getController().getPlayers()) {
+		for (Player p : server.getController().getPlayers()) {
 			System.out.println(p.getName() + " Hand: " + p.getResources());
 		}
 

@@ -94,7 +94,7 @@ public class MaritimeTrade extends Trade {
     }
     
     @Override
-    protected void validateTrade() throws InvalidTradeException
+    public void validateTrade() throws InvalidTradeException
     {
     	//Check if player has valid amount to trade...
     	if(offeringCards.isEmpty() || requestingCards.isEmpty())

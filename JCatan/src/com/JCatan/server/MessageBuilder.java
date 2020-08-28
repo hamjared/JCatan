@@ -67,6 +67,11 @@ public class MessageBuilder {
 		message.setDevCard(devCard);
 		return this;
 	}
+	
+	public MessageBuilder setCustomMessage(String customMessage) {
+		message.setCustomMessage(customMessage);
+		return this;
+	}
 
 	public MessageBuilder robberTile(Tile tile) {
 		message.robberTile = tile;
