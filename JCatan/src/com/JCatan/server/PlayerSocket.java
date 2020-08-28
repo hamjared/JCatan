@@ -113,16 +113,23 @@ public class PlayerSocket implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
-
 	}
 
 	private void trade(Message msg) {
 		com.JCatan.Trade trade = msg.getTrade();
 		try {
-			server.getController().initiateTrade(trade);
-			server.broadcastMessage(msg);
+			if (trade instanceof com.JCatan.DomesticTrade) {
+				server.getController().initiateTrade(trade);
+				server.broadcastMessage(msg);
+			} else {
+				server.getController().initiateTrade(trade);
+				Player player = server.getController().getPlayers().stream()
+						.filter(p -> p.getName().equals(trade.getOfferingPlayer().getName())).findFirst().get();
+				server.getController().acceptTrade(trade, player);
+				Message newMsg = new MessageBuilder().action(Message.Action.BankAcceptedTrade).player(player).gameController(server.getController()).setCustomMessage("Bank Accepted Trade").build();
+				server.broadcastMessage(newMsg);
+			}
 		} catch (InvalidTradeException e) {
 			System.out.println("BAD TRADE DETECTED!!!");
 			Message newMsg = new MessageBuilder().action(Message.Action.BadTrade).player(trade.getOfferingPlayer())

@@ -126,6 +126,11 @@ public class GameGUI extends JFrame {
 		}
 	}
 
+	public void notifyPlayerBankAcceptedTrade(String s) {
+		JOptionPane.showMessageDialog(this, s, "Trade Accepted", JOptionPane.PLAIN_MESSAGE);
+		tradePanel.close();
+	}
+	
 	public void notifyPlayerBadTrade(String s) {
 		JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE);
 		tradePanel.resetFromBadTrade();

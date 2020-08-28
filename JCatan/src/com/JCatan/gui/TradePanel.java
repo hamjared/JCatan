@@ -173,7 +173,7 @@ public class TradePanel extends JPanel {
 		JCheckBox maritimeTrade = new JCheckBox("Maritime");
 		maritimeTrade.addActionListener(e -> {
 			clearSelectedPlayerResources();
-			setPlayersResources(null, playerOffer);
+			setPlayersResources(null, theirOffer);
 			offerButton.setEnabled(true);
 		});
 		maritimeTrade.setSelected(false);
@@ -183,7 +183,7 @@ public class TradePanel extends JPanel {
 		JCheckBox specialTrade = new JCheckBox("Special Trade");
 		specialTrade.addActionListener(e -> {
 			clearSelectedPlayerResources();
-			setPlayersResources(null, playerOffer);
+			setPlayersResources(null, theirOffer);
 			offerButton.setEnabled(true);
 		});
 		maritimeTrade.setSelected(false);

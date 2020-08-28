@@ -176,21 +176,23 @@ public class GameController implements Serializable {
 	}
 
 	public void initiateTrade(Trade trade) throws InvalidTradeException {
+		System.out.print("Validating Trade");
 		if (trade instanceof DomesticTrade) {
 			DomesticTrade dt = (DomesticTrade) trade;
-			System.out.print("Validating Trade");
 			dt.validateTrade();
 		}
 		if (trade instanceof MaritimeTrade) {
 			MaritimeTrade mt = (MaritimeTrade) trade;
 			mt.validateTrade();
-			mt.accept();
 		}
 		if (trade instanceof SpecialTrade) {
 			SpecialTrade st = (SpecialTrade) trade;
 			st.validateTrade();
-			st.accept();
 		}
+	}
+	
+	public void acceptTrade(Trade trade, Player player) {
+		trade.offer(player);
 	}
 
 	public void gamePhaseTrade() {
