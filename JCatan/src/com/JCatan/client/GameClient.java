@@ -122,6 +122,8 @@ public class GameClient implements Runnable {
 				case FinalizeTrade:
 					finalizeTrade(msg);
 					break;
+				case DiceData:
+					showDiceData(msg);
 				default:
 					break;
 				}
@@ -135,6 +137,15 @@ public class GameClient implements Runnable {
 			}
 		}
 
+	}
+
+	private void showDiceData(Message msg) {
+		GameGUI.controller = msg.getGc();
+		this.controller = msg.getGc();
+		System.out.println("Dice roll history:");
+		System.out.println(msg.getDice().getDiceRollHistory());
+		gameGUI.repaint();
+		
 	}
 
 	private void robberMoved(Message msg) {

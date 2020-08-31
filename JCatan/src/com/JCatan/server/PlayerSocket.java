@@ -2,12 +2,14 @@ package com.JCatan.server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import com.JCatan.Bank;
 import com.JCatan.DevCardAction;
 import com.JCatan.DevCardActionBuilder;
 import com.JCatan.DevelopmentCard;
+import com.JCatan.Dice;
 import com.JCatan.GameController;
 import com.JCatan.GamePhase;
 import com.JCatan.HumanPlayer;
@@ -94,6 +96,12 @@ public class PlayerSocket implements Runnable {
 				case BuyDevelopmentCard:
 					buyDevCard(msg);
 					break;
+				case DiceData:
+					sendDiceData(msg);
+					continue;
+				case Chat:
+					updateChat(msg);
+					break;
 				default:
 					break;
 				}
@@ -117,6 +125,29 @@ public class PlayerSocket implements Runnable {
 
 	}
 
+
+	private void updateChat(Message msg) {
+		server.getController().getChat().addToChat(msg.getChatMessage());
+		
+		
+	}
+
+	private void sendDiceData(Message msg) {
+		System.out.println("Dice Data: " + Dice.getInstance().getDiceRollHistory());
+		server.getController().getChat().addToChat("Dice Roll History:\n" + Dice.getInstance().getDiceRollHistory());
+		Message message = new MessageBuilder().action(Message.Action.DiceData).gameController(server.getController())
+				.dice(Dice.getInstance()).build();
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(connection.getOutputStream());
+			oos.writeObject(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
 
 	private void trade(Message msg) {
 		System.out.println("Player is initiating Maritime Trade");
@@ -227,6 +258,7 @@ public class PlayerSocket implements Runnable {
 	}
 
 	private void rollDice() {
+		server.getController().getCurPlayer().setDice(Dice.getInstance());
 		server.getController().getCurPlayer().rollDice();
 		server.getController().gamePhaseRoll();
 		server.getController().setGamePhase(GamePhase.GAMEMAIN);
