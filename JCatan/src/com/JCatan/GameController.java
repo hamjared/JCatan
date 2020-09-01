@@ -93,6 +93,12 @@ public class GameController implements Serializable {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void diceRollPhase() {
+		for (Tile t: this.getBoard().getTiles()) {
+			if (t.getResourceType().equals(ResourceType.DESERT)) {
+				robber.setTargetTile(t);
+			}
+		}
+		
 		for (Player player : players) {
 			player.rollDice();
 		}

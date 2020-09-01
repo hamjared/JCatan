@@ -289,16 +289,8 @@ public class PlayerSocket implements Runnable {
 	private void rollDice() {
 		server.getController().getCurPlayer().setDice(Dice.getInstance());
 		server.getController().getCurPlayer().rollDice();
-		for (Tile t: server.getController().getBoard().getTiles()) {
-			if(t.hasRobber()) {
-				System.out.println("Tile: " + t.getNumber() + " Resource type: " + t.getResourceType() + " I HAVE THE ROBBER");
-			}
-		}
 		server.getController().gamePhaseRoll();
 		server.getController().setGamePhase(GamePhase.GAMEMAIN);
-		for (Player p : server.getController().getPlayers()) {
-			System.out.println(p.getName() + " Hand: " + p.getResources());
-		}
 
 	}
 
