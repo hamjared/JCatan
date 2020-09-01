@@ -63,9 +63,9 @@ public class GameServer {
 				ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
 				handleNewPlayer(ois.readObject(), s);
 			} catch(IOException e) {
-				
+				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				
+				e.printStackTrace();
 			}
 		}
 	}
