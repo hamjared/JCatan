@@ -99,6 +99,7 @@ public class StartMenuFrame extends JFrame
     		public void run() {
     			
     			GameGUI game = new GameGUI();
+    			//GameClient gameClient = new GameClient("137.117.105.3", 5679);
     			GameClient gameClient = new GameClient("127.0.0.1", 5679);
     			game.setGameClient(gameClient);
     			gameClient.setGameGUI(game);

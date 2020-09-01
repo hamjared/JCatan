@@ -42,7 +42,9 @@ public class Dice implements Serializable {
 			wasDoubles = false;
 		}
 
+
 		diceRollHistory.put(die1+die2, diceRollHistory.get(die1+die2) + 1);
+
 		return die1 + die2;
 	}
 

@@ -1,6 +1,7 @@
 package com.JCatan;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -15,22 +16,32 @@ public class Robber implements Serializable{
 	public Robber() {
 		targetTile = null;
 	}
+	
+	
+
+	public Tile getTargetTile() {
+		return targetTile;
+	}
+
+
 
 	public void move(Tile tile) {
-		if(targetTile != null)
+		if(targetTile != null) {
 			targetTile.setHasRobber(false);
-		
+		}
+			
 		targetTile = tile;
 		targetTile.setHasRobber(true);
 	}
 
 	public void rob(Player currentPlayer) {
 		if (targetTile != null && currentPlayer != null) {
-			// Get Neighbor tiles...
+			 //Get Neighbor tiles...
 			List<Player> players = targetTile.getNodes().stream().filter(n -> n.getBuilding() != null)
 					.map(n -> n.getBuilding().getPlayer()).distinct().filter(p -> p != currentPlayer)
 					.collect(Collectors.toList());
 
+			
 			// No one to steal...
 			if (players.isEmpty()) {
 				return;

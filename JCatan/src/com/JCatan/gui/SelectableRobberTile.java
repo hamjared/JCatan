@@ -30,7 +30,6 @@ public class SelectableRobberTile {
 		robber.setPoint(p);
 		Message msg = new MessageBuilder().action(Message.Action.MoveRobber).robberTile(tile).robberPoint(p).build();
 		GameGUI.gameClient.sendMessage(msg);
-//		GameGUI.controller.getRobber().move(tile);
 
 	}
 }
