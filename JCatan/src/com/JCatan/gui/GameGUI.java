@@ -275,8 +275,10 @@ public class GameGUI extends JFrame {
 		endButton.setBorder(border);
 
 		Consumer<JButton> turnOnEndButton = b -> {
-			if(myPlayer.equals(controller.getCurPlayer()))
+			if(myPlayer.equals(controller.getCurPlayer())) {
 				endButton.setEnabled(true);
+				tradeButton.setEnabled(true);
+			}
 		};
 		tradePanel.setDelegate(turnOnEndButton);
 		controller.setAction(t -> tradePanel.close());
@@ -284,13 +286,14 @@ public class GameGUI extends JFrame {
 		tradeButton = new JButton("Trade");
 		controller.setAction(t -> tradePanel.close());
 
-		tradeButton.setEnabled(true);
+		tradeButton.setEnabled(false);
 		tradeButton.setVisible(true);
 		tradeButton.setBounds(750, 867, 122, 134);
 		tradeButton.addActionListener(e -> {
 			tradePanel.setEnabled(true);
 			tradePanel.setVisible(true);
 			endButton.setEnabled(false);
+			tradeButton.setEnabled(false);
 		});
 		contentPane.add(tradeButton);
 		tradeButton.setBorder(border);
@@ -323,6 +326,7 @@ public class GameGUI extends JFrame {
 						gameClient.sendMessage(msg);
 						if (setupNum == 1) {
 							endButton.setText("Roll Dice");
+							tradeButton.setEnabled(false);
 							controller.setGamePhase(GamePhase.GAMEROLL);
 						} else {
 							controller.setCurPlayer(controller.getPlayers().get(setupNum + 1));
@@ -518,7 +522,7 @@ public class GameGUI extends JFrame {
 	}
 
 	public void enableAll() {
-
+		boolean isTradeButtonEnabled = tradeButton.isEnabled();
 		setTurnColor();
 		
 		for (Component c : contentPane.getComponents()) {
@@ -534,7 +538,8 @@ public class GameGUI extends JFrame {
 		for (Component c : master.getComponents()) {
 			c.setEnabled(true);
 		}
-
+		
+		tradeButton.setEnabled(isTradeButtonEnabled);
 	}
 
 	public void updateTurn() {
@@ -573,6 +578,7 @@ public class GameGUI extends JFrame {
 
 	public void diceRolled() {
 
+		tradeButton.setEnabled(false);
 		die1 = controller.getCurPlayer().getDice().getDie1();
 		die2 = controller.getCurPlayer().getDice().getDie2();
 
@@ -628,11 +634,7 @@ public class GameGUI extends JFrame {
 			controller.setGamePhase(GamePhase.ROBBERMOVE);
 			controller.robberMovePhase();
 		}
-
-		if (controller.getCurPlayer().equals(myPlayer)) {
-			tradeButton.setEnabled(true);
-		}
-
+		tradeButton.setEnabled(true);
 		repaint();
 	}
 
