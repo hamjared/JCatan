@@ -15,18 +15,16 @@ public class City extends Building {
 
 	@Override
 	public void gatherResources(GameController controller, ResourceType resource) {
-		boolean isRobberOnTile = node.getTiles().stream().anyMatch(t -> t.hasRobber() == true);
-		
-		if (!isRobberOnTile) {
-			for (int i = 0; i < 2; i++) {
-				try {
-					ResourceCard card = controller.getBank().takeResourceCard(resource);
-					player.getResources().add(card);
-				} catch (InsufficientResourceCardException e) {
-					e.printStackTrace();
-				}
+
+		for (int i = 0; i < 2; i++) {
+			try {
+				ResourceCard card = controller.getBank().takeResourceCard(resource);
+				player.getResources().add(card);
+			} catch (InsufficientResourceCardException e) {
+				e.printStackTrace();
 			}
 		}
+
 	}
 
 	@Override
