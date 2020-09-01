@@ -230,7 +230,7 @@ public class GameClient implements Runnable {
 		System.out.println("Player is wanting to trade with another player...");
 		System.out.println("Receiving Player is: " + msg.getTrade().getReceivingPlayer().getName());
 		System.out.println("My player is: " + gameGUI.getMyPlayer().getName());
-		if (msg.getTrade().getReceivingPlayer().getName().equals(gameGUI.getMyPlayer().getName())) {
+		if (msg.getTrade().getReceivingPlayer().equals(gameGUI.getMyPlayer())) {
 			System.out.println("Trying to enable and start trade panel");
 			gameGUI.getTradePanel().setTradeInfo(msg.getTrade());
 		}
@@ -240,9 +240,9 @@ public class GameClient implements Runnable {
 		System.out.println("Finalizing Trade");
 		GameGUI.controller = msg.getGc();
 		gameGUI.updatePlayer();
-		String myPlayer = gameGUI.getMyPlayer().getName();
-		String offeringPlayer = msg.getTrade().getOfferingPlayer().getName();
-		String receivingPlayer = msg.getTrade().getReceivingPlayer().getName();
+		Player myPlayer = gameGUI.getMyPlayer();
+		Player offeringPlayer = msg.getTrade().getOfferingPlayer();
+		Player receivingPlayer = msg.getTrade().getReceivingPlayer();
 		boolean isPlayerTrading = myPlayer.equals(offeringPlayer) || myPlayer.equals(receivingPlayer);
 		if(isPlayerTrading) {
 			gameGUI.getTradePanel().close();

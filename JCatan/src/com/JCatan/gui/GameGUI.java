@@ -141,7 +141,7 @@ public class GameGUI extends JFrame {
 	public void notifyPlayerDeclinedTrade(String s) {
 		JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE);
 		tradePanel.resetFromBadTrade();
-		if(myPlayer != controller.getCurPlayer()) {
+		if(!myPlayer.equals(controller.getCurPlayer())) {
 			tradePanel.close();
 		}
 	}
@@ -275,7 +275,7 @@ public class GameGUI extends JFrame {
 		endButton.setBorder(border);
 
 		Consumer<JButton> turnOnEndButton = b -> {
-			if(myPlayer.getName().equals(controller.getCurPlayer().getName())) {
+			if(myPlayer.equals(controller.getCurPlayer())) {
 				endButton.setEnabled(true);
 				tradeButton.setEnabled(true);
 			}

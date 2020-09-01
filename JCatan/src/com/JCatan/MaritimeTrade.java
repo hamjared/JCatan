@@ -42,7 +42,6 @@ public class MaritimeTrade extends Trade {
 	@Override
 	public void offer(Player player) {
 		player.receiveTrade(this);
-		banker.receiveTrade(this);
 	}
 
 	private boolean isTradeValid(Map<ResourceType, Integer> offeringMap, Map<ResourceType, Integer> requestingMap,
