@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.JCatan.gui.GameGUI;
 
-public class Board implements Serializable{
+public class Board implements Serializable {
 
 	/**
 	 * 
@@ -64,13 +64,22 @@ public class Board implements Serializable{
 		List<Tile> tiles = diceRollToTiles.get(diceRoll);
 		for (Tile tile : tiles) {
 			List<Building> buildings = tile.getBuildings();
-			for (Building b : buildings) {
-				if (b != null) {
-					b.gatherResources(controller, tile.getResourceType());
+			if (controller.getRobber().getTargetTile() != null) {
+				if (!controller.getRobber().getTargetTile().hasRobber()) {
+					for (Building b : buildings) {
+						if (b != null) {
+							b.gatherResources(controller, tile.getResourceType());
+						}
+					}
+				}
+			} else {
+				for (Building b : buildings) {
+					if (b != null) {
+						b.gatherResources(controller, tile.getResourceType());
+					}
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -149,14 +158,15 @@ public class Board implements Serializable{
 				if (road.getNode1().getBuilding() != null) {
 					if (gamePhase == GamePhase.SETUP) {
 						if (curPlayer.getPlayedRoads().isEmpty()) {
-							if (road.getNode1().getBuilding().getPlayer().equals(curPlayer)){
+							if (road.getNode1().getBuilding().getPlayer().equals(curPlayer)) {
 								playerCanPlayRoad = true;
 							}
 						} else if (curPlayer.getPlayedRoads().isEmpty() == false) {
-							if (road.getNode1().getBuilding().getPlayer().equals(curPlayer) && road.getNode1().getBuilding().getId() == 1) {
+							if (road.getNode1().getBuilding().getPlayer().equals(curPlayer)
+									&& road.getNode1().getBuilding().getId() == 1) {
 								playerCanPlayRoad = true;
 							}
-						} 
+						}
 					} else {
 						if (road.getNode1().getBuilding().getPlayer().equals(curPlayer)) {
 							playerCanPlayRoad = true;
@@ -176,14 +186,15 @@ public class Board implements Serializable{
 				if (road.getNode2().getBuilding() != null) {
 					if (gamePhase == GamePhase.SETUP) {
 						if (curPlayer.getPlayedRoads().isEmpty()) {
-							if (road.getNode2().getBuilding().getPlayer().equals(curPlayer)){
+							if (road.getNode2().getBuilding().getPlayer().equals(curPlayer)) {
 								playerCanPlayRoad = true;
 							}
 						} else if (curPlayer.getPlayedRoads().isEmpty() == false) {
-							if (road.getNode2().getBuilding().getPlayer().equals(curPlayer) && road.getNode2().getBuilding().getId() == 1) {
+							if (road.getNode2().getBuilding().getPlayer().equals(curPlayer)
+									&& road.getNode2().getBuilding().getId() == 1) {
 								playerCanPlayRoad = true;
 							}
-						} 
+						}
 					} else {
 						if (road.getNode2().getBuilding().getPlayer().equals(curPlayer)) {
 							playerCanPlayRoad = true;
@@ -200,7 +211,7 @@ public class Board implements Serializable{
 						}
 					}
 				}
-				
+
 				if (gamePhase != GamePhase.SETUP) {
 					for (Road r : node.getRoads()) {
 						if (r.getPlayer().equals(curPlayer)) {
@@ -281,8 +292,6 @@ public class Board implements Serializable{
 					}
 				}
 
-				
-
 				if (!roads.contains(road) && playerCanPlayRoad) {
 					roads.add(road);
 				}
@@ -309,19 +318,18 @@ public class Board implements Serializable{
 		}
 		return nodes;
 	}
-	
+
 	public boolean isRobberMoving() {
 		return GamePhase.ROBBERMOVE == GameGUI.controller.gamePhase;
 	}
-	
+
 	public String toString() {
 		String s = "";
 		for (Node node : board.getNodeList()) {
 			Building b = node.getBuilding();
-			if(b == null) {
+			if (b == null) {
 				s += node.getNodeIndex() + ": " + "None" + "\n";
-			}
-			else {
+			} else {
 				s += node.getNodeIndex() + ": " + node.getBuilding() + "/n";
 			}
 

@@ -19,6 +19,7 @@ import com.JCatan.Node;
 import com.JCatan.Player;
 import com.JCatan.ResourceType;
 import com.JCatan.RoadBuildingDevelopmentCard;
+import com.JCatan.Tile;
 import com.JCatan.VictoryPointDevelopmentCard;
 import com.JCatan.YearOfPlentyDevelopmentCard;
 import com.JCatan.gui.GameGUI;
@@ -165,9 +166,6 @@ public class PlayerSocket implements Runnable {
 
 	private void playDevelopmentCard(Message msg) {
 		
-		
-		
-		
 		System.out.println("Playing development card: " + msg.getDevCard() + " for " + server.getController().getCurPlayer());
 		convertDevCardActionToServerObjects(msg.getDevCardAction());
 		DevelopmentCard card = convertDevCardToServerObject(msg.getDevCard());
@@ -216,7 +214,6 @@ public class PlayerSocket implements Runnable {
 		server.getController().setGamePhase(GamePhase.GAMEMAIN);
 		server.getController().getRobber().move(msg.getRobberTile());
 		server.getController().getRobber().rob(server.getController().getCurPlayer());
-
 	}
 
 	private void endTurn(Message msg) {
@@ -228,6 +225,11 @@ public class PlayerSocket implements Runnable {
 
 	private void rollDice() {
 		server.getController().getCurPlayer().rollDice();
+		for (Tile t: server.getController().getBoard().getTiles()) {
+			if(t.hasRobber()) {
+				System.out.println("Tile: " + t.getNumber() + " Resource type: " + t.getResourceType() + " I HAVE THE ROBBER");
+			}
+		}
 		server.getController().gamePhaseRoll();
 		server.getController().setGamePhase(GamePhase.GAMEMAIN);
 		for(Player p : server.getController().getPlayers()) {

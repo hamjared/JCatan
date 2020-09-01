@@ -25,7 +25,6 @@ public class Dice implements Serializable {
 			wasDoubles = false;
 		}
 
-
 		return die1 + die2;
 	}
 
