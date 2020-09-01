@@ -70,6 +70,12 @@ public class MessageBuilder {
 		return this;
 	}
 	
+
+	public MessageBuilder setCustomMessage(String customMessage) {
+		message.setCustomMessage(customMessage);
+    return this;
+  }
+  
 	public MessageBuilder dice(Dice dice) {
 		message.setDice(dice);
 		return this;

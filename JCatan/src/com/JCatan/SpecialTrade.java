@@ -27,17 +27,7 @@ public class SpecialTrade extends Trade {
 
 	@Override
 	public void accept() {
-		try {
-			validateTrade();
-			offeringPlayer.receiveTrade(this);
-			bank.receiveTrade(this);
-			GameGUI.controller.endTrade();
-		} catch (InvalidTradeException ex) {
-			// ex.printStackTrace();
-			GameGUI.controller.notifyPlayer(ex.getMessage());
-			decline();
-		}
-
+		
 	}
 
 	@Override
@@ -54,8 +44,8 @@ public class SpecialTrade extends Trade {
 
 	@Override
 	public void offer(Player player) {
-		// TODO Trade: offer
-
+		player.receiveTrade(this);
+		bank.receiveTrade(this);
 	}
 
 	private Map<ResourceType, Integer> convertListToMap(List<ResourceCard> list) {
@@ -64,7 +54,7 @@ public class SpecialTrade extends Trade {
 	}
 
 	@Override
-	protected void validateTrade() throws InvalidTradeException {
+	public void validateTrade() throws InvalidTradeException {
 		// Check if player has valid amount to trade...
 		if (offeringCards.isEmpty() || requestingCards.isEmpty())
 			throw new InvalidTradeException("Empty trading cards!");

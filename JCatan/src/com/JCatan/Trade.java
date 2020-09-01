@@ -62,9 +62,5 @@ public abstract class Trade implements Serializable{
 	 */
 	public abstract void offer(Player player);
 	
-	/**
-	 * @throws InvalidTradeException
-	 */
-	protected abstract void validateTrade() throws InvalidTradeException;
-	
+	public abstract void validateTrade() throws InvalidTradeException;
 }

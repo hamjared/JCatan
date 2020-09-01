@@ -17,19 +17,7 @@ public class DomesticTrade extends Trade {
 
 	@Override
 	public void accept() {
-		try {
-			validateTrade();
-			
-			// Send a local (client's) GUI message...
-			if (GameGUI.controller != null)
-				GameGUI.controller.endTrade();
-		} catch (InvalidTradeException ex) {
-			ex.printStackTrace();
-			if (GameGUI.controller != null) {
-				GameGUI.controller.notifyPlayer(ex.getMessage());
-			}
-			decline();
-		}
+
 	}
 
 	@Override
@@ -59,7 +47,7 @@ public class DomesticTrade extends Trade {
 	}
 
 	@Override
-	protected void validateTrade() throws InvalidTradeException {
+	public void validateTrade() throws InvalidTradeException {
 		if (offeringCards == null || requestingCards == null || offeringCards.isEmpty() || requestingCards.isEmpty())
 			throw new InvalidTradeException("Empty trading cards!");
 
