@@ -54,7 +54,7 @@ public class Message implements Serializable {
 	Player myPlayer;
 	Node node;
 	Road road;
-	Tile robberTile;
+	int tileIndex;
 	Point RobberPoint;
 	String customMessage;
 	Dice dice;
@@ -119,13 +119,13 @@ public class Message implements Serializable {
 	}
 
 
-	public Tile getRobberTile() {
-		return robberTile;
+	public int getRobberTile() {
+		return tileIndex;
 	}
 
 
-	public void setRobberTile(Tile robberTile) {
-		this.robberTile = robberTile;
+	public void setRobberTile(int tileIndex) {
+		this.tileIndex = tileIndex;
 	}
 
 

@@ -86,8 +86,8 @@ public class MessageBuilder {
 		return this;
 	}
 	
-	public MessageBuilder robberTile(Tile tile) {
-		message.robberTile = tile;
+	public MessageBuilder robberTileIndex(int tileIndex) {
+		message.tileIndex = tileIndex;
 		return this;
 	}
 	

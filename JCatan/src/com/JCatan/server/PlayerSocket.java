@@ -273,9 +273,9 @@ public class PlayerSocket implements Runnable {
 	}
 
 	private void moveRobber(Message msg) {
-		System.out.println("Moving robber to tile " + msg.getRobberTile().getNumber());
+		System.out.println("Moving robber to tile " + msg.getRobberTile());
 		server.getController().setGamePhase(GamePhase.GAMEMAIN);
-		server.getController().getRobber().move(msg.getRobberTile());
+		server.getController().getRobber().move(server.getController().getBoard().getTiles().get(msg.getRobberTile()));
 		server.getController().getRobber().rob(server.getController().getCurPlayer());
 	}
 

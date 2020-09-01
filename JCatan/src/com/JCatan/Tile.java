@@ -11,6 +11,7 @@ public class Tile implements Serializable
     ResourceType resourceType;
     boolean isRobberOnTile = false;
     int number;
+    int tileIndex;
     List<Node> nodes;
     
     public void setResourceType(ResourceType resourceType)
@@ -51,11 +52,16 @@ public class Tile implements Serializable
     	isRobberOnTile = val;
     }
     
-    public Tile(List<Node> nodes) {
+    public Tile(List<Node> nodes, int tileIndex) {
         this.nodes = nodes;
+        this.tileIndex = tileIndex;
     }
     
-    public int getNumber()
+    public int getTileIndex() {
+		return tileIndex;
+	}
+
+	public int getNumber()
     {
         return number;
     }
