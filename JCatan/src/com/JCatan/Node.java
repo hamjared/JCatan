@@ -1,10 +1,15 @@
 package com.JCatan;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Node {
+public abstract class Node implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Building building;
 	List<Road> roads;
 	List<Tile> tiles;
@@ -65,6 +70,14 @@ public abstract class Node {
 
 	public List<Road> getRoads() {
 		return roads;
+	}
+	
+	public boolean equals(Object obj) {
+		if(obj == null || !(obj instanceof Node)) {
+			return false;
+		}
+		Node node = (Node) obj;
+		return node.getNodeIndex() == this.getNodeIndex();
 	}
 	
 

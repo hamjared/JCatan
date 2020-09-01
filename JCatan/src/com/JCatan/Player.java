@@ -1,6 +1,7 @@
 package com.JCatan;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,7 +11,11 @@ import java.util.Map;
 import java.util.Random;
 
 
-public abstract class Player {
+public abstract class Player implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	List<ResourceCard> resources;
 	List<DevelopmentCard> devCards;
 	List<Road> roads;
@@ -25,6 +30,7 @@ public abstract class Player {
 	Random randomGenerator;
     boolean hasLongestRoad;
     boolean hasLargestArmy;
+    Dice dice;
   
 	public List<Road> getPlayedRoads() {
 		return playedRoads;
@@ -56,6 +62,7 @@ public abstract class Player {
 		hasLongestRoad = false;
 		hasLargestArmy = false;
 		color = Color.BLACK;
+		dice = new Dice();
 	}
 
 	public List<ResourceCard> getResources(){
@@ -344,6 +351,24 @@ public abstract class Player {
 	
 	public void setRoadBuilderRoads(int r) {
 		roadBuilderRoads = r;
+	}
+	
+	public boolean equals(Object obj) {
+		if (obj == null || ! (obj instanceof Player)) {
+			return false;
+		}
+		
+		Player player = (Player) obj;
+		if(player.getColor().equals(this.color)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public Dice getDice() {
+		return dice;
 	}
 	
 	
