@@ -275,7 +275,7 @@ public class GameGUI extends JFrame {
 		endButton.setBorder(border);
 
 		Consumer<JButton> turnOnEndButton = b -> {
-			if(myPlayer.equals(controller.getCurPlayer())) {
+			if(myPlayer.getName().equals(controller.getCurPlayer().getName())) {
 				endButton.setEnabled(true);
 				tradeButton.setEnabled(true);
 			}
@@ -634,7 +634,8 @@ public class GameGUI extends JFrame {
 			controller.setGamePhase(GamePhase.ROBBERMOVE);
 			controller.robberMovePhase();
 		}
-		tradeButton.setEnabled(true);
+		if(myPlayer.equals(controller.getCurPlayer()))
+			tradeButton.setEnabled(true);
 		repaint();
 	}
 

@@ -240,10 +240,10 @@ public class GameClient implements Runnable {
 		System.out.println("Finalizing Trade");
 		GameGUI.controller = msg.getGc();
 		gameGUI.updatePlayer();
-		String myPlayerName = gameGUI.getMyPlayer().getName();
+		String myPlayer = gameGUI.getMyPlayer().getName();
 		String offeringPlayer = msg.getTrade().getOfferingPlayer().getName();
 		String receivingPlayer = msg.getTrade().getReceivingPlayer().getName();
-		boolean isPlayerTrading = myPlayerName.equals(offeringPlayer) || myPlayerName.equals(receivingPlayer);
+		boolean isPlayerTrading = myPlayer.equals(offeringPlayer) || myPlayer.equals(receivingPlayer);
 		if(isPlayerTrading) {
 			gameGUI.getTradePanel().close();
 		}

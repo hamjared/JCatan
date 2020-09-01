@@ -141,6 +141,15 @@ public class TradePanel extends JPanel {
 	}
 
 	public void close() {
+		if(bottomButtonPanel != cancelButton.getParent()) {
+			bottomButtonPanel.remove(decline);
+			GridBagConstraints gbc_cancelButton = new GridBagConstraints();
+			gbc_cancelButton.weightx = 1.0;
+			gbc_cancelButton.fill = GridBagConstraints.BOTH;
+			gbc_cancelButton.gridx = 3;
+			gbc_cancelButton.gridy = 0;
+			bottomButtonPanel.add(cancelButton, gbc_cancelButton);
+		}
 		cancelButton.setEnabled(true);
 		cancelButton.doClick();
 	}
@@ -632,6 +641,7 @@ public class TradePanel extends JPanel {
 			bottomButtonPanel.add(cancelButton, gbc_declineButton);
 			bottomButtonPanel.revalidate();
 			this.setEnabled(false);
+			action.accept(cancelButton);
 		});
 
 		GridBagConstraints gbc_cancelButton = new GridBagConstraints();
