@@ -7,7 +7,11 @@ import java.util.List;
 
 public class Tile implements Serializable
 {
-    Color color;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3418334843470112053L;
+	Color color;
     ResourceType resourceType;
     boolean isRobberOnTile = false;
     int number;
