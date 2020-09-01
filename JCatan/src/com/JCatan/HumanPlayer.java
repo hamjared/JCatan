@@ -8,6 +8,11 @@ import java.util.Map.Entry;
 
 public class HumanPlayer extends Player {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public HumanPlayer(String name) {
 		super(name);
 
