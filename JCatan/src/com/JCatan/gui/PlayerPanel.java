@@ -33,22 +33,6 @@ public class PlayerPanel extends JPanel
 	private JLabel numDevelopCardsLabel;
 	private JLabel numRoadsLabel;
 	private JLabel numSettlementsLabel;
-	public Player getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-
-	public JLabel getNumSettlementsLabel() {
-		return numSettlementsLabel;
-	}
-
-	public void setNumSettlementsLabel(JLabel numSettlementsLabel) {
-		this.numSettlementsLabel = numSettlementsLabel;
-	}
-
 	private JLabel numCitiesLabel;
 	private JLabel victoryPointsLabel;
 	private JLabel victoryPointsLabelCard;

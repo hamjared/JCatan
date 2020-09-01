@@ -9,8 +9,6 @@ import com.JCatan.HumanPlayer;
 import com.JCatan.Player;
 import com.JCatan.RandomBoardFactory;
 import com.JCatan.TraditionalBoardFactory;
-import com.JCatan.client.GameClient;
-import com.JCatan.client.InitiatePlayer;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -30,8 +28,10 @@ public class StartMenuFrame extends JFrame
 	private static final long serialVersionUID = 7807675421410822657L;
 	private JPanel contentPane;
     private JTextField redPlayerName;
+    private JTextField whitePlayerName;
+    private JTextField bluePlayerName;
+    private JTextField orangePlayerName;
     private JComboBox<String> boardType;
-    private JLabel gameStartLabel;
 
     public StartMenuFrame()
     {
@@ -48,40 +48,63 @@ public class StartMenuFrame extends JFrame
         lblNewLabel.setBounds(302, 11, 147, 45);
         contentPane.add(lblNewLabel);
         
-        JLabel lblNewLabel_1 = new JLabel("Player Name");
-        lblNewLabel_1.setBounds(213, 173, 80, 14);
+        JLabel lblNewLabel_1 = new JLabel("Red Player");
+        lblNewLabel_1.setBounds(213, 114, 80, 14);
         contentPane.add(lblNewLabel_1);
         
         redPlayerName = new JTextField();
         redPlayerName.setText("Joe");
-        redPlayerName.setBounds(336, 170, 113, 20);
+        redPlayerName.setBounds(336, 111, 113, 20);
         contentPane.add(redPlayerName);
         redPlayerName.setColumns(10);
         
+        JLabel lblNewLabel_2 = new JLabel("White Player");
+        lblNewLabel_2.setBounds(213, 162, 80, 14);
+        contentPane.add(lblNewLabel_2);
+        
+        whitePlayerName = new JTextField();
+        whitePlayerName.setText("Bob");
+        whitePlayerName.setBounds(336, 159, 113, 20);
+        contentPane.add(whitePlayerName);
+        whitePlayerName.setColumns(10);
+        
+        JLabel lblNewLabel_3 = new JLabel("Blue Player");
+        lblNewLabel_3.setBounds(213, 211, 67, 14);
+        contentPane.add(lblNewLabel_3);
+        
+        JLabel lblNewLabel_4 = new JLabel("Orange Player");
+        lblNewLabel_4.setBounds(213, 265, 80, 14);
+        contentPane.add(lblNewLabel_4);
+        
+        bluePlayerName = new JTextField();
+        bluePlayerName.setText("Tim");
+        bluePlayerName.setBounds(336, 208, 113, 20);
+        contentPane.add(bluePlayerName);
+        bluePlayerName.setColumns(10);
+        
+        orangePlayerName = new JTextField();
+        orangePlayerName.setText("Will");
+        orangePlayerName.setBounds(336, 262, 113, 20);
+        contentPane.add(orangePlayerName);
+        orangePlayerName.setColumns(10);
+        
         boardType = new JComboBox<String>();
         boardType.setModel(new DefaultComboBoxModel<String>(new String[] {"Traditional Board", "Random Board"}));
-        boardType.setBounds(336, 241, 113, 22);
+        boardType.setBounds(336, 317, 113, 22);
         contentPane.add(boardType);
         
         JLabel lblNewLabel_5 = new JLabel("BoardLayout");
-        lblNewLabel_5.setBounds(213, 245, 80, 14);
+        lblNewLabel_5.setBounds(213, 321, 80, 14);
         contentPane.add(lblNewLabel_5);
         
         JButton btnNewButton = new JButton("Start Game");
         btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	btnNewButton.setEnabled(false);
-            	redPlayerName.setEnabled(false);
                 startGame();
             }
         });
         btnNewButton.setBounds(302, 398, 89, 23);
         contentPane.add(btnNewButton);
-        
-        gameStartLabel = new JLabel("Waiting for Game to Start");
-        gameStartLabel.setBounds(284, 297, 221, 14);
-        contentPane.add(gameStartLabel);
-        gameStartLabel.setVisible(false);
     }
 
     protected void startGame()
@@ -94,34 +117,30 @@ public class StartMenuFrame extends JFrame
         else {
         	bf = new RandomBoardFactory();
         }
-        gameStartLabel.setVisible(true);
+        
         SwingUtilities.invokeLater(new Runnable() {
     		public void run() {
-    			
-    			GameGUI game = new GameGUI();
-    			//GameClient gameClient = new GameClient("137.117.105.3", 5679);
-    			GameClient gameClient = new GameClient("127.0.0.1", 5679);
-    			game.setGameClient(gameClient);
-    			gameClient.setGameGUI(game);
-    			Player player = new HumanPlayer(redPlayerName.getText());
-    			gameClient.sendPlayer(new InitiatePlayer(player, bf));
-    			gameClient.waitForGame();
-    			new Thread(gameClient).start();
-    			
-    			
+    			GameGUI game = new GameGUI(players, bf);
     	        game.setVisible(true);
-    	        setVisible(false);
-    	        dispose();
     		}
     	});
-        
-        
+        setVisible(false);
+        dispose();
     }
     
     protected List<Player> getPlayers(){
         List<Player> players = new ArrayList<>();
         if(!redPlayerName.getText().isEmpty()) {
             players.add(new HumanPlayer(redPlayerName.getText()));
+        }
+        if(!bluePlayerName.getText().isEmpty()) {
+            players.add(new HumanPlayer(bluePlayerName.getText()));
+        }
+        if(!whitePlayerName.getText().isEmpty()) {
+            players.add(new HumanPlayer(whitePlayerName.getText()));
+        }
+        if(!orangePlayerName.getText().isEmpty()) {
+            players.add(new HumanPlayer(orangePlayerName.getText()));
         }
         return players;
     }

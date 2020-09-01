@@ -1,17 +1,12 @@
 package com.JCatan;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Road implements ICost, Serializable
+public class Road implements ICost
 {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	Node node1;
+    Node node1;
     Node node2;
     Player player;
     protected boolean hasBeenPlayed;

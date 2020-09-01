@@ -5,8 +5,6 @@ import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import com.JCatan.Tile;
-import com.JCatan.server.Message;
-import com.JCatan.server.MessageBuilder;
 
 public class SelectableRobberTile {
 	Shape circle;
@@ -28,8 +26,8 @@ public class SelectableRobberTile {
 	
 	public void onClick(RobberShape robber) {
 		robber.setPoint(p);
-		Message msg = new MessageBuilder().action(Message.Action.MoveRobber).robberTile(tile).robberPoint(p).build();
-		GameGUI.gameClient.sendMessage(msg);
-
+		GameGUI.controller.getRobber().move(tile);
+		GameGUI.controller.getRobber().rob(GameGUI.controller.getCurPlayer());
+		GameGUI.controller.refreshScreen();
 	}
 }

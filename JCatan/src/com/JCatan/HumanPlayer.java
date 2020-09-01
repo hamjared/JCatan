@@ -438,7 +438,8 @@ public class HumanPlayer extends Player {
 
 	@Override
 	public int rollDice() {
-		diceRoll = dice.rollDice();
+		diceRoll = new Dice().rollDice();
+//		System.out.println("Dice roll: " + diceRoll);
 		return diceRoll;
 	}
 

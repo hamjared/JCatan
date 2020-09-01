@@ -9,36 +9,8 @@
 		<echo> JCatan </echo>
 	</target>
 	
-	<target name="run server" depends="build server">
-		<java jar="build/jar/JCatanServer.jar" fork="true"/>
-	</target>
-	
-	<target name="run client" depends="build client">
-		<java jar="build/jar/JCatanClient.jar" fork="true"/>
-	</target>
-	
 	<target name="run" depends="build">
 		<java jar="build/jar/JCatan.jar" fork="true"/>
-	</target>
-	
-	<target name="build server" depends="compile">
-			<mkdir dir="build/jar"/>
-			<jar destfile="build/jar/JCatanServer.jar" basedir="build/classes">
-			            <manifest>
-			                <attribute name="Main-Class" value="com.JCatan.server.Main"/>
-			            </manifest>
-			</jar>
-			
-	</target>
-	
-	<target name="build client" depends="compile">
-			<mkdir dir="build/jar"/>
-			<jar destfile="build/jar/JCatanClient.jar" basedir="build/classes">
-			            <manifest>
-			                <attribute name="Main-Class" value="com.JCatan.client.GameClient"/>
-			            </manifest>
-			</jar>
-			
 	</target>
 	
 	<target name="build" depends="compile">

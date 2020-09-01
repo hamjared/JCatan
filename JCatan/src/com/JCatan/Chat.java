@@ -1,15 +1,10 @@
 package com.JCatan;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Chat implements Serializable {
+public class Chat {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	List<String> chat;
 	int maxLines;
 	

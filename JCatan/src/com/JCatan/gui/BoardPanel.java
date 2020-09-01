@@ -52,10 +52,6 @@ public class BoardPanel extends JPanel {
 	private Map<Tile, Hexagon> tileToHexagon;
 	private List<SelectableRobberTile> robberTiles;
 	private RobberShape robber;
-	public RobberShape getRobber() {
-		return robber;
-	}
-
 	private boolean initialized = false;
 
 	public BoardPanel() {
@@ -146,43 +142,50 @@ public class BoardPanel extends JPanel {
 
 		drawCircle(g2d, W2, H2, 10000, true, true, 0x4488FF, 0);
 
-
+		long start = System.nanoTime();
 		drawHexGridAdvanced(g2d, 5, 85);
 		if(!initialized) {
 			Hexagon hex = hexagons.stream().filter(h -> h.getTile().getResourceType() == ResourceType.DESERT).findFirst().get();
 			robber.setPoint(hex.getCenter().x - 15, hex.getCenter().y - 20);
 			initialized = true;
 		}
+		long end = System.nanoTime();
+		System.out.println("Time to draw hex grid: " + (end - start) / (10e9));
 
-
-
+		start = System.nanoTime();
 		drawPorts(g2d);
+		end = System.nanoTime();
+		System.out.println("Time to draw Ports: " + (end - start) / (10e9));
 
-
-
+		start = System.nanoTime();
 		drawBuildingNodes(g2d);
+		end = System.nanoTime();
+		System.out.println("Time to draw Buildable Settlements: " + (end - start) / (10e9));
 
-
+		start = System.nanoTime();
 		drawBuildableRoads(g2d);
+		end = System.nanoTime();
+		System.out.println("Time to draw Buildable ROads: " + (end - start) / (10e9));
 
-
-
+		start = System.nanoTime();
 		drawBuildableCities(g2d);
+		end = System.nanoTime();
+		System.out.println("Time to draw Buildable Cities: " + (end - start) / (10e9));
 
-
-
+		start = System.nanoTime();
 		drawPieces(g2d);
-
+		end = System.nanoTime();
+		System.out.println("Time to draw Board pieces: " + (end - start) / (10e9));
 
 		drawValidRobberSpots(g2d, 40.0d);
-
+		System.out.println("---------------END OF PAINT------------------");
 
 	}
 
 	private void drawPieces(Graphics2D g2d) {
 		SettlementShape ss = new SettlementShape(0, 0, 40, 40);
 		CityShape cs = new CityShape(40, 40);
-
+		long start = System.nanoTime();
 		for (Node node : GameGUI.controller.getBoard().getBoard().getNodeList()) {
 			if (node.getBuilding() != null) {
 				Player player = node.getBuilding().getPlayer();
@@ -234,9 +237,10 @@ public class BoardPanel extends JPanel {
 			}
 
 		}
+		long end = System.nanoTime();
+		System.out.println("Time to draw Cities and Settlements: " + (end - start) / 10e9);
 
-
-
+		start = System.nanoTime();
 		drawRoads(g2d);
 		
 		AffineTransform prev = g2d.getTransform();
@@ -247,8 +251,8 @@ public class BoardPanel extends JPanel {
 		g2d.fill(robber);
 		g2d.setTransform(prev);
 		g2d.setColor(prevColor);
-	
-
+		end = System.nanoTime();
+		System.out.println("Time to draw Roads: " + (end - start) / 10e9);
 
 	}
 

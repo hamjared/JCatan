@@ -1,12 +1,6 @@
 package com.JCatan;
 
-import java.io.Serializable;
-
-public class Port implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Port {
 	PortType portType;
 	ResourceType resourceType;
 	public static enum PortType{

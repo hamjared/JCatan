@@ -1,14 +1,9 @@
 package com.JCatan;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class DevelopmentCard implements ICost, Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public abstract class DevelopmentCard implements ICost {
 	private boolean canBePlayed;
 	public boolean isCanBePlayed() {
 		return canBePlayed;
@@ -56,23 +51,5 @@ public abstract class DevelopmentCard implements ICost, Serializable {
 	    
         return cost;
 	    
-	}
-	
-	public boolean equals(Object obj) {
-		if(obj == null || !(obj instanceof DevelopmentCard)) {
-			return false;
-		}
-		
-		DevelopmentCard devCard = (DevelopmentCard) obj;
-		if(devCard.canBePlayed != this.canBePlayed) {
-			return false;
-		}
-		if(devCard.hasBeenPlayed != this.hasBeenPlayed) {
-			return false;
-		}
-		if(devCard.getClass() != this.getClass()) {
-			return false;
-		}
-		return true;
 	}
 }

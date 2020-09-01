@@ -1,18 +1,13 @@
 package com.JCatan;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public abstract class BoardFactory implements Serializable {
+public abstract class BoardFactory {
     
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private static final int NUM_NODES = 54;
+    private static final int NUM_NODES = 54;
     private static final int[] WHEAT_PORT_NODES =
     { 1, 5 };
     private static final int[] BRICK_PORT_NODES =
@@ -66,7 +61,7 @@ public abstract class BoardFactory implements Serializable {
                 { nodes.get(7), nodes.get(8), nodes.get(17) }, // 12
                 { nodes.get(8), nodes.get(9), nodes.get(18) }, // 13
                 { nodes.get(9), nodes.get(10), nodes.get(19) }, // 14
-                { nodes.get(10), nodes.get(20) }, // 15
+                { nodes.get(10), nodes.get(15) }, // 15
                 { nodes.get(11), nodes.get(21), nodes.get(22) }, // 16
                 { nodes.get(12), nodes.get(22), nodes.get(23) }, // 17
                 { nodes.get(13), nodes.get(23), nodes.get(24) }, // 18

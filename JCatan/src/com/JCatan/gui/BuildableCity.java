@@ -12,8 +12,6 @@ import com.JCatan.Node;
 import com.JCatan.ResourceCard;
 import com.JCatan.ResourceType;
 import com.JCatan.Road;
-import com.JCatan.server.Message;
-import com.JCatan.server.MessageBuilder;
 
 public class BuildableCity {
 	Shape circle;
@@ -38,13 +36,7 @@ public class BuildableCity {
 
 	public void onclick() {
 		try {
-			
 			GameGUI.controller.getCurPlayer().buildCity(node, GameGUI.controller);
-			Message msg = new MessageBuilder().action(Message.Action.BuildCity)
-					.player(GameGUI.controller.getCurPlayer()).buildOnNode(node).build();
-			GameGUI.gameClient.sendMessage(msg);
-			
-
 			GameGUI.ResourcePanel.repaint();
 			GameGUI.Player1Panel.repaint();
 			GameGUI.Player2Panel.repaint();

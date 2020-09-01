@@ -1,13 +1,7 @@
 package com.JCatan;
 
-import java.io.Serializable;
-
-public class DevCardAction implements Serializable{
+public class DevCardAction {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private Player curPlayer;
 	private Player stealFromPlayer;
 	private ResourceType stealResourceType1;
