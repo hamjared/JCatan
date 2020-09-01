@@ -104,16 +104,16 @@ public abstract class Player implements Serializable{
 	 * @throws InsufficientResourceCardException
 	 */
 	public void buyDevelopmentCard(GameController controller) throws InsufficientResourceCardException{
-		Bank bank = controller.getBank();
-		Map<ResourceType, Integer> cost = bank.getDevCardCost();
+		Map<ResourceType, Integer> cost = controller.getBank().getDevCardCost();
 		if(!resourceCheck(cost)) {
 			throw new InsufficientResourceCardException();
 		}
 		
-		removeResourceCards(cost);
+		removeResourceCards(cost, controller.getBank());
+		
 		 
 		try {
-			DevelopmentCard card = bank.takeDevelopmentCard();
+			DevelopmentCard card = controller.getBank().takeDevelopmentCard();
 			this.devCards.add(card);
 			card.setHasBeenPlayed(false);
 			
@@ -123,12 +123,13 @@ public abstract class Player implements Serializable{
 		}
 	}
 	
-	private void removeResourceCards(Map<ResourceType, Integer> cost) {
+	private void removeResourceCards(Map<ResourceType, Integer> cost, Bank bank) {
 		for(Map.Entry mapElement : cost.entrySet()) {
 			ResourceType resource = (ResourceType) mapElement.getKey();
 			Integer numResourcesRequired = (Integer) mapElement.getValue();
 			for ( int i = 0 ; i < numResourcesRequired; i++) {
 				this.resources.remove(new ResourceCard(resource));
+				bank.giveResourceCard(new ResourceCard(resource));
 			}
 		}
 		

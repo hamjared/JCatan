@@ -22,6 +22,11 @@ public class Robber implements Serializable{
 	public Tile getTargetTile() {
 		return targetTile;
 	}
+	
+
+	public void setTargetTile(Tile targetTile) {
+		this.targetTile = targetTile;
+	}
 
 
 
