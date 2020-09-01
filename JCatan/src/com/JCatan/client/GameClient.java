@@ -187,6 +187,7 @@ public class GameClient implements Runnable {
 		System.out.println("Is Robber moving: " + GameGUI.controller.getBoard().isRobberMoving());
 		System.out.println("Game Phase: " + GameGUI.controller.getGamePhase());
 		gameGUI.robberMoved(msg.getRobberPoint());
+		gameGUI.updatePlayer();
 		gameGUI.repaint();
 
 	}
