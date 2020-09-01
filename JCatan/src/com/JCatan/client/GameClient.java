@@ -163,6 +163,8 @@ public class GameClient implements Runnable {
 		GameGUI.controller = msg.getGc();
 		this.controller = msg.getGc();
 		System.out.println(GameGUI.controller.getCurPlayer().getName() + "'s turn");
+		gameGUI.updatePlayer();
+		gameGUI.updateDevCardPanel();
 		gameGUI.gamePhaseEnd();
 
 	}
