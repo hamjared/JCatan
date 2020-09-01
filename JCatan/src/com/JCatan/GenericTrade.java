@@ -38,7 +38,7 @@ public class GenericTrade extends Trade {
     }
 
     @Override
-    protected void validateTrade() throws InvalidTradeException
+    public void validateTrade() throws InvalidTradeException
     {
         // TODO Trade: validateTrade
         

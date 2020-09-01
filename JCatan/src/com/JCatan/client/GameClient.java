@@ -119,9 +119,20 @@ public class GameClient implements Runnable {
 				case Trade:
 					trade(msg);
 					break;
+				case BadTrade:
+					badTradeMessage(msg);
+					break;
+				case BankAcceptedTrade:
+					bankAcceptedTrade(msg);
+					break;
 				case FinalizeTrade:
 					finalizeTrade(msg);
 					break;
+				case DeclineTrade:
+					playerDeclinedTrade(msg);
+					break;
+				case DiceData:
+					showDiceData(msg);
 				default:
 					break;
 				}
@@ -135,6 +146,38 @@ public class GameClient implements Runnable {
 			}
 		}
 
+	}
+	
+	private void playerDeclinedTrade(Message msg) {
+		boolean isPlayerOfferer = gameGUI.getMyPlayer().equals(msg.getMyPlayer());
+		if(isPlayerOfferer) {
+			gameGUI.notifyPlayerDeclinedTrade(msg.getCustomMessage());
+		}
+	}
+	
+	private void bankAcceptedTrade(Message msg) {
+		boolean isPlayerOfferer = gameGUI.getMyPlayer().getName().equals(msg.getMyPlayer().getName());
+		GameGUI.controller = msg.getGc();
+		gameGUI.updatePlayer();
+		if(isPlayerOfferer) {
+			gameGUI.notifyPlayerBankAcceptedTrade(msg.getCustomMessage());
+		}
+		gameGUI.repaint();
+	}
+	
+	private void badTradeMessage(Message msg) {
+		boolean isPlayerOfferer = gameGUI.getMyPlayer().getName().equals(msg.getMyPlayer().getName());
+		if(isPlayerOfferer)
+			gameGUI.notifyPlayerBadTrade(msg.getCustomMessage());		
+	}
+
+	private void showDiceData(Message msg) {
+		GameGUI.controller = msg.getGc();
+		this.controller = msg.getGc();
+		System.out.println("Dice roll history:");
+		System.out.println(msg.getDice().getDiceRollHistory());
+		gameGUI.repaint();
+		
 	}
 
 	private void robberMoved(Message msg) {
@@ -152,6 +195,8 @@ public class GameClient implements Runnable {
 		GameGUI.controller = msg.getGc();
 		this.controller = msg.getGc();
 		System.out.println(GameGUI.controller.getCurPlayer().getName() + "'s turn");
+		gameGUI.updatePlayer();
+		gameGUI.updateDevCardPanel();
 		gameGUI.gamePhaseEnd();
 
 	}
