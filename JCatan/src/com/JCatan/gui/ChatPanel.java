@@ -50,7 +50,7 @@ public class ChatPanel extends JPanel
         		Chat chat = GameGUI.controller.getChat();
         		
         		String chatMessage = GameGUI.myPlayer.getName() + ": " + textField.getText().trim();
-        		if(chatMessage.isBlank()) {
+        		if(chatMessage.isEmpty()) {
         			return;
         		}
         		chat.addToChat(chatMessage);
