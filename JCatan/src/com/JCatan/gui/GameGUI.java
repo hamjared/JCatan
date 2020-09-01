@@ -51,7 +51,7 @@ public class GameGUI extends JFrame {
 	private JLabel sheepLabel;
 	private JLabel oreLabel;
 	JLayeredPane master;
-	Player myPlayer;
+	public static Player myPlayer;
 	public static GameClient gameClient;
 	public static JButton endButton;
 	public static JPanel ResourcePanel;
@@ -60,6 +60,7 @@ public class GameGUI extends JFrame {
 	public static JPanel Player3Panel;
 	public static JPanel Player4Panel;
 	JPanel devCardPanel;
+	JPanel ChatPanel;
 	private JButton tradeButton;
 
 	ImageIcon one = new ImageIcon("images/one.png");
@@ -173,7 +174,7 @@ public class GameGUI extends JFrame {
 
 		Border border = new LineBorder(Color.BLACK, 2, true);
 
-		JPanel ChatPanel = new ChatPanel(controller.getChat());
+		ChatPanel = new ChatPanel(controller.getChat());
 		contentPane.add(ChatPanel);
 		ChatPanel.setBackground(Color.decode("#D3D3D3"));
 		ChatPanel.setBorder(border);
@@ -354,10 +355,10 @@ public class GameGUI extends JFrame {
 		BuildingPanel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-
+				int x = e.getX();
+				int y = e.getY();
 				if (controller.getGamePhase().equals(GamePhase.GAMEMAIN)) {
-					int x = e.getX();
-					int y = e.getY();
+					
 
 					if ((x >= 30 && x <= 60) && (y >= 20 && y <= 110)) {
 
@@ -384,7 +385,7 @@ public class GameGUI extends JFrame {
 						clickOnCity();
 					}
 				}
-				buyDevCard();
+				
 			}
 		});
 
@@ -436,6 +437,14 @@ public class GameGUI extends JFrame {
 				g.drawImage(dieOne, 0, 0, getWidth(), getHeight(), null);
 			}
 		};
+		diceOnePanel.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				Message msg = new MessageBuilder().action(Message.Action.DiceData).build();
+				gameClient.sendMessage(msg);
+				
+			}
+			
+		});
 		diceOnePanel.setBackground(Color.WHITE);
 		diceOnePanel.setBounds(1314, 798, 56, 58);
 		master.add(diceOnePanel, new Integer(1), 0);
@@ -506,6 +515,11 @@ public class GameGUI extends JFrame {
 
 		for (Component c : master.getComponents()) {
 			c.setEnabled(false);
+		}
+		
+		ChatPanel.setEnabled(true);
+		for (Component c : ChatPanel.getComponents()) {
+			c.setEnabled(true);
 		}
 
 	}

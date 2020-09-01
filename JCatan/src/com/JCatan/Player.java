@@ -22,6 +22,10 @@ public abstract class Player implements Serializable{
 	List<Building> buildings;
 	List<Building> playedBuildings;
 	List<Road> playedRoads;
+	public void setDice(Dice dice) {
+		this.dice = dice;
+	}
+
 	int victoryPoints;
 	int diceRoll;
 	int roadBuilderRoads;
@@ -62,7 +66,7 @@ public abstract class Player implements Serializable{
 		hasLongestRoad = false;
 		hasLargestArmy = false;
 		color = Color.BLACK;
-		dice = new Dice();
+		dice = Dice.getInstance();
 	}
 
 	public List<ResourceCard> getResources(){

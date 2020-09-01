@@ -5,8 +5,10 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.JCatan.Board;
+import com.JCatan.Chat;
 import com.JCatan.DevCardAction;
 import com.JCatan.DevelopmentCard;
+import com.JCatan.Dice;
 import com.JCatan.GameController;
 import com.JCatan.Node;
 import com.JCatan.Player;
@@ -44,14 +46,8 @@ public class Message implements Serializable {
 		BuyDevelopmentCard, 
 		PlayDevelopmentCard,
 		MoveRobber, 
-		RollDice, 
-		UpdateBoard, 
-		EndTurn, 
-		DiceRolled, 
-		EndSetupTurn, 
-		Trade,
-		BadTrade,
-		FinalizeTrade, BankAcceptedTrade, DeclineTrade
+		RollDice, UpdateBoard, EndTurn, DiceRolled, EndSetupTurn, Trade,BadTrade,
+		FinalizeTrade, BankAcceptedTrade, DeclineTrade DiceData, Chat
 	}
 	
 	GameController gc;
@@ -61,6 +57,31 @@ public class Message implements Serializable {
 	Tile robberTile;
 	Point RobberPoint;
 	String customMessage;
+	Dice dice;
+	String chatMessage;
+
+
+
+	public String getChatMessage() {
+		return chatMessage;
+	}
+
+
+	public void setChatMessage(String chatMessage) {
+		this.chatMessage = chatMessage;
+	}
+
+
+	public Dice getDice() {
+		return dice;
+	}
+
+
+	public void setDice(Dice dice) {
+		this.dice = dice;
+	}
+
+
 	Trade trade;
 	DevCardAction devCardAction;
 	DevelopmentCard devCard;
