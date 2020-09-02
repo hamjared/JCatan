@@ -141,7 +141,9 @@ public class GameClient implements Runnable {
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				System.out.println(GameGUI.myPlayer.getName() + " Lost connection to server");
 				e.printStackTrace();
+				break;
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
