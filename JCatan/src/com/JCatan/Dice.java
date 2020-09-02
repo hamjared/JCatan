@@ -56,6 +56,15 @@ public class Dice implements Serializable {
 		return die2;
 	}
 	
+	
+	public boolean isWasDoubles() {
+		return wasDoubles;
+	}
+
+	public void setWasDoubles(boolean wasDoubles) {
+		this.wasDoubles = wasDoubles;
+	}
+
 	public Map <Integer, Integer> getDiceRollHistory() {
 		return diceRollHistory;
 	}

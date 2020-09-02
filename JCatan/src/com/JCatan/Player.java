@@ -243,6 +243,7 @@ public abstract class Player implements Serializable{
 		}
 		card.performAction(devCardAction);
 		card.setHasBeenPlayed(true);
+		devCards.remove(card);
 	}
 
 	/**
