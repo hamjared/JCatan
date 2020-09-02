@@ -11,7 +11,6 @@ import com.JCatan.Player;
 import com.JCatan.TraditionalBoardFactory;
 import com.JCatan.gui.GameGUI;
 import com.JCatan.server.Message;
-import com.JCatan.server.MessageBuilder;
 
 public class GameClient implements Runnable {
 
@@ -133,6 +132,9 @@ public class GameClient implements Runnable {
 					break;
 				case DiceData:
 					showDiceData(msg);
+				case RoadBuilder:
+					redrawBuildableRoads(msg);
+					break;
 				default:
 					break;
 				}
@@ -148,6 +150,15 @@ public class GameClient implements Runnable {
 
 	}
 	
+	private void redrawBuildableRoads(Message msg) {
+		GameGUI.controller = msg.getGc();
+		this.controller = msg.getGc();
+		gameGUI.updatePlayer();
+		gameGUI.getBoardPanel().buildRoad();
+		gameGUI.repaint();
+		
+	}
+
 	private void playerDeclinedTrade(Message msg) {
 		boolean isPlayerOfferer = gameGUI.getMyPlayer().equals(msg.getMyPlayer());
 		if(isPlayerOfferer) {
