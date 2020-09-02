@@ -94,6 +94,12 @@ public class PlayerSocket implements Runnable {
 					continue;
 				case PlayDevelopmentCard:
 					playDevelopmentCard(msg);
+					if (msg.getDevCard() instanceof RoadBuildingDevelopmentCard) {
+						Message rbMessage = new MessageBuilder().action(Message.Action.RoadBuilder)
+								.gameController(server.getController()).build();
+						server.broadcastMessage(rbMessage);
+						continue;
+					}
 					break;
 				case BuyDevelopmentCard:
 					buyDevCard(msg);
@@ -127,15 +133,14 @@ public class PlayerSocket implements Runnable {
 			}
 		}
 	}
-	
+
 	private void playerDeclineTrade(Message msg) {
 		server.broadcastMessage(msg);
 	}
 
 	private void updateChat(Message msg) {
 		server.getController().getChat().addToChat(msg.getChatMessage());
-		
-		
+
 	}
 
 	private void sendDiceData(Message msg) {
@@ -150,9 +155,7 @@ public class PlayerSocket implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
+
 	}
 
 	private void trade(Message msg) {
@@ -166,7 +169,8 @@ public class PlayerSocket implements Runnable {
 				Player player = server.getController().getPlayers().stream()
 						.filter(p -> p.getName().equals(trade.getOfferingPlayer().getName())).findFirst().get();
 				server.getController().acceptTrade(trade, player);
-				Message newMsg = new MessageBuilder().action(Message.Action.BankAcceptedTrade).player(player).gameController(server.getController()).setCustomMessage("Bank Accepted Trade").build();
+				Message newMsg = new MessageBuilder().action(Message.Action.BankAcceptedTrade).player(player)
+						.gameController(server.getController()).setCustomMessage("Bank Accepted Trade").build();
 				server.broadcastMessage(newMsg);
 			}
 		} catch (InvalidTradeException e) {
@@ -229,8 +233,9 @@ public class PlayerSocket implements Runnable {
 	}
 
 	private void playDevelopmentCard(Message msg) {
-		
-		System.out.println("Playing development card: " + msg.getDevCard() + " for " + server.getController().getCurPlayer());
+
+		System.out.println(
+				"Playing development card: " + msg.getDevCard() + " for " + server.getController().getCurPlayer());
 
 		convertDevCardActionToServerObjects(msg.getDevCardAction());
 		DevelopmentCard card = convertDevCardToServerObject(msg.getDevCard());

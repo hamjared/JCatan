@@ -47,7 +47,7 @@ public class Message implements Serializable {
 		PlayDevelopmentCard,
 		MoveRobber, 
 		RollDice, UpdateBoard, EndTurn, DiceRolled, EndSetupTurn, Trade, BadTrade,
-		FinalizeTrade, BankAcceptedTrade, DeclineTrade, DiceData, Chat
+		FinalizeTrade, BankAcceptedTrade, DeclineTrade, DiceData, Chat, RoadBuilder
 	}
 	
 	GameController gc;
