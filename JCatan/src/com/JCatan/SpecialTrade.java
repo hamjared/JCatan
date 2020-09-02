@@ -45,6 +45,7 @@ public class SpecialTrade extends Trade {
 	@Override
 	public void offer(Player player) {
 		player.receiveTrade(this);
+		bank.receiveTrade(this);
 	}
 
 	private Map<ResourceType, Integer> convertListToMap(List<ResourceCard> list) {

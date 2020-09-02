@@ -167,7 +167,7 @@ public class PlayerSocket implements Runnable {
 			} else {
 				server.getController().initiateTrade(trade);
 				Player player = server.getController().getPlayers().stream()
-						.filter(p -> p.getName().equals(trade.getOfferingPlayer().getName())).findFirst().get();
+						.filter(p -> p.equals(trade.getOfferingPlayer())).findFirst().get();
 				server.getController().acceptTrade(trade, player);
 				Message newMsg = new MessageBuilder().action(Message.Action.BankAcceptedTrade).player(player)
 						.gameController(server.getController()).setCustomMessage("Bank Accepted Trade").build();
@@ -188,9 +188,9 @@ public class PlayerSocket implements Runnable {
 				server.getController().initiateTrade(trade);
 
 				Player offerer = server.getController().getPlayers().stream()
-						.filter(p -> p.getName().equals(trade.getOfferingPlayer().getName())).findFirst().get();
+						.filter(p -> p.equals(trade.getOfferingPlayer())).findFirst().get();
 				Player receiver = server.getController().getPlayers().stream()
-						.filter(p -> p.getName().equals(trade.getReceivingPlayer().getName())).findFirst().get();
+						.filter(p -> p.equals(trade.getReceivingPlayer())).findFirst().get();
 				offerer.receiveTrade(trade);
 				receiver.receiveTrade(trade);
 				msg.setGc(server.getController());
