@@ -632,7 +632,6 @@ public class GameGUI extends JFrame {
 		} else {
 			endButton.setText("End Robber Move");
 			controller.setGamePhase(GamePhase.ROBBERMOVE);
-			controller.robberMovePhase();
 		}
 		if(myPlayer.equals(controller.getCurPlayer()))
 			tradeButton.setEnabled(true);

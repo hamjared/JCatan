@@ -151,11 +151,6 @@ public class GameController implements Serializable {
 		return robber;
 	}
 
-	public void robberMovePhase() {
-		curPlayer = players.get(playerTurnIndex);
-		robber.rob(curPlayer);
-	}
-
 	public void gamePhaseRoll() {
 		curPlayer = players.get(playerTurnIndex);
 		if (setUpChatCheck == false) {
@@ -227,7 +222,13 @@ public class GameController implements Serializable {
 			chat.addToChat("Game over: " + curPlayer.getName() + " won!");
 		}
 
-		playerTurnIndex++;
+		Dice dice = Dice.getInstance();
+		if (dice.isWasDoubles()) {
+			chat.addToChat(curPlayer.getName() + " rolled doubles. Player will go again.");
+		} else {
+			playerTurnIndex++;
+		}
+		
 
 		if (playerTurnIndex >= players.size()) {
 			playerTurnIndex = 0;
