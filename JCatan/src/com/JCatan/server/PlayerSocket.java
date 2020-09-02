@@ -5,28 +5,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import com.JCatan.Bank;
 import com.JCatan.DevCardAction;
-import com.JCatan.DevCardActionBuilder;
 import com.JCatan.DevelopmentCard;
-import com.JCatan.DomesticTrade;
 import com.JCatan.Dice;
 import com.JCatan.GameController;
 import com.JCatan.GamePhase;
-import com.JCatan.HumanPlayer;
 import com.JCatan.InsufficientResourceCardException;
 import com.JCatan.InvalidDevCardUseException;
 import com.JCatan.InvalidTradeException;
 import com.JCatan.KnightDevelopmentCard;
-import com.JCatan.MonopolyDevelopmentCard;
 import com.JCatan.Node;
 import com.JCatan.Player;
-import com.JCatan.ResourceType;
 import com.JCatan.RoadBuildingDevelopmentCard;
-import com.JCatan.Tile;
-import com.JCatan.VictoryPointDevelopmentCard;
-import com.JCatan.YearOfPlentyDevelopmentCard;
-import com.JCatan.gui.GameGUI;
 
 public class PlayerSocket implements Runnable {
 	Player player;
@@ -120,8 +110,7 @@ public class PlayerSocket implements Runnable {
 				Message returnMessage = new MessageBuilder().action(Message.Action.UpdateBoard)
 						.gameController(server.getController()).build();
 
-				System.out.println("Game board: ");
-				System.out.println(server.getController().getBoard());
+				
 
 				server.broadcastMessage(returnMessage);
 			} catch (IOException e) {
@@ -144,7 +133,7 @@ public class PlayerSocket implements Runnable {
 	}
 
 	private void sendDiceData(Message msg) {
-		System.out.println("Dice Data: " + Dice.getInstance().getDiceRollHistory());
+		
 		server.getController().getChat().addToChat("Dice Roll History:\n" + Dice.getInstance().getDiceRollHistory());
 		Message message = new MessageBuilder().action(Message.Action.DiceData).gameController(server.getController())
 				.dice(Dice.getInstance()).build();
@@ -206,7 +195,7 @@ public class PlayerSocket implements Runnable {
 	}
 
 	private void buildCity(Message msg) {
-		System.out.println("Building a city for : " + msg.getMyPlayer() + "on node " + msg.getNode());
+		
 		GameController controller = server.getController();
 		try {
 			Node node = controller.getBoard().getBoard().getNodeList().get(msg.getNode().getNodeIndex());
@@ -234,9 +223,7 @@ public class PlayerSocket implements Runnable {
 
 	private void playDevelopmentCard(Message msg) {
 
-		System.out.println(
-				"Playing development card: " + msg.getDevCard() + " for " + server.getController().getCurPlayer());
-
+		
 		convertDevCardActionToServerObjects(msg.getDevCardAction());
 		DevelopmentCard card = convertDevCardToServerObject(msg.getDevCard());
 		if (msg.getDevCard() instanceof KnightDevelopmentCard) {
@@ -244,7 +231,7 @@ public class PlayerSocket implements Runnable {
 		}
 		try {
 			server.getController().getCurPlayer().playDevelopmentCard(card, msg.getDevCardAction());
-			System.out.println("Dev cards: " + server.getController().getCurPlayer().getDevCards());
+			
 		} catch (InvalidDevCardUseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -281,7 +268,7 @@ public class PlayerSocket implements Runnable {
 	}
 
 	private void moveRobber(Message msg) {
-		System.out.println("Moving robber to tile " + msg.getRobberTile());
+		
 		server.getController().setGamePhase(GamePhase.GAMEMAIN);
 		server.getController().getRobber().move(server.getController().getBoard().getTiles().get(msg.getRobberTile()));
 		server.getController().getRobber().rob(server.getController().getCurPlayer());
@@ -290,8 +277,7 @@ public class PlayerSocket implements Runnable {
 	private void endTurn(Message msg) {
 		server.getController().setGamePhase(GamePhase.GAMEROLL);
 		server.getController().gamePhaseEnd();
-		System.out.println("Turn ended, " + server.getController().getCurPlayer().getName() + "'s Turn now");
-
+		
 	}
 
 	private void rollDice() {
@@ -309,8 +295,6 @@ public class PlayerSocket implements Runnable {
 	}
 
 	private void buildRoad(Message msg) {
-		System.out.println("Building a road for : " + msg.getMyPlayer() + " from "
-				+ msg.getRoad().getNode1().getNodeIndex() + "to " + msg.getRoad().getNode2().getNodeIndex());
 		GameController controller = server.getController();
 		try {
 			Node node1 = controller.getBoard().getBoard().getNodeList().get(msg.getRoad().getNode1().getNodeIndex());
@@ -327,7 +311,6 @@ public class PlayerSocket implements Runnable {
 	}
 
 	private void buildSettlement(Message msg) {
-		System.out.println("Building a setllement for : " + msg.getMyPlayer() + "on node " + msg.getNode());
 		GameController controller = server.getController();
 		try {
 			Node node = controller.getBoard().getBoard().getNodeList().get(msg.getNode().getNodeIndex());
