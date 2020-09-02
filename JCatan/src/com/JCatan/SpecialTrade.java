@@ -42,6 +42,10 @@ public class SpecialTrade extends Trade {
 
 	}
 
+	public Bank getBank() {
+		return bank;
+	}
+	
 	@Override
 	public void offer(Player player) {
 		player.receiveTrade(this);

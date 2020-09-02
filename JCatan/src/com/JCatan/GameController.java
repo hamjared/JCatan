@@ -194,6 +194,10 @@ public class GameController implements Serializable {
 	
 	public void acceptTrade(Trade trade, Player player) {
 		trade.offer(player);
+		if(trade instanceof MaritimeTrade)
+			this.bank = ((MaritimeTrade)trade).getBank();
+		if(trade instanceof SpecialTrade)
+			this.bank = ((SpecialTrade)trade).getBank();
 	}
 
 	public void gamePhaseTrade() {

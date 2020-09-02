@@ -39,6 +39,10 @@ public class MaritimeTrade extends Trade {
 
 	}
 
+	public Bank getBank() {
+		return banker;
+	}
+	
 	@Override
 	public void offer(Player player) {
 		player.receiveTrade(this);
