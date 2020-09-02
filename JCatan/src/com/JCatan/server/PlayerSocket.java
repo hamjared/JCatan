@@ -274,6 +274,9 @@ public class PlayerSocket implements Runnable {
 			int stealPlayerIndex = server.getController().getPlayers().indexOf(devCardAction.getStealFromPlayer());
 			devCardAction.setStealFromPlayer(server.getController().getPlayers().get(stealPlayerIndex));
 		}
+		if (devCardAction.getGamePlayers() != null) {
+			devCardAction.setGamePlayers(server.getController().getPlayers());
+		}
 
 	}
 

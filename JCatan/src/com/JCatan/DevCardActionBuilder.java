@@ -1,5 +1,7 @@
 package com.JCatan;
 
+import java.util.List;
+
 public class DevCardActionBuilder {
 	
 	DevCardAction devCardAction;
@@ -25,6 +27,11 @@ public class DevCardActionBuilder {
 	
 	public DevCardActionBuilder stealResourceType2(ResourceType type) {
 		this.devCardAction.setStealResourceType2(type);
+		return this;
+	}
+	
+	public DevCardActionBuilder gamePlayers(List<Player> players) {
+		this.devCardAction.setGamePlayers(players);
 		return this;
 	}
 	

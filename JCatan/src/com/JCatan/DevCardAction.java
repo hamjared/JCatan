@@ -1,6 +1,7 @@
 package com.JCatan;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class DevCardAction implements Serializable{
 	
@@ -13,6 +14,13 @@ public class DevCardAction implements Serializable{
 	private ResourceType stealResourceType1;
 	private ResourceType stealResourceType2;
 	private Bank bank;
+	private List<Player> gamePlayers;
+	public List<Player> getGamePlayers() {
+		return gamePlayers;
+	}
+	public void setGamePlayers(List<Player> gamePlayers) {
+		this.gamePlayers = gamePlayers;
+	}
 	public ResourceType getStealResourceType1() {
 		return stealResourceType1;
 	}

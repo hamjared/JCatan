@@ -151,7 +151,7 @@ public class DevCardPanel extends JPanel {
 		}
 
 		else if (card instanceof MonopolyDevelopmentCard) {
-			renderComboBoxes(true, true, false);
+			renderComboBoxes(false, false, true);
 		} else if (card instanceof RoadBuildingDevelopmentCard) {
 			renderComboBoxes(false, false, false);
 		} else {
@@ -178,12 +178,12 @@ public class DevCardPanel extends JPanel {
 
 		if (card instanceof MonopolyDevelopmentCard) {
 			Player stealPlayer = (Player) playerComboBox.getSelectedItem();
-			ResourceType rt = (ResourceType) resourceComboBox1.getSelectedItem();
+			ResourceType rt = (ResourceType) resourceComboBox2.getSelectedItem();
 			if (stealPlayer == null || rt == null) {
 				return null;
 			}
 			return new DevCardActionBuilder().curPlayer(GameGUI.controller.getCurPlayer()).stealResourceType1(rt)
-					.stealPlayer(stealPlayer).build();
+					.stealPlayer(stealPlayer).gamePlayers(GameGUI.controller.getPlayers()).build();
 		}
 		if (card instanceof RoadBuildingDevelopmentCard) {
 			Bank bank = GameGUI.controller.getBank();
