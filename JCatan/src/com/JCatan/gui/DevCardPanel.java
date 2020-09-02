@@ -38,6 +38,7 @@ public class DevCardPanel extends JPanel {
 	private JLabel resources1Label;
 	private JLabel playerLabel;
 	private BoardPanel boardPanel;
+	JButton playButton;
 
 	private JComboBox comboBox;
 	private JLabel resource2Label;
@@ -61,13 +62,14 @@ public class DevCardPanel extends JPanel {
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showDevCardOptions();
+				grayOutPlayButton();
 			}
 		});
 		comboBox.setBounds(10, 11, 181, 22);
 		add(comboBox);
 
-		JButton btnNewButton = new JButton("Play");
-		btnNewButton.addActionListener(new ActionListener() {
+		 playButton = new JButton("Play");
+		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Play development card pressed, Game Phase: "
 						+ GameGUI.gameClient.getController().getGamePhase());
@@ -91,8 +93,8 @@ public class DevCardPanel extends JPanel {
 				}
 			}
 		});
-		btnNewButton.setBounds(221, 11, 69, 23);
-		add(btnNewButton);
+		playButton.setBounds(221, 11, 69, 23);
+		add(playButton);
 		setLayout(null);
 
 		playerComboBox = new JComboBox();
@@ -121,6 +123,21 @@ public class DevCardPanel extends JPanel {
 
 		showDevCardOptions();
 
+	}
+
+	protected void grayOutPlayButton() {
+		DevelopmentCard card = (DevelopmentCard) comboBox.getSelectedItem();
+		if(card == null) {
+			playButton.setEnabled(false);
+			return;
+		}
+		if(card.isCanBePlayed()) {
+			playButton.setEnabled(true);
+		}
+		else {
+			playButton.setEnabled(false);
+		}
+		
 	}
 
 	protected void showDevCardOptions() {
@@ -213,12 +230,14 @@ public class DevCardPanel extends JPanel {
 	}
 
 	public void showPanel() {
-		setEnabled(true);
-		setVisible(true);
+		
 		updateComboBox();
 		updateResourceComboBox();
 		updatePlayerComboBox();
 		showDevCardOptions();
+		grayOutPlayButton();
+		setEnabled(true);
+		setVisible(true);
 	}
 
 	public void hidePanel() {
