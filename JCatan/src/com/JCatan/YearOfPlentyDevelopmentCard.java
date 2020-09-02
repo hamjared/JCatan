@@ -4,7 +4,12 @@ public class YearOfPlentyDevelopmentCard extends DevelopmentCard {
 
 
     
-    public String toString() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public String toString() {
     	return "Year of Plenty";
     }
 
