@@ -589,7 +589,12 @@ public class GameGUI extends JFrame {
 			dieTwo = six.getImage();
 			break;
 		}
+		endButton.setText("End Turn");
 
+		repaint();
+	}
+	
+	public void checkForSevenRolled() {
 		int val = die1 + die2;
 
 		if (val != 7) {
@@ -604,6 +609,7 @@ public class GameGUI extends JFrame {
 		}
 		if(myPlayer.equals(controller.getCurPlayer()))
 			tradeButton.setEnabled(true);
+		
 		repaint();
 	}
 
