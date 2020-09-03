@@ -168,8 +168,15 @@ public class GameClient implements Runnable {
 		}
 		if (playerHasCardToDrop == false && GameGUI.controller.getCurPlayer().equals(GameGUI.myPlayer)) {
 			GameGUI.endButton.setEnabled(true);
+			gameGUI.checkForSevenRolled();
 		}
-		gameGUI.repaint();
+		
+		if (gameGUI.endButton.getText().equals("End Robber Move")) {
+			//Dont repaint the gameGUI this will override the clickable robber circles
+		} else {
+			gameGUI.repaint();
+		}
+		
 	}
 
 	private void redrawBuildableRoads(Message msg) {
@@ -262,6 +269,8 @@ public class GameClient implements Runnable {
 		if (playerHasCardToDrop == false && GameGUI.controller.getCurPlayer().equals(GameGUI.myPlayer)) {
 			gameGUI.endButton.setEnabled(true);
 		}
+		
+		
 	}
 
 	private void updateBoard(Message msg) {
