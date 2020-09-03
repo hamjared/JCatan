@@ -16,7 +16,9 @@ import com.JCatan.InvalidTradeException;
 import com.JCatan.KnightDevelopmentCard;
 import com.JCatan.Node;
 import com.JCatan.Player;
+import com.JCatan.ResourceCard;
 import com.JCatan.RoadBuildingDevelopmentCard;
+import com.JCatan.gui.GameGUI;
 
 public class PlayerSocket implements Runnable {
 	Player player;
@@ -42,7 +44,9 @@ public class PlayerSocket implements Runnable {
 				if (obj == null || !(obj instanceof Message)) {
 					continue;
 				}
+				System.out.println("I am before the message");
 				Message msg = (Message) obj;
+				System.out.println("I made it past the message");
 				switch (msg.getAction()) {
 				case BuildSettlement:
 					buildSettlement(msg);
@@ -108,6 +112,9 @@ public class PlayerSocket implements Runnable {
 				case Chat:
 					updateChat(msg);
 					break;
+				case DropCardsOnSeven:
+					playerDropsCards(msg);
+					continue;
 				default:
 					break;
 				}
@@ -124,6 +131,28 @@ public class PlayerSocket implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private void playerDropsCards(Message msg) {
+		GameController controller = server.getController();
+		Player dropCardPlayer = null;
+		
+		ResourceCard card = msg.getCard();
+		for(Player p: controller.getPlayers()) {
+			if(p.equals(msg.getMyPlayer())) {
+				dropCardPlayer = p;
+				break;
+			}
+		}
+		
+		dropCardPlayer.dropCardOnSeven(card, dropCardPlayer, controller.getBank());
+		
+		for (Player p: controller.getPlayers()) {
+			server.getController().getChat().addToChat(p.getName() + " needs to drop " + p.getCardsToDrop() + " cards");
+		}
+				
+		Message msg2 = new MessageBuilder().action(Message.Action.DropCardsOnSeven).gameController(server.getController()).build();
+		server.broadcastMessage(msg2);
 	}
 
 	private void playerDeclineTrade(Message msg) {

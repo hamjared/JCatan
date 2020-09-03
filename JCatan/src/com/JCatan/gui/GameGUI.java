@@ -394,46 +394,7 @@ public class GameGUI extends JFrame {
 			}
 		});
 
-		ResourcePanel = new ResourcesPanel() {
-			@Override
-			public void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				try {
-					recs.clear();
-					for (int i = 0; i < myPlayer.getResources().size(); i++) {
-						ResourceCard resource = myPlayer.getResources().get(i);
-						switch (resource.getResourceType()) {
-						case WOOD:
-							resourceCard = wood.getImage();
-							break;
-						case SHEEP:
-							resourceCard = sheep.getImage();
-							break;
-						case ORE:
-							resourceCard = ore.getImage();
-							break;
-						case BRICK:
-							resourceCard = brick.getImage();
-							break;
-						case WHEAT:
-							resourceCard = wheat.getImage();
-							break;
-						default:
-							break;
-						}
-						g.drawImage(resourceCard, j + 5, 18, 55, 95, null);
-						Rectangle imageBounds = new Rectangle(j+ + 5, 18, 55, 95);
-						recs.add(imageBounds);
-						j += 56;
-					}
-					j = 0;
-				} catch (Exception e) {
-
-				}
-			}
-		};
-		ResourcePanel.setBounds(0, 867, 750, 134);
-		ResourcePanel.setBackground(Color.decode("#CC9966"));
+		ResourcePanel = new ResourcesPanel();
 		ResourcePanel.setBorder(border);
 		contentPane.add(ResourcePanel);
 		repaint();

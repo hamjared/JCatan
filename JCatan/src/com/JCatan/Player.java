@@ -35,6 +35,8 @@ public abstract class Player implements Serializable{
     boolean hasLongestRoad;
     boolean hasLargestArmy;
     boolean playedDevCardOnTurn;
+    boolean sevenRolled;
+    int cardsToDrop;
     Dice dice;
   
 	public List<Road> getPlayedRoads() {
@@ -55,9 +57,11 @@ public abstract class Player implements Serializable{
 
 	Player(String name) {
 		roadBuilderRoads = 0;
+		sevenRolled = false;
 		resources = new ArrayList<ResourceCard>();
 		devCards = new ArrayList<DevelopmentCard>();
 		victoryPoints = 0;
+		cardsToDrop = 0;
 		buildings = new ArrayList<Building>();
 		playedBuildings = new ArrayList<>();
 		playedRoads = new ArrayList<Road>();
@@ -243,7 +247,7 @@ public abstract class Player implements Serializable{
 		if(! card.isCanBePlayed()) {
 			throw new InvalidDevCardUseException();
 		}
-		if (playedDevCardOnTurn == false) {
+		if (playedDevCardOnTurn == false || card instanceof VictoryPointDevelopmentCard) {
 			card.performAction(devCardAction);
 			card.setHasBeenPlayed(true);
 			playedDevCardOnTurn = true;
@@ -271,7 +275,9 @@ public abstract class Player implements Serializable{
 	 */
 	public abstract void setup(Node node1, Node node2, GameController controller);
 
-	public abstract void sevenRolled(Player activePlayer, Bank bank);
+	public abstract void sevenRolled(Bank bank);
+	
+	public abstract void dropCardOnSeven(ResourceCard card, Player activePlayer, Bank bank);
 
 	public boolean sevenRolledSteal(Player player) {
 		List<ResourceCard> resources = player.getResources();
@@ -370,6 +376,23 @@ public abstract class Player implements Serializable{
 
 	public void setPlayedDevCardOnTurn(boolean playedDevCardOnTurn) {
 		this.playedDevCardOnTurn = playedDevCardOnTurn;
+	}
+
+	public boolean isSevenRolled() {
+		return sevenRolled;
+	}
+
+	public void setSevenRolled(boolean sevenRolled) {
+		this.sevenRolled = sevenRolled;
+	}
+	
+
+	public int getCardsToDrop() {
+		return cardsToDrop;
+	}
+
+	public void setCardsToDrop(int cardsToDrop) {
+		this.cardsToDrop = cardsToDrop;
 	}
 
 	public boolean equals(Object obj) {

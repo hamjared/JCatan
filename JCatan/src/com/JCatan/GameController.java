@@ -162,15 +162,9 @@ public class GameController implements Serializable {
 
 		if (diceRoll == 7) {
 			for (Player p : players) {
-				p.sevenRolled(p, this.getBank());
+				p.sevenRolled(this.getBank());
+				getChat().addToChat(p.getName() + " needs to drop " + p.getCardsToDrop() + " cards");
 			}
-			boolean cardStolen = false;
-//				while (cardStolen == false) {
-//					cardStolen = curPlayer.sevenRolledSteal(players.get(playerTurnIndex + 1)); // Pass in a player to
-//																								// steal from here right
-//																								// now it is set to
-//																								// curPlayer + 1
-//				}
 		}
 
 		board.dishOutResources(this, diceRoll);
