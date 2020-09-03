@@ -590,6 +590,16 @@ public class GameGUI extends JFrame {
 			break;
 		}
 		endButton.setText("End Turn");
+		
+		int sevenCheck = 0;
+		for (Player p: controller.getPlayers()) {
+			if (p.getCardsToDrop() == 0) {
+				sevenCheck++;
+			}
+		}
+		if (sevenCheck == 4) {
+			checkForSevenRolled();
+		}
 
 		repaint();
 	}
