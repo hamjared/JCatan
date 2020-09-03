@@ -137,8 +137,8 @@ public class PlayerPanel extends JPanel
     }
     
     @Override
-    public void paint(Graphics g) {
-    	super.paint(g);
+    public void paintComponent(Graphics g) {
+    	super.paintComponent(g);
     	Graphics2D g2 = (Graphics2D) g;
     	
     	drawShape(new Rectangle2D.Double(0,0, 10,30), 0, 275, 75, 1, g2, player.getColor());

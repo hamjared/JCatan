@@ -214,7 +214,7 @@ public class GameClient implements Runnable {
 		gameGUI.updatePlayer();
 		gameGUI.updateDevCardPanel();
 		gameGUI.gamePhaseEnd();
-
+		gameGUI.repaint();
 	}
 
 	private void diceRolled(Message msg) {
