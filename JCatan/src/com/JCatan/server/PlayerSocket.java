@@ -137,13 +137,7 @@ public class PlayerSocket implements Runnable {
 		server.getController().getChat().addToChat("Dice Roll History:\n" + Dice.getInstance().getDiceRollHistory());
 		Message message = new MessageBuilder().action(Message.Action.DiceData).gameController(server.getController())
 				.dice(Dice.getInstance()).build();
-		try {
-			ObjectOutputStream oos = new ObjectOutputStream(connection.getOutputStream());
-			oos.writeObject(message);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		server.broadcastMessage(message);
 
 	}
 
