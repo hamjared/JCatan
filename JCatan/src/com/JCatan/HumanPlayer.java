@@ -47,6 +47,11 @@ public class HumanPlayer extends Player {
 
 	@Override
 	public void buildRoad(GamePhase phase, Node node1, Node node2, GameController controller) throws InsufficientResourceCardException {
+		if(node1.getNodeIndex() > node2.getNodeIndex()) {
+			Node temp = node1;
+			node1 = node2;
+			node2 = temp;
+		}
 		if (phase == GamePhase.SETUP) {
 			// Setup Phase Build
 			Road road = new Road(node1, node2, this);
