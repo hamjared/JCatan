@@ -34,6 +34,7 @@ public abstract class Player implements Serializable{
 	Random randomGenerator;
     boolean hasLongestRoad;
     boolean hasLargestArmy;
+    boolean playedDevCardOnTurn;
     Dice dice;
   
 	public List<Road> getPlayedRoads() {
@@ -65,6 +66,7 @@ public abstract class Player implements Serializable{
 		initializeBuildingsAndRoads();
 		hasLongestRoad = false;
 		hasLargestArmy = false;
+		playedDevCardOnTurn = false;
 		color = Color.BLACK;
 		dice = Dice.getInstance();
 	}
@@ -241,9 +243,12 @@ public abstract class Player implements Serializable{
 		if(! card.isCanBePlayed()) {
 			throw new InvalidDevCardUseException();
 		}
-		card.performAction(devCardAction);
-		card.setHasBeenPlayed(true);
-		devCards.remove(card);
+		if (playedDevCardOnTurn == false) {
+			card.performAction(devCardAction);
+			card.setHasBeenPlayed(true);
+			playedDevCardOnTurn = true;
+		}
+		
 	}
 
 	/**
@@ -359,6 +364,14 @@ public abstract class Player implements Serializable{
 		roadBuilderRoads = r;
 	}
 	
+	public boolean isPlayedDevCardOnTurn() {
+		return playedDevCardOnTurn;
+	}
+
+	public void setPlayedDevCardOnTurn(boolean playedDevCardOnTurn) {
+		this.playedDevCardOnTurn = playedDevCardOnTurn;
+	}
+
 	public boolean equals(Object obj) {
 		if (obj == null || ! (obj instanceof Player)) {
 			return false;
