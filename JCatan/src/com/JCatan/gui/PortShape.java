@@ -35,7 +35,7 @@ public class PortShape {
 	private void setColor() {
 
 		if (port.getPortType() == PortType.GENERIC) {
-			g2.setColor(Color.decode("#00008B"));
+			g2.setColor(Color.decode("#000000"));
 		} else {
 			switch (port.getResourceType()) {
 			case BRICK:
