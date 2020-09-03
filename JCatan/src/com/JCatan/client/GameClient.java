@@ -132,6 +132,7 @@ public class GameClient implements Runnable {
 					break;
 				case DiceData:
 					showDiceData(msg);
+					break;
 				case RoadBuilder:
 					redrawBuildableRoads(msg);
 					break;
