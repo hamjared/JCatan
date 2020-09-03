@@ -1,5 +1,6 @@
 package com.JCatan.gui;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +36,7 @@ import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Font;
 import java.awt.Graphics;
 import javax.swing.JLabel;
@@ -92,6 +94,7 @@ public class GameGUI extends JFrame {
 	int die1;
 	int die2;
 	int j = 0;
+	List<Rectangle> recs = new ArrayList<>();
 	int setupNum = 0;
 	public static boolean setupReverse = false;
 
@@ -396,6 +399,7 @@ public class GameGUI extends JFrame {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				try {
+					recs.clear();
 					for (int i = 0; i < myPlayer.getResources().size(); i++) {
 						ResourceCard resource = myPlayer.getResources().get(i);
 						switch (resource.getResourceType()) {
@@ -418,6 +422,8 @@ public class GameGUI extends JFrame {
 							break;
 						}
 						g.drawImage(resourceCard, j + 5, 18, 55, 95, null);
+						Rectangle imageBounds = new Rectangle(j+ + 5, 18, 55, 95);
+						recs.add(imageBounds);
 						j += 56;
 					}
 					j = 0;

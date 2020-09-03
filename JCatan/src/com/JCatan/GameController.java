@@ -233,6 +233,7 @@ public class GameController implements Serializable {
 			playerTurnIndex++;
 		}
 		
+		curPlayer.setPlayedDevCardOnTurn(false);
 
 		if (playerTurnIndex >= players.size()) {
 			playerTurnIndex = 0;

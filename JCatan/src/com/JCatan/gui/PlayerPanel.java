@@ -172,7 +172,13 @@ public class PlayerPanel extends JPanel
 
 	private void setLabels() {
 		this.numResourceCardLabel.setText("" + player.getResources().size());
-		this.numDevelopCardsLabel.setText("" + player.getDevCards().size());
+		int playerDevCardCounter = 0;
+		for (DevelopmentCard card: player.getDevCards()) {
+			if (!card.isHasBeenPlayed()) {
+				playerDevCardCounter++;
+			}
+		}
+		this.numDevelopCardsLabel.setText("" + playerDevCardCounter);
 		this.numRoadsLabel.setText("" + player.getRoads().size());
 		this.numSettlementsLabel.setText("" + player.getBuildings().stream().filter(b -> b instanceof Settlement).count());
 		this.numCitiesLabel.setText("" + player.getBuildings().stream().filter(b -> b instanceof City).count());

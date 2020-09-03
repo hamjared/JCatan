@@ -83,13 +83,18 @@ public class PlayerSocket implements Runnable {
 					finalizeTrade(msg);
 					continue;
 				case PlayDevelopmentCard:
-					playDevelopmentCard(msg);
-					if (msg.getDevCard() instanceof RoadBuildingDevelopmentCard) {
-						Message rbMessage = new MessageBuilder().action(Message.Action.RoadBuilder)
-								.gameController(server.getController()).build();
-						server.broadcastMessage(rbMessage);
-						continue;
+					if (server.getController().getCurPlayer().isPlayedDevCardOnTurn()) {
+						// Can't play dev card
+					} else {
+						playDevelopmentCard(msg);
+						if (msg.getDevCard() instanceof RoadBuildingDevelopmentCard) {
+							Message rbMessage = new MessageBuilder().action(Message.Action.RoadBuilder)
+									.gameController(server.getController()).build();
+							server.broadcastMessage(rbMessage);
+							continue;
+						}
 					}
+
 					break;
 				case BuyDevelopmentCard:
 					buyDevCard(msg);
@@ -109,8 +114,6 @@ public class PlayerSocket implements Runnable {
 
 				Message returnMessage = new MessageBuilder().action(Message.Action.UpdateBoard)
 						.gameController(server.getController()).build();
-
-				
 
 				server.broadcastMessage(returnMessage);
 			} catch (IOException e) {
@@ -133,7 +136,7 @@ public class PlayerSocket implements Runnable {
 	}
 
 	private void sendDiceData(Message msg) {
-		
+
 		server.getController().getChat().addToChat("Dice Roll History:\n" + Dice.getInstance().getDiceRollHistory());
 		Message message = new MessageBuilder().action(Message.Action.DiceData).gameController(server.getController())
 				.dice(Dice.getInstance()).build();
@@ -189,7 +192,7 @@ public class PlayerSocket implements Runnable {
 	}
 
 	private void buildCity(Message msg) {
-		
+
 		GameController controller = server.getController();
 		try {
 			Node node = controller.getBoard().getBoard().getNodeList().get(msg.getNode().getNodeIndex());
@@ -217,7 +220,6 @@ public class PlayerSocket implements Runnable {
 
 	private void playDevelopmentCard(Message msg) {
 
-		
 		convertDevCardActionToServerObjects(msg.getDevCardAction());
 		DevelopmentCard card = convertDevCardToServerObject(msg.getDevCard());
 		if (msg.getDevCard() instanceof KnightDevelopmentCard) {
@@ -225,7 +227,7 @@ public class PlayerSocket implements Runnable {
 		}
 		try {
 			server.getController().getCurPlayer().playDevelopmentCard(card, msg.getDevCardAction());
-			
+
 		} catch (InvalidDevCardUseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -262,7 +264,7 @@ public class PlayerSocket implements Runnable {
 	}
 
 	private void moveRobber(Message msg) {
-		
+
 		server.getController().setGamePhase(GamePhase.GAMEMAIN);
 		server.getController().getRobber().move(server.getController().getBoard().getTiles().get(msg.getRobberTile()));
 		server.getController().getRobber().rob(server.getController().getCurPlayer());
@@ -271,7 +273,7 @@ public class PlayerSocket implements Runnable {
 	private void endTurn(Message msg) {
 		server.getController().setGamePhase(GamePhase.GAMEROLL);
 		server.getController().gamePhaseEnd();
-		
+
 	}
 
 	private void rollDice() {
