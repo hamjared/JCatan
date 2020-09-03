@@ -39,8 +39,9 @@ public class LongestRoadCalculator {
 		Set<Road> traveledRoads = new HashSet<Road>();
 
 		int l1 = dfs(node1, traveledRoads, 0);
+		traveledRoads = new HashSet<Road>();
 		int l2 = dfs(node2, traveledRoads, 0);
-		return l1 + l2;
+		return Math.max(l1, l2);
 
 	}
 

@@ -139,5 +139,29 @@ public class LongestRoadCalculatorTest extends TestCase {
 		assertEquals(5, player.calcLongestRoad());
 
 	}
+	
+	public void test8() throws InsufficientResourceCardException {
+		Board board = new Board(new TraditionalBoardFactory());
+		Player player = new HumanPlayer("Joe");
+		GameController controller = new GameController(null, new TraditionalBoardFactory());
+
+		player.buildSettlement(GamePhase.SETUP, board.board.getNodeList().get(28), controller);
+		player.buildSettlement(GamePhase.SETUP, board.board.getNodeList().get(12), controller);
+		player.buildSettlement(GamePhase.SETUP, board.board.getNodeList().get(13), controller);
+
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(28), board.board.getNodeList().get(22), null);
+
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(17), board.board.getNodeList().get(22), null);
+
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(17), board.board.getNodeList().get(12), null);
+
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(12), board.board.getNodeList().get(8), null);
+		assertEquals(4, player.calcLongestRoad());
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(8), board.board.getNodeList().get(13), null);
+		assertEquals(5, player.calcLongestRoad());
+		player.buildRoad(GamePhase.SETUP, board.board.getNodeList().get(13), board.board.getNodeList().get(18), null);
+		assertEquals(6, player.calcLongestRoad());
+
+	}
 
 }
