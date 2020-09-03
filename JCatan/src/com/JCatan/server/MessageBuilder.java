@@ -2,8 +2,10 @@ package com.JCatan.server;
 
 import java.awt.Point;
 
+import com.JCatan.Chat;
 import com.JCatan.DevCardAction;
 import com.JCatan.DevelopmentCard;
+import com.JCatan.Dice;
 import com.JCatan.GameController;
 import com.JCatan.Node;
 import com.JCatan.Player;
@@ -67,9 +69,25 @@ public class MessageBuilder {
 		message.setDevCard(devCard);
 		return this;
 	}
+	
 
-	public MessageBuilder robberTile(Tile tile) {
-		message.robberTile = tile;
+	public MessageBuilder setCustomMessage(String customMessage) {
+		message.setCustomMessage(customMessage);
+    return this;
+  }
+  
+	public MessageBuilder dice(Dice dice) {
+		message.setDice(dice);
+		return this;
+	}
+
+	public MessageBuilder chatMessage(String chatMessage) {
+		message.setChatMessage(chatMessage);
+		return this;
+	}
+	
+	public MessageBuilder robberTileIndex(int tileIndex) {
+		message.tileIndex = tileIndex;
 		return this;
 	}
 	

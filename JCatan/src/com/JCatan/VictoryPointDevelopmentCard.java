@@ -1,6 +1,10 @@
 package com.JCatan;
 
 public class VictoryPointDevelopmentCard extends DevelopmentCard {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String name;
 
 	public VictoryPointDevelopmentCard() {

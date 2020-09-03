@@ -22,6 +22,10 @@ public abstract class Player implements Serializable{
 	List<Building> buildings;
 	List<Building> playedBuildings;
 	List<Road> playedRoads;
+	public void setDice(Dice dice) {
+		this.dice = dice;
+	}
+
 	int victoryPoints;
 	int diceRoll;
 	int roadBuilderRoads;
@@ -30,6 +34,7 @@ public abstract class Player implements Serializable{
 	Random randomGenerator;
     boolean hasLongestRoad;
     boolean hasLargestArmy;
+    boolean playedDevCardOnTurn;
     Dice dice;
   
 	public List<Road> getPlayedRoads() {
@@ -61,8 +66,9 @@ public abstract class Player implements Serializable{
 		initializeBuildingsAndRoads();
 		hasLongestRoad = false;
 		hasLargestArmy = false;
+		playedDevCardOnTurn = false;
 		color = Color.BLACK;
-		dice = new Dice();
+		dice = Dice.getInstance();
 	}
 
 	public List<ResourceCard> getResources(){
@@ -100,16 +106,16 @@ public abstract class Player implements Serializable{
 	 * @throws InsufficientResourceCardException
 	 */
 	public void buyDevelopmentCard(GameController controller) throws InsufficientResourceCardException{
-		Bank bank = controller.getBank();
-		Map<ResourceType, Integer> cost = bank.getDevCardCost();
+		Map<ResourceType, Integer> cost = controller.getBank().getDevCardCost();
 		if(!resourceCheck(cost)) {
 			throw new InsufficientResourceCardException();
 		}
 		
-		removeResourceCards(cost);
+		removeResourceCards(cost, controller.getBank());
+		
 		 
 		try {
-			DevelopmentCard card = bank.takeDevelopmentCard();
+			DevelopmentCard card = controller.getBank().takeDevelopmentCard();
 			this.devCards.add(card);
 			card.setHasBeenPlayed(false);
 			
@@ -119,12 +125,13 @@ public abstract class Player implements Serializable{
 		}
 	}
 	
-	private void removeResourceCards(Map<ResourceType, Integer> cost) {
+	private void removeResourceCards(Map<ResourceType, Integer> cost, Bank bank) {
 		for(Map.Entry mapElement : cost.entrySet()) {
 			ResourceType resource = (ResourceType) mapElement.getKey();
 			Integer numResourcesRequired = (Integer) mapElement.getValue();
 			for ( int i = 0 ; i < numResourcesRequired; i++) {
 				this.resources.remove(new ResourceCard(resource));
+				bank.giveResourceCard(new ResourceCard(resource));
 			}
 		}
 		
@@ -236,8 +243,12 @@ public abstract class Player implements Serializable{
 		if(! card.isCanBePlayed()) {
 			throw new InvalidDevCardUseException();
 		}
-		card.performAction(devCardAction);
-		card.setHasBeenPlayed(true);
+		if (playedDevCardOnTurn == false) {
+			card.performAction(devCardAction);
+			card.setHasBeenPlayed(true);
+			playedDevCardOnTurn = true;
+		}
+		
 	}
 
 	/**
@@ -353,6 +364,14 @@ public abstract class Player implements Serializable{
 		roadBuilderRoads = r;
 	}
 	
+	public boolean isPlayedDevCardOnTurn() {
+		return playedDevCardOnTurn;
+	}
+
+	public void setPlayedDevCardOnTurn(boolean playedDevCardOnTurn) {
+		this.playedDevCardOnTurn = playedDevCardOnTurn;
+	}
+
 	public boolean equals(Object obj) {
 		if (obj == null || ! (obj instanceof Player)) {
 			return false;

@@ -1,5 +1,6 @@
 package com.JCatan.gui;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +36,7 @@ import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Font;
 import java.awt.Graphics;
 import javax.swing.JLabel;
@@ -52,7 +54,7 @@ public class GameGUI extends JFrame {
 	private JLabel sheepLabel;
 	private JLabel oreLabel;
 	JLayeredPane master;
-	Player myPlayer;
+	public static Player myPlayer;
 	public static GameClient gameClient;
 	public static JButton endButton;
 	public static JPanel ResourcePanel;
@@ -61,6 +63,7 @@ public class GameGUI extends JFrame {
 	public static JPanel Player3Panel;
 	public static JPanel Player4Panel;
 	JPanel devCardPanel;
+	JPanel ChatPanel;
 	private JButton tradeButton;
 
 	ImageIcon one = new ImageIcon("images/one.png");
@@ -91,6 +94,7 @@ public class GameGUI extends JFrame {
 	int die1;
 	int die2;
 	int j = 0;
+	List<Rectangle> recs = new ArrayList<>();
 	int setupNum = 0;
 	public static boolean setupReverse = false;
 
@@ -106,36 +110,48 @@ public class GameGUI extends JFrame {
 
 	public GameGUI() {
 
-
 	}
-	
+
 	public void setMyPlayer(Player player) {
 		myPlayer = player;
 	}
-	
+
 	public void setGameClient(GameClient gc) {
 		gameClient = gc;
 	}
-	
+
 	public void updateGameController(GameController gc) {
 		controller = gc;
 		System.out.println("Cur Player Color: " + gc.getCurPlayer().getColor());
 		System.out.println(myPlayer.getName() + " Color: " + myPlayer.getColor());
-		if(gc.getCurPlayer().equals(myPlayer)) {
+		if (gc.getCurPlayer().equals(myPlayer)) {
 			enableAll();
-		}
-		else {
+		} else {
 			disableAll();
 		}
-		
-		
+	}
+
+	public void notifyPlayerBankAcceptedTrade(String s) {
+		JOptionPane.showMessageDialog(this, s, "Trade Accepted", JOptionPane.PLAIN_MESSAGE);
+		tradePanel.close();
+	}
+	
+	public void notifyPlayerBadTrade(String s) {
+		JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE);
+		tradePanel.resetFromBadTrade();
+	}
+	
+	public void notifyPlayerDeclinedTrade(String s) {
+		JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE);
+		tradePanel.resetFromBadTrade();
+		if(!myPlayer.equals(controller.getCurPlayer())) {
+			tradePanel.close();
+		}
 	}
 
 	public void initialize(GameController gc) {
 
 		controller = gc;
-		controller.setNotifyPlayer(
-				s -> JOptionPane.showMessageDialog(this, s, "Trading Error", JOptionPane.WARNING_MESSAGE));
 		controller.setRefreshScreenDelegate(x -> {
 			ResourcePanel.repaint();
 			Player1Panel.repaint();
@@ -162,7 +178,7 @@ public class GameGUI extends JFrame {
 
 		Border border = new LineBorder(Color.BLACK, 2, true);
 
-		JPanel ChatPanel = new ChatPanel(controller.getChat());
+		ChatPanel = new ChatPanel(controller.getChat());
 		contentPane.add(ChatPanel);
 		ChatPanel.setBackground(Color.decode("#D3D3D3"));
 		ChatPanel.setBorder(border);
@@ -215,26 +231,23 @@ public class GameGUI extends JFrame {
 		oreLabel.setHorizontalAlignment(oreLabel.CENTER);
 		BankPanel.add(oreLabel);
 
-		
 		Player1Panel = new PlayerPanel(1441, 490, 463, 126, controller.getPlayer(0));
 		Player1Panel.setBackground(Color.decode("#87ceeb"));
 		Player1Panel.setBorder(border);
 		contentPane.add(Player1Panel);
 
-		
 		Player2Panel = new PlayerPanel(1441, 615, 463, 126, controller.getPlayer(1));
 		Player2Panel.setBackground(Color.decode("#87ceeb"));
 		Player2Panel.setBorder(border);
 		contentPane.add(Player2Panel);
 
 		// controller.getPlayer(2).setColor(Color.decode("#FFA500"));
-		
+
 		Player3Panel = new PlayerPanel(1441, 741, 463, 126, controller.getPlayer(2));
 		Player3Panel.setBackground(Color.decode("#87ceeb"));
 		Player3Panel.setBorder(border);
 		contentPane.add(Player3Panel);
 
-		
 		Player4Panel = new PlayerPanel(1441, 867, 463, 134, controller.getPlayer(3));
 		Player4Panel.setBackground(Color.decode("#87ceeb"));
 		Player4Panel.setBorder(border);
@@ -264,20 +277,26 @@ public class GameGUI extends JFrame {
 		endButton = new JButton("Start Setup");
 		endButton.setBorder(border);
 
-		Consumer<JButton> turnOnEndButton = b -> endButton.setEnabled(true);
+		Consumer<JButton> turnOnEndButton = b -> {
+			if(myPlayer.equals(controller.getCurPlayer())) {
+				endButton.setEnabled(true);
+				tradeButton.setEnabled(true);
+			}
+		};
 		tradePanel.setDelegate(turnOnEndButton);
 		controller.setAction(t -> tradePanel.close());
 
 		tradeButton = new JButton("Trade");
 		controller.setAction(t -> tradePanel.close());
 
-		tradeButton.setEnabled(true);
+		tradeButton.setEnabled(false);
 		tradeButton.setVisible(true);
 		tradeButton.setBounds(750, 867, 122, 134);
 		tradeButton.addActionListener(e -> {
 			tradePanel.setEnabled(true);
 			tradePanel.setVisible(true);
 			endButton.setEnabled(false);
+			tradeButton.setEnabled(false);
 		});
 		contentPane.add(tradeButton);
 		tradeButton.setBorder(border);
@@ -310,6 +329,7 @@ public class GameGUI extends JFrame {
 						gameClient.sendMessage(msg);
 						if (setupNum == 1) {
 							endButton.setText("Roll Dice");
+							tradeButton.setEnabled(false);
 							controller.setGamePhase(GamePhase.GAMEROLL);
 						} else {
 							controller.setCurPlayer(controller.getPlayers().get(setupNum + 1));
@@ -347,7 +367,6 @@ public class GameGUI extends JFrame {
 						int y = e.getY();
 
 						if ((x >= 30 && x <= 60) && (y >= 20 && y <= 110)) {
-
 							clickOnRoad();
 						}
 						if ((x >= 121 && x <= 167) && (y >= 43 && y <= 109)) {
@@ -380,6 +399,7 @@ public class GameGUI extends JFrame {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				try {
+					recs.clear();
 					for (int i = 0; i < myPlayer.getResources().size(); i++) {
 						ResourceCard resource = myPlayer.getResources().get(i);
 						switch (resource.getResourceType()) {
@@ -402,6 +422,8 @@ public class GameGUI extends JFrame {
 							break;
 						}
 						g.drawImage(resourceCard, j + 5, 18, 55, 95, null);
+						Rectangle imageBounds = new Rectangle(j+ + 5, 18, 55, 95);
+						recs.add(imageBounds);
 						j += 56;
 					}
 					j = 0;
@@ -423,6 +445,14 @@ public class GameGUI extends JFrame {
 				g.drawImage(dieOne, 0, 0, getWidth(), getHeight(), null);
 			}
 		};
+		diceOnePanel.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				Message msg = new MessageBuilder().action(Message.Action.DiceData).build();
+				gameClient.sendMessage(msg);
+				
+			}
+			
+		});
 		diceOnePanel.setBackground(Color.WHITE);
 		diceOnePanel.setBounds(1314, 798, 56, 58);
 		master.add(diceOnePanel, new Integer(1), 0);
@@ -489,11 +519,16 @@ public class GameGUI extends JFrame {
 		for (Component c : master.getComponents()) {
 			c.setEnabled(false);
 		}
+		
+		ChatPanel.setEnabled(true);
+		for (Component c : ChatPanel.getComponents()) {
+			c.setEnabled(true);
+		}
 
 	}
 
 	public void enableAll() {
-
+		boolean isTradeButtonEnabled = tradeButton.isEnabled();
 		setTurnColor();
 		
 		for (Component c : contentPane.getComponents()) {
@@ -509,51 +544,50 @@ public class GameGUI extends JFrame {
 		for (Component c : master.getComponents()) {
 			c.setEnabled(true);
 		}
-
+		
+		tradeButton.setEnabled(isTradeButtonEnabled);
 	}
 
 	public void updateTurn() {
 		System.out.println("Cur Player Color: " + controller.getCurPlayer().getColor());
 		System.out.println(myPlayer.getName() + " Color: " + myPlayer.getColor());
-		if(controller.getCurPlayer().equals(myPlayer)) {
+		if (controller.getCurPlayer().equals(myPlayer)) {
 			enableAll();
-		}
-		else {
+		} else {
 			System.out.println("Called disable all for " + myPlayer);
 			setTurnColor();
 			disableAll();
 		}
-		
+
 	}
 
 	public void updatePlayer() {
-		for(Player p :controller.getPlayers()) {
-			if(p.equals(myPlayer)) {
+		for (Player p : controller.getPlayers()) {
+			if (p.equals(myPlayer)) {
 				myPlayer = p;
 			}
-			if(p.equals(((PlayerPanel)Player1Panel).getPlayer())) { 
-				((PlayerPanel)Player1Panel).setPlayer(p);
+			if (p.equals(((PlayerPanel) Player1Panel).getPlayer())) {
+				((PlayerPanel) Player1Panel).setPlayer(p);
 			}
-			if(p.equals(((PlayerPanel)Player2Panel).getPlayer())) {
-				((PlayerPanel)Player2Panel).setPlayer(p);
+			if (p.equals(((PlayerPanel) Player2Panel).getPlayer())) {
+				((PlayerPanel) Player2Panel).setPlayer(p);
 			}
-			if(p.equals(((PlayerPanel)Player3Panel).getPlayer())) {
-				((PlayerPanel)Player3Panel).setPlayer(p);
+			if (p.equals(((PlayerPanel) Player3Panel).getPlayer())) {
+				((PlayerPanel) Player3Panel).setPlayer(p);
 			}
-			if(p.equals(((PlayerPanel)Player4Panel).getPlayer())) {
-				((PlayerPanel)Player4Panel).setPlayer(p);
+			if (p.equals(((PlayerPanel) Player4Panel).getPlayer())) {
+				((PlayerPanel) Player4Panel).setPlayer(p);
 			}
 		}
-		
-		
-		
+
 	}
-	
+
 	public void diceRolled() {
-		
+
+		tradeButton.setEnabled(false);
 		die1 = controller.getCurPlayer().getDice().getDie1();
 		die2 = controller.getCurPlayer().getDice().getDie2();
-		
+
 		switch (die1) {
 		case 1:
 			dieOne = one.getImage();
@@ -602,26 +636,28 @@ public class GameGUI extends JFrame {
 			controller.setGamePhase(GamePhase.GAMEMAIN);
 			controller.gamePhaseTrade();
 		} else {
-			endButton.setText("End Robber Move");
+			if(myPlayer.equals(controller.getCurPlayer()))
+					endButton.setText("End Robber Move");
+			
 			controller.setGamePhase(GamePhase.ROBBERMOVE);
-			controller.robberMovePhase();
 		}
-		
-		if(controller.getCurPlayer().equals(myPlayer)) {
+		if(myPlayer.equals(controller.getCurPlayer()))
 			tradeButton.setEnabled(true);
-		}
-
-		
 		repaint();
+	}
+
+	public BoardPanel getBoardPanel() {
+		return BoardPanel;
 	}
 
 	public TradePanel getTradePanel() {
 		return tradePanel;
-  }
-	public void updateDevCardPanel() {
-		((DevCardPanel)devCardPanel).updateComboBox();
 	}
-	
+
+	public void updateDevCardPanel() {
+		((DevCardPanel) devCardPanel).updateComboBox();
+	}
+
 	public Player getMyPlayer() {
 		return myPlayer;
 	}
@@ -646,17 +682,17 @@ public class GameGUI extends JFrame {
 		System.out.println("This is the cur player: " + controller.getCurPlayer());
 		updateTurn();
 		repaint();
-		
+
 	}
 
 	public void robberMoved(Point p) {
-		((BoardPanel)BoardPanel).getRobber().setPoint(p);
-		
+		((BoardPanel) BoardPanel).getRobber().setPoint(p);
+
 	}
-	
+
 	private void setTurnColor() {
-		if(controller.getCurPlayer().equals(controller.getPlayers().get(0))) {
-			if(controller.getCurPlayer().getColor().equals(Color.BLUE)) {
+		if (controller.getCurPlayer().equals(controller.getPlayers().get(0))) {
+			if (controller.getCurPlayer().getColor().equals(Color.BLUE)) {
 				Player1Panel.setBorder(new LineBorder(Color.BLUE, 3, true));
 				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
 				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
@@ -678,7 +714,7 @@ public class GameGUI extends JFrame {
 				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
 			}
 		} else if (controller.getCurPlayer().equals(controller.getPlayers().get(1))) {
-			if(controller.getCurPlayer().getColor().equals(Color.BLUE)) {
+			if (controller.getCurPlayer().getColor().equals(Color.BLUE)) {
 				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
 				Player2Panel.setBorder(new LineBorder(Color.BLUE, 2, true));
 				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
@@ -700,7 +736,7 @@ public class GameGUI extends JFrame {
 				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
 			}
 		} else if (controller.getCurPlayer().equals(controller.getPlayers().get(2))) {
-			if(controller.getCurPlayer().getColor().equals(Color.BLUE)) {
+			if (controller.getCurPlayer().getColor().equals(Color.BLUE)) {
 				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
 				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
 				Player3Panel.setBorder(new LineBorder(Color.BLUE, 2, true));
@@ -722,7 +758,7 @@ public class GameGUI extends JFrame {
 				Player4Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
 			}
 		} else {
-			if(controller.getCurPlayer().getColor().equals(Color.BLUE)) {
+			if (controller.getCurPlayer().getColor().equals(Color.BLUE)) {
 				Player1Panel.setBorder(new LineBorder(Color.BLACK, 3, true));
 				Player2Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
 				Player3Panel.setBorder(new LineBorder(Color.BLACK, 2, true));
@@ -744,7 +780,7 @@ public class GameGUI extends JFrame {
 				Player4Panel.setBorder(new LineBorder(Color.decode("#FFA500"), 2, true));
 			}
 		}
-			
+
 	}
 
 }

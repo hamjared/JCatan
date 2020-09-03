@@ -211,7 +211,8 @@ public abstract class BoardFactory implements Serializable {
             };
         
         for (int i = 0 ; i < array.length; i++) {
-            tiles.add(new Tile(Arrays.asList(array[i]) ));
+            tiles.add(new Tile(Arrays.asList(array[i]), i ));
+            
         }
         
 

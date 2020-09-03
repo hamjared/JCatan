@@ -15,7 +15,7 @@ public class Chat implements Serializable {
 	
 	public Chat() {
 		chat = new LinkedList<>();
-		maxLines = 15;
+		maxLines = 13;
 	}
 	
 	public void addToChat(String string) {

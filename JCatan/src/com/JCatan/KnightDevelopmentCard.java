@@ -2,7 +2,12 @@ package com.JCatan;
 
 public class KnightDevelopmentCard extends DevelopmentCard {
 
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public void performAction(DevCardAction devCardAction) throws InvalidDevCardUseException
     {
 //    	int stealCardIndex = (int) Math.round(Math.random() * devCardAction.getStealFromPlayer().getResources().size());

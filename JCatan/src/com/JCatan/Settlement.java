@@ -35,12 +35,10 @@ public class Settlement extends Building {
 	@Override
 	public void gatherResources(GameController controller, ResourceType resource) {
 		try {
-			boolean isRobberOnTile = node.getTiles().stream().anyMatch(t -> t.hasRobber() == true);
-			
-			if (!isRobberOnTile) {
-				ResourceCard card = controller.getBank().takeResourceCard(resource);
-				player.getResources().add(card);
-			}
+
+			ResourceCard card = controller.getBank().takeResourceCard(resource);
+			player.getResources().add(card);
+
 		} catch (InsufficientResourceCardException e) {
 			e.printStackTrace();
 		}

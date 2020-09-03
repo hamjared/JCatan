@@ -7,10 +7,15 @@ import java.util.List;
 
 public class Tile implements Serializable
 {
-    Color color;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3418334843470112053L;
+	Color color;
     ResourceType resourceType;
     boolean isRobberOnTile = false;
     int number;
+    int tileIndex;
     List<Node> nodes;
     
     public void setResourceType(ResourceType resourceType)
@@ -51,11 +56,16 @@ public class Tile implements Serializable
     	isRobberOnTile = val;
     }
     
-    public Tile(List<Node> nodes) {
+    public Tile(List<Node> nodes, int tileIndex) {
         this.nodes = nodes;
+        this.tileIndex = tileIndex;
     }
     
-    public int getNumber()
+    public int getTileIndex() {
+		return tileIndex;
+	}
+
+	public int getNumber()
     {
         return number;
     }

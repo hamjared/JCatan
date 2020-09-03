@@ -11,7 +11,6 @@ import com.JCatan.Player;
 import com.JCatan.TraditionalBoardFactory;
 import com.JCatan.gui.GameGUI;
 import com.JCatan.server.Message;
-import com.JCatan.server.MessageBuilder;
 
 public class GameClient implements Runnable {
 
@@ -119,8 +118,23 @@ public class GameClient implements Runnable {
 				case Trade:
 					trade(msg);
 					break;
+				case BadTrade:
+					badTradeMessage(msg);
+					break;
+				case BankAcceptedTrade:
+					bankAcceptedTrade(msg);
+					break;
 				case FinalizeTrade:
 					finalizeTrade(msg);
+					break;
+				case DeclineTrade:
+					playerDeclinedTrade(msg);
+					break;
+				case DiceData:
+					showDiceData(msg);
+					break;
+				case RoadBuilder:
+					redrawBuildableRoads(msg);
 					break;
 				default:
 					break;
@@ -128,13 +142,57 @@ public class GameClient implements Runnable {
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				System.out.println(GameGUI.myPlayer.getName() + " Lost connection to server");
 				e.printStackTrace();
+				break;
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
+	}
+	
+	private void redrawBuildableRoads(Message msg) {
+		GameGUI.controller = msg.getGc();
+		this.controller = msg.getGc();
+		gameGUI.updatePlayer();
+		if(gameGUI.getMyPlayer().equals(GameGUI.controller.getCurPlayer()))
+			gameGUI.getBoardPanel().buildRoad();
+		gameGUI.repaint();
+		
+	}
+
+	private void playerDeclinedTrade(Message msg) {
+		boolean isPlayerOfferer = gameGUI.getMyPlayer().equals(msg.getMyPlayer());
+		if(isPlayerOfferer) {
+			gameGUI.notifyPlayerDeclinedTrade(msg.getCustomMessage());
+		}
+	}
+	
+	private void bankAcceptedTrade(Message msg) {
+		boolean isPlayerOfferer = gameGUI.getMyPlayer().getName().equals(msg.getMyPlayer().getName());
+		GameGUI.controller = msg.getGc();
+		gameGUI.updatePlayer();
+		if(isPlayerOfferer) {
+			gameGUI.notifyPlayerBankAcceptedTrade(msg.getCustomMessage());
+		}
+		gameGUI.repaint();
+	}
+	
+	private void badTradeMessage(Message msg) {
+		boolean isPlayerOfferer = gameGUI.getMyPlayer().getName().equals(msg.getMyPlayer().getName());
+		if(isPlayerOfferer)
+			gameGUI.notifyPlayerBadTrade(msg.getCustomMessage());		
+	}
+
+	private void showDiceData(Message msg) {
+		GameGUI.controller = msg.getGc();
+		this.controller = msg.getGc();
+		System.out.println("Dice roll history:");
+		System.out.println(msg.getDice().getDiceRollHistory());
+		gameGUI.repaint();
+		
 	}
 
 	private void robberMoved(Message msg) {
@@ -144,6 +202,7 @@ public class GameClient implements Runnable {
 		System.out.println("Is Robber moving: " + GameGUI.controller.getBoard().isRobberMoving());
 		System.out.println("Game Phase: " + GameGUI.controller.getGamePhase());
 		gameGUI.robberMoved(msg.getRobberPoint());
+		gameGUI.updatePlayer();
 		gameGUI.repaint();
 
 	}
@@ -152,6 +211,8 @@ public class GameClient implements Runnable {
 		GameGUI.controller = msg.getGc();
 		this.controller = msg.getGc();
 		System.out.println(GameGUI.controller.getCurPlayer().getName() + "'s turn");
+		gameGUI.updatePlayer();
+		gameGUI.updateDevCardPanel();
 		gameGUI.gamePhaseEnd();
 
 	}
@@ -184,7 +245,7 @@ public class GameClient implements Runnable {
 		System.out.println("Player is wanting to trade with another player...");
 		System.out.println("Receiving Player is: " + msg.getTrade().getReceivingPlayer().getName());
 		System.out.println("My player is: " + gameGUI.getMyPlayer().getName());
-		if (msg.getTrade().getReceivingPlayer().getName().equals(gameGUI.getMyPlayer().getName())) {
+		if (msg.getTrade().getReceivingPlayer().equals(gameGUI.getMyPlayer())) {
 			System.out.println("Trying to enable and start trade panel");
 			gameGUI.getTradePanel().setTradeInfo(msg.getTrade());
 		}
@@ -194,10 +255,10 @@ public class GameClient implements Runnable {
 		System.out.println("Finalizing Trade");
 		GameGUI.controller = msg.getGc();
 		gameGUI.updatePlayer();
-		String myPlayerName = gameGUI.getMyPlayer().getName();
-		String offeringPlayer = msg.getTrade().getOfferingPlayer().getName();
-		String receivingPlayer = msg.getTrade().getReceivingPlayer().getName();
-		boolean isPlayerTrading = myPlayerName.equals(offeringPlayer) || myPlayerName.equals(receivingPlayer);
+		Player myPlayer = gameGUI.getMyPlayer();
+		Player offeringPlayer = msg.getTrade().getOfferingPlayer();
+		Player receivingPlayer = msg.getTrade().getReceivingPlayer();
+		boolean isPlayerTrading = myPlayer.equals(offeringPlayer) || myPlayer.equals(receivingPlayer);
 		if(isPlayerTrading) {
 			gameGUI.getTradePanel().close();
 		}

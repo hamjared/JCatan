@@ -65,7 +65,7 @@ public class Board implements Serializable {
 		for (Tile tile : tiles) {
 			List<Building> buildings = tile.getBuildings();
 			if (controller.getRobber().getTargetTile() != null) {
-				if (!controller.getRobber().getTargetTile().hasRobber()) {
+				if (!tile.hasRobber()) {
 					for (Building b : buildings) {
 						if (b != null) {
 							b.gatherResources(controller, tile.getResourceType());
