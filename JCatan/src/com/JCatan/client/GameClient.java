@@ -157,7 +157,8 @@ public class GameClient implements Runnable {
 		GameGUI.controller = msg.getGc();
 		this.controller = msg.getGc();
 		gameGUI.updatePlayer();
-		gameGUI.getBoardPanel().buildRoad();
+		if(gameGUI.getMyPlayer().equals(GameGUI.controller.getCurPlayer()))
+			gameGUI.getBoardPanel().buildRoad();
 		gameGUI.repaint();
 		
 	}
