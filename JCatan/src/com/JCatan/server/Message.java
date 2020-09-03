@@ -12,6 +12,7 @@ import com.JCatan.Dice;
 import com.JCatan.GameController;
 import com.JCatan.Node;
 import com.JCatan.Player;
+import com.JCatan.ResourceCard;
 import com.JCatan.Road;
 import com.JCatan.Tile;
 import com.JCatan.Trade;
@@ -47,7 +48,7 @@ public class Message implements Serializable {
 		PlayDevelopmentCard,
 		MoveRobber, 
 		RollDice, UpdateBoard, EndTurn, DiceRolled, EndSetupTurn, Trade, BadTrade,
-		FinalizeTrade, BankAcceptedTrade, DeclineTrade, DiceData, Chat, RoadBuilder
+		FinalizeTrade, BankAcceptedTrade, DeclineTrade, DiceData, Chat, RoadBuilder, DropCardsOnSeven
 	}
 	
 	GameController gc;
@@ -170,6 +171,7 @@ public class Message implements Serializable {
 
 
 	Action action;
+	private ResourceCard card;
 	
 	
 	public Message(Action action, GameController controller, Player player) {
@@ -186,8 +188,21 @@ public class Message implements Serializable {
 		return this.trade;
 	}
 	
+	
 	public Message() {
 		// TODO Auto-generated constructor stub
 	}
+
+
+	public ResourceCard getCard() {
+		return card;
+	}
+
+
+	public void setCard(ResourceCard card) {
+		this.card = card;
+	}
+	
+	
 	
 }

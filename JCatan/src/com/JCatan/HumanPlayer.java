@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.JCatan.gui.GameGUI;
+import com.JCatan.server.Message;
+import com.JCatan.server.MessageBuilder;
+
 public class HumanPlayer extends Player {
 
 	/**
@@ -470,10 +474,11 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
-	public void sevenRolled(Player activePlayer, Bank bank) {
-		List<ResourceCard> resources = activePlayer.getResources();
+	public void sevenRolled(Bank bank) {
+		this.sevenRolled = true;
+		List<ResourceCard> resources = this.getResources();
 		int handSize = resources.size();
-		int cardsToDrop = 0;
+		cardsToDrop = 0;
 		if(handSize > 7) {
 			if (handSize %2 == 0) {
 				//Player chooses half their cards to drop
@@ -483,11 +488,12 @@ public class HumanPlayer extends Player {
 				cardsToDrop = (handSize - 1) / 2;
 			}
 		}
-		for(int i = 0; i < cardsToDrop; i++) {
-			bank.giveResourceCard(activePlayer.getResources().get(i));
-			activePlayer.getResources().remove(i);
-			
-		}
-
+		
+	}
+	
+	public void dropCardOnSeven(ResourceCard card, Player activePlayer, Bank bank) {
+			bank.giveResourceCard(card);
+			activePlayer.getResources().remove(card);
+			cardsToDrop--;
 	}
 }

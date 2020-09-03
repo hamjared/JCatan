@@ -9,6 +9,7 @@ import com.JCatan.Dice;
 import com.JCatan.GameController;
 import com.JCatan.Node;
 import com.JCatan.Player;
+import com.JCatan.ResourceCard;
 import com.JCatan.Road;
 import com.JCatan.Tile;
 import com.JCatan.Trade;
@@ -88,6 +89,11 @@ public class MessageBuilder {
 	
 	public MessageBuilder robberTileIndex(int tileIndex) {
 		message.tileIndex = tileIndex;
+		return this;
+	}
+	
+	public MessageBuilder dropCardOnSevenRolled(ResourceCard card) {
+		message.setCard(card);
 		return this;
 	}
 	

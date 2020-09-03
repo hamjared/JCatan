@@ -136,6 +136,9 @@ public class GameClient implements Runnable {
 				case RoadBuilder:
 					redrawBuildableRoads(msg);
 					break;
+				case DropCardsOnSeven:
+					dropCards(msg);
+					break;
 				default:
 					break;
 				}
@@ -153,6 +156,22 @@ public class GameClient implements Runnable {
 
 	}
 	
+	private void dropCards(Message msg) {
+		GameGUI.controller = msg.getGc();
+		gameGUI.updatePlayer();
+		boolean playerHasCardToDrop = false;
+		for (Player p: GameGUI.controller.getPlayers()) {
+			if (p.getCardsToDrop() > 0) {
+				GameGUI.endButton.setEnabled(false);
+				playerHasCardToDrop = true;
+			}
+		}
+		if (playerHasCardToDrop == false && GameGUI.controller.getCurPlayer().equals(GameGUI.myPlayer)) {
+			GameGUI.endButton.setEnabled(true);
+		}
+		gameGUI.repaint();
+	}
+
 	private void redrawBuildableRoads(Message msg) {
 		GameGUI.controller = msg.getGc();
 		this.controller = msg.getGc();
@@ -198,11 +217,21 @@ public class GameClient implements Runnable {
 	private void robberMoved(Message msg) {
 		GameGUI.controller = msg.getGc();
 		this.controller = msg.getGc();
+		gameGUI.updatePlayer();
+		gameGUI.robberMoved(msg.getRobberPoint());
+		boolean playerHasCardToDrop = false;
+		for (Player p: gameGUI.controller.getPlayers()) {
+			if (p.getCardsToDrop() > 0) {
+				gameGUI.endButton.setEnabled(false);
+				playerHasCardToDrop = true;
+			}
+		}
+		if (playerHasCardToDrop == false && GameGUI.controller.getCurPlayer().equals(GameGUI.myPlayer)) {
+			gameGUI.endButton.setEnabled(true);
+		}
 		System.out.println("Robber Moved");
 		System.out.println("Is Robber moving: " + GameGUI.controller.getBoard().isRobberMoving());
-		System.out.println("Game Phase: " + GameGUI.controller.getGamePhase());
-		gameGUI.robberMoved(msg.getRobberPoint());
-		gameGUI.updatePlayer();
+		System.out.println("Game Phase: " + GameGUI.controller.getGamePhase());		
 		gameGUI.repaint();
 
 	}
@@ -223,6 +252,16 @@ public class GameClient implements Runnable {
 		gameGUI.updatePlayer();
 		System.out.println(gameGUI.getMyPlayer().getName() + " Hand: " + gameGUI.getMyPlayer().getResources());
 		gameGUI.diceRolled();
+		boolean playerHasCardToDrop = false;
+		for (Player p: gameGUI.controller.getPlayers()) {
+			if (p.getCardsToDrop() > 0) {
+				gameGUI.endButton.setEnabled(false);
+				playerHasCardToDrop = true;
+			}
+		}
+		if (playerHasCardToDrop == false && GameGUI.controller.getCurPlayer().equals(GameGUI.myPlayer)) {
+			gameGUI.endButton.setEnabled(true);
+		}
 	}
 
 	private void updateBoard(Message msg) {
