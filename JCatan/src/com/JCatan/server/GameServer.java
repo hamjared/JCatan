@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import com.JCatan.BoardFactory;
 import com.JCatan.GameController;
@@ -45,8 +46,10 @@ public class GameServer {
 
 
 	public void acceptConnections() {
+		
+		int numPlayers = getNumPlayers();
 		System.out.println("Waiting for connections on: " + connectionListener);
-		while(players.size() < 4) {
+		while(players.size() < numPlayers) {
 			Socket s = null;
 			try {
 				s = connectionListener.accept();
@@ -71,6 +74,26 @@ public class GameServer {
 	}
 
 	
+	private int getNumPlayers() {
+		System.out.println("How many players? (3 or 4): ");
+		Scanner scan = new Scanner(System.in);
+		String s = scan.nextLine();
+		scan.close();
+		int numPlayers;
+		
+		try {
+			numPlayers = Integer.parseInt(s);
+		} catch (NumberFormatException e) {
+			System.out.println("Please enter 3 or 4");
+			numPlayers = getNumPlayers();
+		}
+		
+		
+		return numPlayers;
+		
+	}
+
+
 	public void acceptMessages() {
 		List<Thread> threads = new ArrayList<>();
 		for( PlayerSocket p: players) {

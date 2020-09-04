@@ -50,7 +50,10 @@ public class BuildableRoad {
 			GameGUI.Player1Panel.repaint();
 			GameGUI.Player2Panel.repaint();
 			GameGUI.Player3Panel.repaint();
-			GameGUI.Player4Panel.repaint();
+			if(GameGUI.Player4Panel != null) {
+				GameGUI.Player4Panel.repaint();
+			}
+			
 		} catch (InsufficientResourceCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
