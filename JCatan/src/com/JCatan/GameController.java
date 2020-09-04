@@ -98,7 +98,7 @@ public class GameController implements Serializable {
 				robber.setTargetTile(t);
 			}
 		}
-		
+
 		for (Player player : players) {
 			player.rollDice();
 		}
@@ -185,13 +185,13 @@ public class GameController implements Serializable {
 			st.validateTrade();
 		}
 	}
-	
+
 	public void acceptTrade(Trade trade, Player player) {
 		trade.offer(player);
-		if(trade instanceof MaritimeTrade)
-			this.bank = ((MaritimeTrade)trade).getBank();
-		if(trade instanceof SpecialTrade)
-			this.bank = ((SpecialTrade)trade).getBank();
+		if (trade instanceof MaritimeTrade)
+			this.bank = ((MaritimeTrade) trade).getBank();
+		if (trade instanceof SpecialTrade)
+			this.bank = ((SpecialTrade) trade).getBank();
 	}
 
 	public void gamePhaseTrade() {
@@ -226,7 +226,7 @@ public class GameController implements Serializable {
 		} else {
 			playerTurnIndex++;
 		}
-		
+
 		curPlayer.setPlayedDevCardOnTurn(false);
 
 		if (playerTurnIndex >= players.size()) {
@@ -240,23 +240,27 @@ public class GameController implements Serializable {
 		int largestArmy = 0;
 		Player prevLargestArmyPlayer = null;
 		for (Player player : players) {
-			if (player.hasLongestRoad) {
+			if (player.hasLargestArmy) {
 				prevLargestArmyPlayer = player;
 			}
 		}
+
 		if (prevLargestArmyPlayer != null) {
 			largestArmy = prevLargestArmyPlayer.getNumberOfKnightsPlayed();
 		}
+
 		for (Player player : players) {
-			player.setHasLargestArmy(false);
 			int playersArmy = player.getNumberOfKnightsPlayed();
-			if (playersArmy > largestArmy && playersArmy >= 3) {
+
+			if (player.equals(prevLargestArmyPlayer) && playersArmy > largestArmy
+					|| playersArmy > largestArmy && playersArmy >= 3) {
+
+				if (prevLargestArmyPlayer != null)
+					prevLargestArmyPlayer.setHasLargestArmy(false);
+
 				largestArmy = playersArmy;
 				player.setHasLargestArmy(true);
-			}
-			if (player.equals(prevLargestArmyPlayer) && playersArmy >= largestArmy) {
-				largestArmy = playersArmy;
-				player.setHasLongestRoad(true);
+				prevLargestArmyPlayer = player;
 			}
 		}
 	}
