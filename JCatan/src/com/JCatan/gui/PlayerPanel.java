@@ -116,14 +116,6 @@ public class PlayerPanel extends JPanel
         longestRoadLabel.setBounds(372, 27, 20, 14);
         add(longestRoadLabel);
         
-        R = new JLabel("R");
-        R.setFont(new Font("Tahoma", Font.BOLD, 14));
-        R.setForeground(Color.BLACK);
-        R.setBackground(Color.WHITE);
-        R.setHorizontalAlignment(SwingConstants.CENTER);
-        R.setBounds(65, 59, 46, 14);
-        add(R);
-        
         lblNewLabel_1 = new JLabel("K");
         lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
         lblNewLabel_1.setBounds(391, 23, 46, 14);

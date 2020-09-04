@@ -144,7 +144,6 @@ public class Board implements Serializable {
 
 			curNodeIndex++;
 		}
-		System.out.println(playableNodes.size());
 		return playableNodes;
 	}
 

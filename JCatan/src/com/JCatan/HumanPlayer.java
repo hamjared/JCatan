@@ -428,11 +428,6 @@ public class HumanPlayer extends Player {
 					this.giveBuilding(settlement);					
 					node.setBuilding(city);
 					city.setNode(node);
-					for(Building b: this.getBuildings()) {
-						if(b instanceof City) {
-							System.out.println("I have a city");
-						}
-					}
 					for (ResourceType type : list) {
 						this.removeResource(type);
 						ResourceCard card = new ResourceCard(type);

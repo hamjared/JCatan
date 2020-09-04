@@ -71,8 +71,6 @@ public class DevCardPanel extends JPanel {
 		 playButton = new JButton("Play");
 		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Play development card pressed, Game Phase: "
-						+ GameGUI.gameClient.getController().getGamePhase());
 				DevelopmentCard card = (DevelopmentCard) comboBox.getSelectedItem();
 				if (GameGUI.gameClient.getController().getGamePhase().equals(GamePhase.GAMEMAIN)) {
 					DevCardAction devCardAction = makeDevCardAction(card);
