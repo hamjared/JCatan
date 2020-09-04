@@ -44,9 +44,7 @@ public class PlayerSocket implements Runnable {
 				if (obj == null || !(obj instanceof Message)) {
 					continue;
 				}
-				System.out.println("I am before the message");
 				Message msg = (Message) obj;
-				System.out.println("I made it past the message");
 				switch (msg.getAction()) {
 				case BuildSettlement:
 					buildSettlement(msg);

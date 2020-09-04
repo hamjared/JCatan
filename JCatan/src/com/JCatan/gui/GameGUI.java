@@ -23,6 +23,7 @@ import com.JCatan.GamePhase;
 import com.JCatan.Player;
 import com.JCatan.ResourceCard;
 import com.JCatan.ResourceType;
+import com.JCatan.Timer;
 import com.JCatan.client.GameClient;
 import com.JCatan.server.Message;
 import com.JCatan.server.MessageBuilder;
@@ -122,8 +123,6 @@ public class GameGUI extends JFrame {
 
 	public void updateGameController(GameController gc) {
 		controller = gc;
-		System.out.println("Cur Player Color: " + gc.getCurPlayer().getColor());
-		System.out.println(myPlayer.getName() + " Color: " + myPlayer.getColor());
 		if (gc.getCurPlayer().equals(myPlayer)) {
 			enableAll();
 		} else {
@@ -640,6 +639,7 @@ public class GameGUI extends JFrame {
 	}
 
 	public void gamePhaseEnd() {
+		Timer.startTimer();
 		tradeButton.setEnabled(false);
 		endButton.setText("Roll Dice");
 		if (controller.isGameEnded()) {
@@ -655,11 +655,10 @@ public class GameGUI extends JFrame {
 		BoardPanel.drawRoads = false;
 		BoardPanel.drawSettlements = false;
 		BoardPanel.drawCities = false;
-		BoardPanel.repaint();
-		System.out.println("This is the cur player: " + controller.getCurPlayer());
+		//BoardPanel.repaint();
 		updateTurn();
 		repaint();
-
+		Timer.endTimer();
 	}
 
 	public void robberMoved(Point p) {

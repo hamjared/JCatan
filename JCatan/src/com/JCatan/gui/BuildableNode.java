@@ -42,9 +42,6 @@ public class BuildableNode {
 
 			GameGUI.controller.getCurPlayer().buildSettlement(GameGUI.controller.getGamePhase(), node,
 					GameGUI.controller);
-			System.out.println("From building players onClick");
-			System.out.println(GameGUI.controller.getBoard());
-			System.out.println("------------------------------");
 			Message msg = new MessageBuilder().action(Message.Action.BuildSettlement)
 					.player(GameGUI.controller.getCurPlayer()).buildOnNode(node).build();
 			GameGUI.gameClient.sendMessage(msg);
