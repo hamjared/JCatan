@@ -26,6 +26,7 @@ import com.JCatan.ResourceType;
 import com.JCatan.Road;
 import com.JCatan.Settlement;
 import com.JCatan.Tile;
+import com.JCatan.Timer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -124,6 +125,8 @@ public class BoardPanel extends JPanel {
 		setBounds(0, 0, 1441, 867);
 		hexagons = new ArrayList<>();
 		robber = new RobberShape(40,40);
+		this.setDoubleBuffered(false);
+		
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -138,6 +141,8 @@ public class BoardPanel extends JPanel {
 
 	@Override
 	public void paintComponent(Graphics g) {
+		System.out.println("-------------------------- Board panel Pain Method ----------------------");
+		Timer.startTimer();
 		Graphics2D g2d = (Graphics2D) g;
 
 		g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
@@ -145,10 +150,10 @@ public class BoardPanel extends JPanel {
 		metrics = g.getFontMetrics();
 
 		drawCircle(g2d, W2, H2, 10000, true, true, 0x4488FF, 0);
-
-
 		drawHexGridAdvanced(g2d, 5, 85);
+		
 		if(!initialized) {
+			
 			Hexagon hex = hexagons.stream().filter(h -> h.getTile().getResourceType() == ResourceType.DESERT).findFirst().get();
 			robber.setPoint(hex.getCenter().x - 15, hex.getCenter().y - 20);
 			initialized = true;
@@ -175,6 +180,7 @@ public class BoardPanel extends JPanel {
 
 
 		drawValidRobberSpots(g2d, 40.0d);
+		Timer.endTimer();
 
 
 	}
