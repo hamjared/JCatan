@@ -305,10 +305,10 @@ public class GameController implements Serializable {
 	}
 
 	public void endSetupTurn() {
-		if (setupNum == 3 && setupReverse == false) {
+		if (setupNum == (this.players.size() - 1) && setupReverse == false) {
 			setCurPlayer(getPlayers().get(setupNum));
 			setupReverse = true;
-		} else if (setupNum <= 3 && setupReverse == true) {
+		} else if (setupNum <=(this.players.size() - 1) && setupReverse == true) {
 			if (setupNum == 0) {
 				setGamePhase(GamePhase.GAMEROLL);
 			} else {
