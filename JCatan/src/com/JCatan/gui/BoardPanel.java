@@ -230,58 +230,6 @@ public class BoardPanel extends JPanel {
 			}
 		}
 
-//		for (Node node : GameGUI.controller.getBoard().getBoard().getNodeList()) {
-//			if (node.getBuilding() != null) {
-//				Player player = node.getBuilding().getPlayer();
-//				if (node.getBuilding() instanceof City) {
-//
-//					for (Hexagon hex : hexagons) {
-//						if (hex.getTile().getNodes().contains(node)) {
-//							int vertex = hex.getTile().getNodes().indexOf(node);
-//							vertex = vertex - 1;
-//							if (vertex < 0) {
-//								vertex = 5;
-//							}
-//							Point p = hex.getVertex(vertex);
-//							AffineTransform prev = g2d.getTransform();
-//							Color prevColor = g2d.getColor();
-//							g2d.setColor(node.getBuilding().getPlayer().getColor());
-//							g2d.translate(p.getX() - 20, p.getY() - 20);
-//							g2d.fill(cs);
-//							g2d.setColor(Color.BLACK);
-//							g2d.draw(cs);
-//							g2d.setTransform(prev);
-//							g2d.setColor(prevColor);
-//						}
-//					}
-//
-//				} else if (node.getBuilding() instanceof Settlement) {
-//
-//					for (Hexagon hex : hexagons) {
-//						if (hex.getTile().getNodes().contains(node)) {
-//							int vertex = hex.getTile().getNodes().indexOf(node);
-//							vertex = vertex - 1;
-//							if (vertex < 0) {
-//								vertex = 5;
-//							}
-//							Point p = hex.getVertex(vertex);
-//
-//							AffineTransform prev = g2d.getTransform();
-//							Color prevColor = g2d.getColor();
-//							g2d.setColor(node.getBuilding().getPlayer().getColor());
-//							g2d.translate(p.getX() - 20, p.getY() - 20);
-//							g2d.fill(ss);
-//							g2d.setColor(Color.BLACK);
-//							g2d.draw(ss);
-//							g2d.setTransform(prev);
-//							g2d.setColor(prevColor);
-//						}
-//					}
-//				}
-//			}
-//
-//		}
-
 
 
 		drawRoads(g2d);
