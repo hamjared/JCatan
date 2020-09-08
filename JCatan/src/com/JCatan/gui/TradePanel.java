@@ -318,7 +318,7 @@ public class TradePanel extends JPanel {
 			if (temp <= 0)
 				return;
 			--temp;
-			boolean isRequestMapping = ((JButton) e.getSource()).getRootPane().equals(theirOffer);
+			boolean isRequestMapping = ((JButton) e.getSource()).getParent().getParent().equals(theirOffer);
 			if (isRequestMapping) {
 				updateMap(requestingResourceTypeAndAmount, resourceName, temp);
 			} else {
@@ -339,7 +339,7 @@ public class TradePanel extends JPanel {
 			Integer temp = Integer.valueOf(val);
 			String resourceName = playerResourceName.getText();
 			++temp;
-			boolean isRequestMapping = ((JButton) e.getSource()).getRootPane().equals(theirOffer);
+			boolean isRequestMapping = ((JButton) e.getSource()).getParent().getParent().equals(theirOffer);
 			if (isRequestMapping) {
 				updateMap(requestingResourceTypeAndAmount, resourceName, temp);
 			} else {
