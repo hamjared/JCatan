@@ -8,32 +8,13 @@ import com.JCatan.gui.GameGUI;
 
 public class DomesticTrade extends Trade {
 
+	private static final long serialVersionUID = 2373157336453625113L;
+
 	// This will need to notify gamecontroller to update the panel...
 	public DomesticTrade(Player offeringPlayer, Player receivingPlayer, List<ResourceCard> offeringCards,
 			List<ResourceCard> requestingCards) {
 		super(offeringPlayer, offeringCards, requestingCards);
 		this.receivingPlayer = receivingPlayer;
-	}
-
-	@Override
-	public void accept() {
-
-	}
-
-	@Override
-	public void counterOffer() {
-		// TODO Trade: counterOffer
-	}
-
-	@Override
-	public void decline() {
-		// TODO Trade: decline
-
-	}
-
-	@Override
-	public void offer(Player player) {
-		// TODO Trade: offer
 	}
 
 	private boolean checkResources(Map<ResourceType, Integer> tradingCards, Map<ResourceType, Integer> actualResource) {
@@ -67,5 +48,9 @@ public class DomesticTrade extends Trade {
 				|| !checkResources(offeringCardsMap, offeringPlayerResources)) {
 			throw new InvalidTradeException("Not enough resources");
 		}
+	}
+
+	@Override
+	public void offer(Player player) {
 	}
 }

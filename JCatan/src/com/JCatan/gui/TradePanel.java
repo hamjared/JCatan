@@ -1,7 +1,6 @@
 package com.JCatan.gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
@@ -57,7 +56,21 @@ public class TradePanel extends JPanel {
 	private Map<String, Integer> requestingResourceTypeAndAmount;
 	private boolean recievingOffer = false;
 	private JPanel bottomButtonPanel;
-	JButton decline;
+	JButton declineButton;
+
+	private class CustomCheckBox extends JCheckBox {
+		private static final long serialVersionUID = -6191571460091396369L;
+		private Player player;
+
+		public CustomCheckBox(Player player, String label) {
+			super(label);
+			this.player = player;
+		}
+
+		public Player getPlayer() {
+			return player;
+		}
+	}
 
 	public void setTradeInfo(Trade trade) {
 
@@ -76,29 +89,18 @@ public class TradePanel extends JPanel {
 
 		setOfferResources(offering, true, theirOffer);
 		setOfferResources(requesting, false, playerOffer);
-		playerOffer.revalidate();
-		theirOffer.revalidate();
-
 		JCheckBox temp = new JCheckBox(selectedPlayer.getName());
 		temp.setSelected(true);
 		temp.setEnabled(false);
 		buttonToggleGroup.add(temp);
 		traders.add(temp);
-		traders.revalidate();
 
 		confirmButton.setEnabled(true);
 		counterOfferButton.setEnabled(true);
+		declineButton.setEnabled(true);
+		cancelButton.setEnabled(false);
 		
-		bottomButtonPanel.remove(cancelButton);		
-		GridBagConstraints gbc_declineButton = new GridBagConstraints();
-		gbc_declineButton.weightx = 1.0;
-		gbc_declineButton.fill = GridBagConstraints.BOTH;
-		gbc_declineButton.gridx = 3;
-		gbc_declineButton.gridy = 0;
-		decline.setEnabled(true);
-		bottomButtonPanel.add(decline, gbc_declineButton);
-		bottomButtonPanel.revalidate();
-		
+		this.revalidate();
 		this.repaint();
 	}
 
@@ -111,20 +113,19 @@ public class TradePanel extends JPanel {
 		temp.setEnabled(false);
 		buttonToggleGroup.add(temp);
 		traders.add(temp);
-		traders.revalidate();
-		traders.repaint();
 
 		confirmButton.setEnabled(false);
 		counterOfferButton.setEnabled(false);
+		declineButton.setEnabled(true);
 		offerButton.setEnabled(true);
+		cancelButton.setEnabled(false);
 		setPlayersResources(currentPlayer, playerOffer);
-		playerOffer.revalidate();
-		playerOffer.repaint();
 
 		// Now grab the original offering player's resources to counter offer...
 		setPlayersResources(selectedPlayer, theirOffer);
-		theirOffer.revalidate();
-		theirOffer.repaint();
+
+		this.revalidate();
+		this.repaint();
 	}
 
 	private void confirmEvent() {
@@ -141,17 +142,20 @@ public class TradePanel extends JPanel {
 	}
 
 	public void close() {
-		if(bottomButtonPanel != cancelButton.getParent()) {
-			bottomButtonPanel.remove(decline);
-			GridBagConstraints gbc_cancelButton = new GridBagConstraints();
-			gbc_cancelButton.weightx = 1.0;
-			gbc_cancelButton.fill = GridBagConstraints.BOTH;
-			gbc_cancelButton.gridx = 3;
-			gbc_cancelButton.gridy = 0;
-			bottomButtonPanel.add(cancelButton, gbc_cancelButton);
-		}
+		this.setVisible(false);
+		this.setEnabled(false);
+
+		recievingOffer = false;
+		clearAllPlayerResources();
+		counterOfferButton.setEnabled(false);
+		confirmButton.setEnabled(false);
+		declineButton.setEnabled(false);
 		cancelButton.setEnabled(true);
-		cancelButton.doClick();
+
+		//Reenable the end turn button
+		if (action != null) {
+			action.accept(cancelButton);
+		}
 	}
 
 	private List<ResourceCard> setTradeCards(Map<String, Integer> resources) {
@@ -186,27 +190,19 @@ public class TradePanel extends JPanel {
 	}
 
 	public void resetFromBadTrade() {
-		boolean hasCancelButton = Arrays.asList(bottomButtonPanel.getComponents()).contains(cancelButton);
-		if(hasCancelButton) {
+		if (!recievingOffer) {
 			offerButton.setEnabled(true);
 			cancelButton.setEnabled(true);
 			AddandDecButtonsEnabled(true);
 		} else {
 			recievingOffer = false;
-			bottomButtonPanel.remove(decline);
-			GridBagConstraints gbc_cancelButton = new GridBagConstraints();
-			gbc_cancelButton.weightx = 1.0;
-			gbc_cancelButton.fill = GridBagConstraints.BOTH;
-			gbc_cancelButton.gridx = 3;
-			gbc_cancelButton.gridy = 0;
+			declineButton.setEnabled(false);
 			cancelButton.setEnabled(true);
-			bottomButtonPanel.add(cancelButton, gbc_cancelButton);
-			bottomButtonPanel.revalidate();
 			clearAllPlayerResources();
 			this.repaint();
 		}
 	}
-	
+
 	private void setTraders() {
 		JCheckBox maritimeTrade = new JCheckBox("Maritime");
 		maritimeTrade.addActionListener(e -> {
@@ -233,14 +229,11 @@ public class TradePanel extends JPanel {
 				.collect(Collectors.toList());
 
 		for (Player player : participants) {
-			JCheckBox temp = new JCheckBox(player.getName());
+			CustomCheckBox temp = new CustomCheckBox(player, player.getName());
 			temp.setSelected(false);
 			temp.addActionListener(e -> {
-				JCheckBox box = (JCheckBox) e.getSource();
-
-				selectedPlayer = GameGUI.controller.getPlayers().stream().filter(t -> t.getName() == box.getText())
-						.findFirst().orElse(null);
-
+				CustomCheckBox box = (CustomCheckBox) e.getSource();
+				selectedPlayer = box.getPlayer();
 				clearSelectedPlayerResources();
 				setPlayersResources(selectedPlayer, theirOffer);
 				offerButton.setEnabled(true);
@@ -285,12 +278,8 @@ public class TradePanel extends JPanel {
 		theirOffer.revalidate();
 	}
 
-	private void updateOfferingMap(String resource, Integer amount) {
-		offeringResourceTypeAndAmount.computeIfPresent(resource, (k, v) -> amount);
-	}
-
-	private void updateRequestingMap(String resource, Integer amount) {
-		requestingResourceTypeAndAmount.computeIfPresent(resource, (k, v) -> amount);
+	private void updateMap(Map<String, Integer> map, String resource, Integer amount) {
+		map.computeIfPresent(resource, (k, v) -> amount);
 	}
 
 	private JLabel createLabel(JPanel panel, String text, int x, int y) {
@@ -329,11 +318,11 @@ public class TradePanel extends JPanel {
 			if (temp <= 0)
 				return;
 			--temp;
-			boolean isRequestMapping = ((JButton) e.getSource()).getParent().getParent().equals(theirOffer);
+			boolean isRequestMapping = ((JButton) e.getSource()).getRootPane().equals(theirOffer);
 			if (isRequestMapping) {
-				updateRequestingMap(resourceName, temp);
+				updateMap(requestingResourceTypeAndAmount, resourceName, temp);
 			} else {
-				updateOfferingMap(resourceName, temp);
+				updateMap(offeringResourceTypeAndAmount, resourceName, temp);
 			}
 			playerResourceTotal.setText(temp.toString());
 		});
@@ -350,11 +339,11 @@ public class TradePanel extends JPanel {
 			Integer temp = Integer.valueOf(val);
 			String resourceName = playerResourceName.getText();
 			++temp;
-			boolean isRequestMapping = ((JButton) e.getSource()).getParent().getParent().equals(theirOffer);
+			boolean isRequestMapping = ((JButton) e.getSource()).getRootPane().equals(theirOffer);
 			if (isRequestMapping) {
-				updateRequestingMap(resourceName, temp);
+				updateMap(requestingResourceTypeAndAmount, resourceName, temp);
 			} else {
-				updateOfferingMap(resourceName, temp);
+				updateMap(offeringResourceTypeAndAmount, resourceName, temp);
 			}
 			playerResourceTotal.setText(temp.toString());
 		});
@@ -378,9 +367,6 @@ public class TradePanel extends JPanel {
 				.toMap(t -> ((ResourceCard) t).getResourceType(), v -> 1, (existing, addition) -> existing + addition));
 
 		for (Map.Entry<ResourceType, Integer> entry : resources.entrySet()) {
-
-			// GridBagLayout temp = (GridBagLayout) panel.getLayout();
-			// int i = (isOfferingSet) ? 0 : temp.columnWidths.length / 2 + 1;
 			int i = 0;
 			String cardName = entry.getKey().name();
 			String total = entry.getValue().toString();
@@ -396,6 +382,7 @@ public class TradePanel extends JPanel {
 
 	private void setPlayersResources(Player player, JPanel panel) {
 		int j = 0;
+		int i = 0;
 		Map<ResourceType, Integer> resources = null;
 		if (player != null) {
 			resources = player.getUniqueResourcesCount();
@@ -404,16 +391,10 @@ public class TradePanel extends JPanel {
 					.collect(Collectors.toMap(Map.Entry::getKey, e -> 0));
 		}
 
-		boolean isCurrentPlayer = player != null && player == currentPlayer;
-
 		for (Map.Entry<ResourceType, Integer> entry : resources.entrySet()) {
-
-			GridBagLayout temp = (GridBagLayout) panel.getLayout();
-			// int i = (isCurrentPlayer) ? 0 : temp.columnWidths.length / 2 + 1;
-			int i = 0;
 			String cardName = entry.getKey().name();
 			String total = entry.getValue().toString();
-			if (isCurrentPlayer) {
+			if (player == currentPlayer) {
 				offeringResourceTypeAndAmount.put(cardName, Integer.parseInt(total));
 			} else {
 				requestingResourceTypeAndAmount.put(cardName, Integer.parseInt(total));
@@ -423,23 +404,20 @@ public class TradePanel extends JPanel {
 			j++;
 		}
 	}
-	
+
 	private void AddandDecButtonsEnabled(boolean isOn) {
-		List<Component> buttons = Arrays.stream(playerOffer.getComponents()).filter(b -> b instanceof JPanel).collect(Collectors.toList());
-		buttons.stream().forEach(b-> {
-			Arrays.stream(((JPanel)b).getComponents()).forEach(c->c.setEnabled(isOn));
+
+		Arrays.stream(playerOffer.getComponents()).filter(c->c instanceof JPanel).forEach(b -> {
+			Arrays.stream(((JPanel) b).getComponents()).forEach(c -> c.setEnabled(isOn));
 		});
-		
-		buttons = Arrays.stream(theirOffer.getComponents()).filter(b -> b instanceof JPanel).collect(Collectors.toList());
-		buttons.stream().forEach(b-> {
-			Arrays.stream(((JPanel)b).getComponents()).forEach(c->c.setEnabled(isOn));
+
+		Arrays.stream(theirOffer.getComponents()).filter(c->c instanceof JPanel).forEach(b -> {
+			Arrays.stream(((JPanel) b).getComponents()).forEach(c -> c.setEnabled(isOn));
 		});
 	}
 
-	/**
-	 * Create the panel.
-	 */
 	public TradePanel(int x, int y, int width, int height) {
+		this.setDoubleBuffered(false);
 		this.setBounds(x, y, width, height);
 
 		selectedPlayer = null;
@@ -512,7 +490,7 @@ public class TradePanel extends JPanel {
 		gbc_panel.gridy = 2;
 		add(bottomButtonPanel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 114, 106, 143, 109, 0 };
+		gbl_panel.columnWidths = new int[] { 114, 106, 143, 109, 100 };
 		gbl_panel.rowHeights = new int[] { 0, 0 };
 		gbl_panel.columnWeights = new double[] { 0.0, 1.0, 1.0, 1.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
@@ -529,10 +507,10 @@ public class TradePanel extends JPanel {
 
 				if (trader != null && trader.isSelected()) {
 					recievingOffer = false;
-					//Turn off cancelButton and remove the + - buttons on labels
+					// Turn off cancelButton and the + - buttons on labels
 					AddandDecButtonsEnabled(false);
-					Arrays.stream(bottomButtonPanel.getComponents()).forEach(b->b.setEnabled(false));
-					
+					Arrays.stream(bottomButtonPanel.getComponents()).forEach(b -> b.setEnabled(false));
+
 					String name = trader.getText();
 
 					List<ResourceCard> offering = setTradeCards(offeringResourceTypeAndAmount);
@@ -543,28 +521,19 @@ public class TradePanel extends JPanel {
 						DomesticTrade trade = new DomesticTrade(currentPlayer, selectedPlayer, offering, requesting);
 						Message msg = new MessageBuilder().action(Message.Action.Trade).trade(trade).build();
 						GameGUI.gameClient.sendMessage(msg);
-						// GameGUI.controller.initiateTrade(trade);
-						// GameGUI.ResourcePanel.repaint();
-					}
-
-					// Maritime Trade
-					if (name == "Maritime") {
+					}// Maritime Trade 
+					else if (name == "Maritime") {
 						MaritimeTrade trade = new MaritimeTrade(currentPlayer, GameGUI.controller.getBank(), offering,
 								requesting);
 						Message msg = new MessageBuilder().action(Message.Action.Trade).trade(trade).build();
 						GameGUI.gameClient.sendMessage(msg);
-						// GameGUI.controller.initiateTrade(trade);
-						// GameGUI.ResourcePanel.repaint();
 					}
-
 					// Special Trade
-					if (name == "Special Trade") {
+					else if (name == "Special Trade") {
 						SpecialTrade trade = new SpecialTrade(currentPlayer, GameGUI.controller.getBank(), offering,
 								requesting);
 						Message msg = new MessageBuilder().action(Message.Action.Trade).trade(trade).build();
 						GameGUI.gameClient.sendMessage(msg);
-						// GameGUI.controller.initiateTrade(trade);
-						// GameGUI.ResourcePanel.repaint();
 					}
 				}
 			}
@@ -606,50 +575,37 @@ public class TradePanel extends JPanel {
 
 		cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(e -> {
-			this.setVisible(false);
-			this.setEnabled(false);
-			recievingOffer = false;
-			clearAllPlayerResources();
-			counterOfferButton.setEnabled(false);
-			confirmButton.setEnabled(false);
-			if (action != null) {
-				action.accept(cancelButton);
-			}
+			close();
 		});
-		
-		decline = new JButton("Decline");
-		decline.addActionListener(e->{
-			//Send a message to server that player declined the trade...
+
+		declineButton = new JButton("Decline");
+		declineButton.addActionListener(e -> {
+			// Send a message to server that player declined the trade...
 			String message = "Player declined your trade";
-			Message msg = new MessageBuilder().action(Message.Action.DeclineTrade).setCustomMessage(message).player(selectedPlayer).build();
+			Message msg = new MessageBuilder().action(Message.Action.DeclineTrade).setCustomMessage(message)
+					.player(selectedPlayer).build();
 			GameGUI.gameClient.sendMessage(msg);
-			
-			//Now close this window and reset it properly.
-			this.setVisible(false);
-			recievingOffer = false;
-			clearAllPlayerResources();
-			counterOfferButton.setEnabled(false);
-			confirmButton.setEnabled(false);
-			bottomButtonPanel.remove(decline);
-			
-			GridBagConstraints gbc_declineButton = new GridBagConstraints();
-			gbc_declineButton.weightx = 1.0;
-			gbc_declineButton.fill = GridBagConstraints.BOTH;
-			gbc_declineButton.gridx = 3;
-			gbc_declineButton.gridy = 0;
-			cancelButton.setEnabled(true);
-			bottomButtonPanel.add(cancelButton, gbc_declineButton);
-			bottomButtonPanel.revalidate();
-			this.setEnabled(false);
-			action.accept(cancelButton);
+
+			// Now close this window and reset it properly.
+			close();
 		});
+
+		GridBagConstraints gbc_declineButton = new GridBagConstraints();
+		gbc_declineButton.weightx = 1.0;
+		gbc_declineButton.fill = GridBagConstraints.BOTH;
+		gbc_declineButton.gridx = 3;
+		gbc_declineButton.gridy = 0;
+		declineButton.setEnabled(false);
+		bottomButtonPanel.add(declineButton, gbc_declineButton);
 
 		GridBagConstraints gbc_cancelButton = new GridBagConstraints();
 		gbc_cancelButton.weightx = 1.0;
 		gbc_cancelButton.fill = GridBagConstraints.BOTH;
-		gbc_cancelButton.gridx = 3;
+		gbc_cancelButton.gridx = 4;
 		gbc_cancelButton.gridy = 0;
+		cancelButton.setEnabled(true);
 		bottomButtonPanel.add(cancelButton, gbc_cancelButton);
+		bottomButtonPanel.revalidate();
 		this.setVisible(false);
 		this.setEnabled(false);
 	}

@@ -9,10 +9,9 @@ import java.util.Map.Entry;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
-import com.JCatan.gui.GameGUI;
-
 public class MaritimeTrade extends Trade {
 
+	private static final long serialVersionUID = -2035915789482825387L;
 	private Bank banker;
 	private final int defaultMultiple = 4;
 
@@ -21,22 +20,6 @@ public class MaritimeTrade extends Trade {
 			List<ResourceCard> requestingCards) {
 		super(offeringPlayer, offeringCards, requestingCards);
 		this.banker = banker;
-	}
-
-	@Override
-	public void accept() {
-
-	}
-
-	@Override
-	public void counterOffer() {
-		// TODO Trade: counterOffer
-
-	}
-
-	@Override
-	public void decline() {
-
 	}
 
 	public Bank getBank() {
@@ -51,6 +34,7 @@ public class MaritimeTrade extends Trade {
 
 	private boolean isTradeValid(Map<ResourceType, Integer> offeringMap, Map<ResourceType, Integer> requestingMap,
 			BiPredicate<Entry<ResourceType, Integer>, Entry<ResourceType, Integer>> tester) {
+		
 		// Sort Descending of each map to match the ratios...
 		LinkedHashMap<ResourceType, Integer> descendingOffer = new LinkedHashMap<>();
 		LinkedHashMap<ResourceType, Integer> descendingRequest = new LinkedHashMap<>();
@@ -99,22 +83,8 @@ public class MaritimeTrade extends Trade {
 		if (offeringMap.keySet().size() != requestingMap.keySet().size())
 			throw new InvalidTradeException("Invalid amount of resources being traded.");
 
-		// Check if player has settlement on harbor...
-		List<PortNode> hasPort = offeringPlayer.buildings.stream().filter(b -> b.getNode() instanceof PortNode)
-				.map(b -> (PortNode) b.getNode()).collect(Collectors.toList());
-		boolean hasSpecialPort = hasPort.stream()
-				.anyMatch(n -> n.getPort().getPortType().equals(Port.PortType.GENERIC));
-		boolean hasGeneralPort = hasPort.stream()
-				.anyMatch(n -> n.getPort().getPortType().equals(Port.PortType.SPECIAL));
-
 		// Note R -> Requesting Cards | O -> Offering Cards
-		BiPredicate<Entry<ResourceType, Integer>, Entry<ResourceType, Integer>> isRatioCorrect = null;
-
-		if (!hasSpecialPort && !hasGeneralPort) {
-			isRatioCorrect = (R, O) -> R.getValue() * defaultMultiple == O.getValue();
-		}
-
-		if (!isTradeValid(offeringMap, requestingMap, isRatioCorrect)) {
+		if (!isTradeValid(offeringMap, requestingMap, (R, O) -> R.getValue() * defaultMultiple == O.getValue())) {
 			throw new InvalidTradeException("Invalid trade of resources!");
 		}
 	}
