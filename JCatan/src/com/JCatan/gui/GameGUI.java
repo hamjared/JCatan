@@ -633,7 +633,7 @@ public class GameGUI extends JFrame {
 		if(myPlayer.equals(controller.getCurPlayer()))
 			tradeButton.setEnabled(true);
 		
-		//repaint();
+		repaint();
 	}
 
 	public BoardPanel getBoardPanel() {

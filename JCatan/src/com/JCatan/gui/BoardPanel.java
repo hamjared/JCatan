@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import javax.swing.JPanel;
 
+import com.JCatan.Building;
 import com.JCatan.City;
 import com.JCatan.GamePhase;
 import com.JCatan.Node;
@@ -188,58 +189,98 @@ public class BoardPanel extends JPanel {
 	private void drawPieces(Graphics2D g2d) {
 		SettlementShape ss = new SettlementShape(0, 0, 40, 40);
 		CityShape cs = new CityShape(40, 40);
-
-		for (Node node : GameGUI.controller.getBoard().getBoard().getNodeList()) {
-			if (node.getBuilding() != null) {
-				Player player = node.getBuilding().getPlayer();
-				if (node.getBuilding() instanceof City) {
-
-					for (Hexagon hex : hexagons) {
-						if (hex.getTile().getNodes().contains(node)) {
-							int vertex = hex.getTile().getNodes().indexOf(node);
-							vertex = vertex - 1;
-							if (vertex < 0) {
-								vertex = 5;
-							}
-							Point p = hex.getVertex(vertex);
-							AffineTransform prev = g2d.getTransform();
-							Color prevColor = g2d.getColor();
-							g2d.setColor(node.getBuilding().getPlayer().getColor());
-							g2d.translate(p.getX() - 20, p.getY() - 20);
-							g2d.fill(cs);
-							g2d.setColor(Color.BLACK);
-							g2d.draw(cs);
-							g2d.setTransform(prev);
-							g2d.setColor(prevColor);
-						}
-					}
-
-				} else if (node.getBuilding() instanceof Settlement) {
-
-					for (Hexagon hex : hexagons) {
-						if (hex.getTile().getNodes().contains(node)) {
-							int vertex = hex.getTile().getNodes().indexOf(node);
-							vertex = vertex - 1;
-							if (vertex < 0) {
-								vertex = 5;
-							}
-							Point p = hex.getVertex(vertex);
-
-							AffineTransform prev = g2d.getTransform();
-							Color prevColor = g2d.getColor();
-							g2d.setColor(node.getBuilding().getPlayer().getColor());
-							g2d.translate(p.getX() - 20, p.getY() - 20);
-							g2d.fill(ss);
-							g2d.setColor(Color.BLACK);
-							g2d.draw(ss);
-							g2d.setTransform(prev);
-							g2d.setColor(prevColor);
-						}
-					}
+		
+		for(Player p: GameGUI.controller.getPlayers()) {
+			for(Building b: p.getPlayedBuildings()) {
+				
+				Hexagon hex = tileToHexagon.get(b.getNode().getTiles().get(0));
+				int vertex = hex.getTile().getNodes().indexOf(b.getNode());
+				vertex = vertex - 1;
+				if (vertex < 0) {
+					vertex = 5;
 				}
-			}
+				
+				if(b instanceof City) {
+					Point point = hex.getVertex(vertex);
+					AffineTransform prev = g2d.getTransform();
+					Color prevColor = g2d.getColor();
+					g2d.setColor(p.getColor());
+					g2d.translate(point.getX() - 20, point.getY() - 20);
+					g2d.fill(cs);
+					g2d.setColor(Color.BLACK);
+					g2d.draw(cs);
+					g2d.setTransform(prev);
+					g2d.setColor(prevColor);
+				}
+				else if( b instanceof Settlement) {
+					
+					Point point = hex.getVertex(vertex);
 
+					AffineTransform prev = g2d.getTransform();
+					Color prevColor = g2d.getColor();
+					g2d.setColor(p.getColor());
+					g2d.translate(point.getX() - 20, point.getY() - 20);
+					g2d.fill(ss);
+					g2d.setColor(Color.BLACK);
+					g2d.draw(ss);
+					g2d.setTransform(prev);
+					g2d.setColor(prevColor);
+				}
+				
+			}
 		}
+
+//		for (Node node : GameGUI.controller.getBoard().getBoard().getNodeList()) {
+//			if (node.getBuilding() != null) {
+//				Player player = node.getBuilding().getPlayer();
+//				if (node.getBuilding() instanceof City) {
+//
+//					for (Hexagon hex : hexagons) {
+//						if (hex.getTile().getNodes().contains(node)) {
+//							int vertex = hex.getTile().getNodes().indexOf(node);
+//							vertex = vertex - 1;
+//							if (vertex < 0) {
+//								vertex = 5;
+//							}
+//							Point p = hex.getVertex(vertex);
+//							AffineTransform prev = g2d.getTransform();
+//							Color prevColor = g2d.getColor();
+//							g2d.setColor(node.getBuilding().getPlayer().getColor());
+//							g2d.translate(p.getX() - 20, p.getY() - 20);
+//							g2d.fill(cs);
+//							g2d.setColor(Color.BLACK);
+//							g2d.draw(cs);
+//							g2d.setTransform(prev);
+//							g2d.setColor(prevColor);
+//						}
+//					}
+//
+//				} else if (node.getBuilding() instanceof Settlement) {
+//
+//					for (Hexagon hex : hexagons) {
+//						if (hex.getTile().getNodes().contains(node)) {
+//							int vertex = hex.getTile().getNodes().indexOf(node);
+//							vertex = vertex - 1;
+//							if (vertex < 0) {
+//								vertex = 5;
+//							}
+//							Point p = hex.getVertex(vertex);
+//
+//							AffineTransform prev = g2d.getTransform();
+//							Color prevColor = g2d.getColor();
+//							g2d.setColor(node.getBuilding().getPlayer().getColor());
+//							g2d.translate(p.getX() - 20, p.getY() - 20);
+//							g2d.fill(ss);
+//							g2d.setColor(Color.BLACK);
+//							g2d.draw(ss);
+//							g2d.setTransform(prev);
+//							g2d.setColor(prevColor);
+//						}
+//					}
+//				}
+//			}
+//
+//		}
 
 
 
