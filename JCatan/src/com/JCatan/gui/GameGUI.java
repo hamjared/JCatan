@@ -786,7 +786,9 @@ public class GameGUI extends JFrame {
 		Player1Panel.repaint();
 		Player2Panel.repaint();
 		Player3Panel.repaint();
-		Player4Panel.repaint();
+		if(Player4Panel != null) {
+			Player4Panel.repaint();
+		}
 
 	}
 
