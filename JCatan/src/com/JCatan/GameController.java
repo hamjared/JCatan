@@ -26,6 +26,10 @@ public class GameController implements Serializable {
 	Consumer action;
 	Consumer<String> notify;
 	Consumer refresh;
+	public void setChat(Chat chat) {
+		this.chat = chat;
+	}
+
 	Robber robber;
 	boolean setUpChatCheck = false;
 	int setupNum = 0;

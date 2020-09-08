@@ -92,6 +92,11 @@ public class MessageBuilder {
 		return this;
 	}
 	
+	public MessageBuilder chat(Chat chat) {
+		message.setChat(chat);
+		return this;
+	}
+	
 	public MessageBuilder dropCardOnSevenRolled(ResourceCard card) {
 		message.setCard(card);
 		return this;

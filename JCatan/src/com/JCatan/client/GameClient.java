@@ -213,8 +213,7 @@ public class GameClient implements Runnable {
 	}
 
 	private void showDiceData(Message msg) {
-		GameGUI.controller = msg.getGc();
-		this.controller = msg.getGc();
+		GameGUI.controller.setChat(msg.getChat());
 		System.out.println("Dice roll history:");
 		System.out.println(msg.getDice().getDiceRollHistory());
 		gameGUI.repaint();

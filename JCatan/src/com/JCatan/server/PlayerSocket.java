@@ -165,7 +165,7 @@ public class PlayerSocket implements Runnable {
 	private void sendDiceData(Message msg) {
 
 		server.getController().getChat().addToChat("Dice Roll History:\n" + Dice.getInstance().getDiceRollHistory());
-		Message message = new MessageBuilder().action(Message.Action.DiceData).gameController(server.getController())
+		Message message = new MessageBuilder().action(Message.Action.DiceData).chat(server.getController().getChat())
 				.dice(Dice.getInstance()).build();
 		server.broadcastMessage(message);
 

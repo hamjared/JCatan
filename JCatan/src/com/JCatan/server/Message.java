@@ -60,7 +60,18 @@ public class Message implements Serializable {
 	String customMessage;
 	Dice dice;
 	String chatMessage;
+	Chat chat;
 
+
+
+	public Chat getChat() {
+		return chat;
+	}
+
+
+	public void setChat(Chat chat) {
+		this.chat = chat;
+	}
 
 
 	public String getChatMessage() {
