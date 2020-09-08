@@ -7,15 +7,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
-
-import com.JCatan.gui.GameGUI;
 
 public class SpecialTrade extends Trade {
 
-	private final int generalPortMultiple = 3;
-	private final int specialPortMultiple = 2;
+	private static final long serialVersionUID = -1546670767267731913L;
 	Bank bank;
 	PortNode node;
 
@@ -23,23 +19,6 @@ public class SpecialTrade extends Trade {
 			List<ResourceCard> requestingCards) {
 		super(offeringPlayer, offeringCards, requestingCards);
 		this.bank = bank;
-	}
-
-	@Override
-	public void accept() {
-		
-	}
-
-	@Override
-	public void counterOffer() {
-		// TODO Trade: counterOffer
-
-	}
-
-	@Override
-	public void decline() {
-		// TODO Trade: decline
-
 	}
 
 	public Bank getBank() {
@@ -69,27 +48,11 @@ public class SpecialTrade extends Trade {
 		if (offeringMap.keySet().size() != requestingMap.keySet().size())
 			throw new InvalidTradeException("Invalid amount of resources being traded.");
 
-		// Check if player has settlement on harbor...
-		// List<PortNode> hasPort = offeringPlayer.buildings.stream().filter(b ->
-		// b.getNode() instanceof
-		// PortNode).map(b->(PortNode)b.getNode()).collect(Collectors.toList());
 		List<PortNode> ports = new ArrayList<>();
 		for (Building b : offeringPlayer.getPlayedBuildings()) {
 			if (b.getNode() instanceof PortNode) {
 				ports.add((PortNode) b.getNode());
 			}
-		}
-		boolean hasSpecialPort = ports.stream().anyMatch(n -> n.getPort().getPortType().equals(Port.PortType.GENERIC));
-		boolean hasGeneralPort = ports.stream().anyMatch(n -> n.getPort().getPortType().equals(Port.PortType.SPECIAL));
-
-		// Note R -> Requesting Cards | O -> Offering Cards
-		BiPredicate<Entry<ResourceType, Integer>, Entry<ResourceType, Integer>> isRatioCorrect = null;
-
-		if (hasSpecialPort && !hasGeneralPort) {
-			isRatioCorrect = (R, O) -> R.getValue() * specialPortMultiple == O.getValue();
-		} else if (hasSpecialPort && hasGeneralPort) {
-			isRatioCorrect = (R, O) -> R.getValue() * specialPortMultiple == O.getValue()
-					|| R.getValue() * generalPortMultiple == O.getValue();
 		}
 
 		boolean check = false;
@@ -106,17 +69,17 @@ public class SpecialTrade extends Trade {
 			throw new InvalidTradeException("Invalid trade!");
 		}
 
-		if (!isTradeValid(offeringMap, requestingMap, isRatioCorrect)) {
+		if (!isTradeValid(offeringMap, requestingMap)) {
 			throw new InvalidTradeException("Invalid trade of resources!");
 		}
 
 	}
 
-	private boolean isTradeValid(Map<ResourceType, Integer> offeringMap, Map<ResourceType, Integer> requestingMap,
-			BiPredicate<Entry<ResourceType, Integer>, Entry<ResourceType, Integer>> tester) {
+	private boolean isTradeValid(Map<ResourceType, Integer> offeringMap, Map<ResourceType, Integer> requestingMap) {
 		// Sort Descending of each map to match the ratios...
 		LinkedHashMap<ResourceType, Integer> descendingOffer = new LinkedHashMap<>();
 		LinkedHashMap<ResourceType, Integer> descendingRequest = new LinkedHashMap<>();
+		
 		offeringMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
 				.forEachOrdered(x -> descendingOffer.put(x.getKey(), x.getValue()));
 		requestingMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
@@ -137,10 +100,6 @@ public class SpecialTrade extends Trade {
 			if (request.getValue() > bank.getNumberOfResourceCardsRemaining(request.getKey())) {
 				return false;
 			}
-
-//            if(!tester.test(request, offer)) {
-//            	return false;
-//            }
 		}
 		return true;
 	}

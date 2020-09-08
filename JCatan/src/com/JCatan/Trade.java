@@ -43,21 +43,6 @@ public abstract class Trade implements Serializable{
 	}
 	
 	/**
-	 * 
-	 */
-	public abstract void accept();
-
-	/**
-	 * 
-	 */
-	public abstract void counterOffer();
-	
-	/**
-	 * 
-	 */
-	public abstract void decline();
-	
-	/**
 	 * @param player
 	 */
 	public abstract void offer(Player player);
