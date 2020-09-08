@@ -407,7 +407,7 @@ public class GameGUI extends JFrame {
 		ResourcePanel = new ResourcesPanel();
 		ResourcePanel.setBorder(border);
 		contentPane.add(ResourcePanel);
-		repaint();
+		//repaint();
 
 		JPanel diceOnePanel = new JPanel() {
 			@Override
@@ -633,7 +633,7 @@ public class GameGUI extends JFrame {
 		if(myPlayer.equals(controller.getCurPlayer()))
 			tradeButton.setEnabled(true);
 		
-		repaint();
+		//repaint();
 	}
 
 	public BoardPanel getBoardPanel() {
@@ -671,7 +671,7 @@ public class GameGUI extends JFrame {
 		BoardPanel.drawCities = false;
 		//BoardPanel.repaint();
 		updateTurn();
-		repaint();
+		//repaint();
 		Timer.endTimer();
 	}
 
@@ -782,6 +782,11 @@ public class GameGUI extends JFrame {
 				}
 			}
 		}
+		
+		Player1Panel.repaint();
+		Player2Panel.repaint();
+		Player3Panel.repaint();
+		Player4Panel.repaint();
 
 	}
 
