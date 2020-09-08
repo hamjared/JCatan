@@ -610,7 +610,7 @@ public class GameGUI extends JFrame {
 				sevenCheck++;
 			}
 		}
-		if (sevenCheck == 4) {
+		if (sevenCheck == controller.getPlayers().size()) {
 			checkForSevenRolled();
 		}
 
